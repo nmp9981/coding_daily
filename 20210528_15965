@@ -1,0 +1,31 @@
+#에라토스테네스의 체
+def era(n):#소수 리스트
+  li = [True]*(25*n)
+  i = 3
+  while i < len(li):
+    if li[i] == True:
+      for j in range(2*i, len(li), i):
+        if li[j] == True:
+          li[j] = False
+    i += 2#홀수만 계산
+  return li
+
+#소수 순서
+def prime(n, li):
+  i = 1
+  order = 1
+  while order < n:
+    i += 2
+    if li[i] == True:
+      order += 1
+  print(i)
+
+#입력
+n = int(input())
+if n == 1:
+  print(2)
+elif n == 2:
+  print(3)
+else:
+  li = era(n)
+  prime(n, li)
