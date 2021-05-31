@@ -1,0 +1,54 @@
+#괄호만 추출
+def vps(st):#앞에서부터
+  s = []
+  for i in range(0, len(st)):#마지막 . 은 제외
+    if st[i] in ["(",")","[","]"]:
+      s.append(st[i])
+  return s
+
+#괄호 균형
+def balance(s):#끝에서부터 검사
+  count = 0#소괄호 변수
+  counts = 0#대괄호 변수
+  l = len(s) - 1
+  while l >= 0:
+    if s[l] == "(":#(이면 +
+      count += 1
+    elif s[l] == ")":#)이면 -
+      count -= 1
+    
+    if s[l] == "[":#[이면 +
+      counts += 1
+    elif s[l] == "]":#]이면 -
+      counts -= 1
+  
+    if l >= 1 and count == 1 and s[l-1] == ")":
+      #)( 같은 예외형, 다음문자와 비교, l=0 일때는 다음문자가 없으므로 제외
+      print("no")
+      return
+    elif l >= 1 and counts == 1 and s[l-1] == "]":
+      #][ 같은 예외형, 다음문자와 비교, l=0 일때는 다음문자가 없으므로 제외
+      print("no")
+      return
+    elif l >= 1 and s[l] == ')' and s[l-1] == "[":
+      #[(])같은 예외형
+      print("no")
+      return
+    elif l >= 1 and s[l] == ']' and s[l-1] == "(":
+      print("no")
+      return  
+    else:#다음 문자
+      l -= 1
+  if count == 0 and counts == 0:#괄호가 짝이 되었는가?
+    print("yes")
+  else:
+    print("no")
+
+#입력
+while True:
+  st = input()
+  if st == '.':#최종 종료조건
+    break
+  else:
+    s = vps(st)
+    balance(s)
