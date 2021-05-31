@@ -1,0 +1,27 @@
+#괄호
+def vps(s):
+  count = 0#괄호 변수
+  l = len(s) - 1
+  while l >= 0:
+    if s[l] == "(":#(이면 +
+      count += 1
+    else:#)이면 -
+      count -= 1
+  
+    if l >= 1 and count == 1 and s[l-1] == ")":
+      #)( 같은 예외형, 다음문자와 비교, l=0 일때는 다음문자가 없으므로 제외
+      print("NO")
+      return
+    else:#다음 문자
+      l -= 1
+  
+  if count == 0:#괄호가 짝이 되었는가?
+    print("YES")
+  else:
+    print("NO")
+
+#입력
+t = int(input())
+for i in range(0,t):
+  s = input()
+  vps(s)
