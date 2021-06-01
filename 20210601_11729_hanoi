@@ -1,0 +1,11 @@
+#hanoi
+def move(n,x,y):#하노이탑 이동 과정
+  if n > 1:
+    move(n-1,x,6-x-y)#n-1개를 1->2번기둥
+  print(x,y)#맨 밑 이동(1->3)
+  if n > 1:
+    move(n-1,6-x-y,y)#n-1개를 2->3번기둥
+
+n = int(input())
+print(2**n - 1)#이동 가짓수
+move(n,1,3)#1->3번 기둥
