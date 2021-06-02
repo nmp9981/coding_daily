@@ -1,0 +1,58 @@
+#이웃항과의 차
+#나머지가 모두 같으려면 각 차이의 최소값을 구해야한다
+def nei(n):
+  neibor = []
+  for i in range(0,len(n)-1):
+    sub = n[i+1] - n[i]
+    neibor.append(sub)
+  
+  return neibor
+
+#여러개의 최대공약수-> 이렇게하면 남은 수들간의 서로소 조건을 구현할 수 없어 오류가 생김(무한루프)
+def div(neibor):
+  j = 2
+  number = 1
+  while 1 < min(neibor):
+    count = 0
+    for i in range(0,len(neibor)):#각각 나눠 지는가?
+      if neibor[i] % j == 0:
+        count += 1
+
+    if count == len(neibor):#모두가 나눠짐
+      number *= j
+      for i in range(0,len(neibor)):
+        neibor[i] /= j
+    else:
+      j += 1
+
+  return number
+
+def rest(number):#number의 약수
+  rest_n = []
+  sq = round(number ** 0.5 + 1)#제곱근까지만
+  for i in range(2,sq):
+    if number % i == 0:
+      if i**2 != number:
+        rest_n.append(i)
+        rest_n.append(int(number/i))
+      elif i**2 == number:#제곱수일 경우
+        rest_n.append(i)
+  return rest_n
+
+#입력
+t = int(input())
+n = []
+for i in range(0,t):
+  num = int(input())
+  n.append(num)
+
+n.sort()#오름차순 정렬
+neibor = nei(n)#이웃항간 차
+number = div(neibor)#최대공약수
+rest_n = rest(number)#최대공약수의 약수
+
+#출력
+rest_n.sort()
+rest_n.append(number)#자기자신 추가
+for i in range(0,len(rest_n)):
+  print(rest_n[i],end=" ")#공백으로 구분하여 출력
