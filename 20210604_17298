@@ -1,0 +1,22 @@
+#o큰수
+def onum(li):
+  o = [-1]*len(li)#오큰수
+  stack = [0]#인덱스
+  i = 1
+  while stack and i < len(li):#li[i-1] < li[i]
+    if li[stack[-1]] < li[i]:#다음 인덱스 검사
+      while stack and li[stack[-1]] < li[i]:#팝으로 스택이 다 빠지는 동안 리스트에 추가
+        o[stack[-1]] = li[i]
+        stack.pop()
+    
+    stack.append(i)
+    i += 1
+  
+  #리스트 출력
+  for i in range(0,len(o)):
+    print(o[i],end = " ")
+
+#입력
+n = int(input())
+li = list(map(int,input().split()))
+onum(li)
