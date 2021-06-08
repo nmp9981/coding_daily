@@ -1,0 +1,25 @@
+def printer(n,m,li):
+  de = [0 for i in range (n)]
+  de[m] = 1
+  count = 0
+  while True:
+    if li[0] == max(li):
+      count += 1#문서를 몇번째로 인쇄하는가
+      if de[0] == 1:
+        print(count)
+        break
+      else:
+        del li[0]
+        del de[0]
+    else:
+      de.append(de[0])
+      li.append(li[0])
+      del li[0]
+      del de[0]
+
+#입력
+t = int(input())
+for i in range(0,t):
+  n,m = map(int,input().split())
+  li = list(map(int,input().split()))
+  printer(n,m,li)
