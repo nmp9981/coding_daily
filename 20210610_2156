@@ -1,0 +1,17 @@
+#포도주잔
+def wine(g,n):
+  p = [0]*10001#누적
+  p[0] = g[0]
+  p[1] = g[0] + g[1]
+  p[2] = max(g[0] + g[1], g[0] + g[2], g[1] + g[2])
+  for i in range(3,n):
+    p[i] = max(p[i-1], g[i] + p[i-2], g[i] + g[i-1] + p[i-3])
+  print(p[n-1])
+
+#입력
+n = int(input())
+g = [0]*10001
+for i in range(0,n):
+  num = int(input())
+  g[i] = num
+wine(g,n)
