@@ -1,0 +1,19 @@
+#정수 삼각형
+def tri(p,n):
+  for i in range(1,n):
+    for j in range(0,i+1):
+      if j == 0:
+        p[i][j] = p[i][j] + p[i-1][j]
+      elif j == i:
+        p[i][j] = p[i][j] + p[i-1][j-1]
+      else:
+        p[i][j] = p[i][j] + max(p[i-1][j-1], p[i-1][j])
+  print(max(p[n-1]))
+
+#입력
+n = int(input())
+p = []
+for i in range(0,n):
+  li = list(map(int,input().split()))
+  p.append(li)
+tri(p,n)
