@@ -1,0 +1,29 @@
+#쉬운계단수
+def stair(n):
+  #2차원 리스트 생성
+  li = []
+  for i in range(0,n):
+    c = [0]*10
+    li.append(c)
+  
+  #초기값
+  for i in range(0,10):
+    if i == 0:
+      li[0][i] = 0
+    else:
+      li[0][i] = 1
+
+  #계단수
+  for i in range(1,n):
+    for j in range(0,10):
+      if j == 0:
+        li[i][j] = li[i-1][j+1]
+      elif j == 9:
+        li[i][j] = li[i-1][j-1]
+      else:
+        li[i][j] = li[i-1][j-1] + li[i-1][j+1]
+  print(sum(li[n-1])%1000000000)
+
+#입력
+n = int(input())
+stair(n)
