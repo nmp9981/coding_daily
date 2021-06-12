@@ -1,0 +1,36 @@
+import sys
+input = lambda : sys.stdin.readline().strip()
+
+def ac(p,n,li):
+  b = 0#역방향
+  f = 0#정방향
+  r = 0#회전
+
+  #어느방향을 없앨 건지 카운트를 셈
+  for i in p:
+    if i == 'R':
+      r += 1
+    elif i == 'D':
+      if r % 2 == 1:
+        b += 1
+      else:
+        f += 1
+  
+  #출력
+  if f + b <= n:
+    result = li[f:n-b]
+    if r % 2 == 1:
+      print("[" + ",".join(result[::-1]) + "]")#뒤집어서 출력
+    else:
+      print("[" + ",".join(result) + "]")#그대로 출력
+  else:#덱에 원소가 없음
+    print('error')
+
+#입력
+t = int(input())
+for i in range(0,t):
+  p = input()
+  p = p.replace('RR','')#두번회전시 원래대로
+  n = int(input())
+  li = input()[1:-1].split(',')
+  ac(p,n,li)
