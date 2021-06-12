@@ -1,0 +1,13 @@
+def lis(li,n):
+  #초기 세팅(모두가 길이 1)
+  count = [1 for i in range(n)]
+  for i in range(0,n):#현재 탐색위치
+    for j in range(0,i):#이전항까지 탐색
+      if li[i] > li[j]:
+        count[i] = max(count[i], count[j]+1)
+  print(max(count))#가장긴 부분수열의 길이
+
+#입력
+n = int(input())
+li = list(map(int,input().split()))
+lis(li,n)
