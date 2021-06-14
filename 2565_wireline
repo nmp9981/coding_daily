@@ -1,0 +1,20 @@
+#전깃줄
+def wire(li,n):
+  li = sorted(li, key=lambda x:x[0])#가장 왼쪽열 기준으로 정렬
+  line = list(map(lambda x:x[1],li))
+
+  #LIS 적용
+  p = [1 for i in range(n)]#최장증가수열 누적값
+  for i in range(0,n):
+    for j in range(0,i):
+      if line[i] > line[j]:
+        p[i] = max(p[i], p[j]+1)
+  print(n-max(p))
+  
+#입력
+n = int(input())
+li = []
+for i in range(n):
+  x = list(map(int, input().split()))
+  li.append(x)
+wire(li,n)
