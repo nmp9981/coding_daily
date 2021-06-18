@@ -1,0 +1,23 @@
+#스티커 수
+def sticker(li,n):
+  #초기값
+  li[0][1] += li[1][0]
+  li[1][1] += li[0][0]
+  #점화식, 0행, 1행 나눠서 진행
+  for i in range(2,n):
+    li[0][i] += max(li[1][i-2], li[1][i-1])#마지막에 위쪽 선택
+    li[1][i] += max(li[0][i-2], li[0][i-1])#마지막에 아래쪽 선택
+  #출력(마지막 2개중 큰것)
+  print(max(li[0][n-1], li[1][n-1]))
+
+#입력
+t = int(input())
+for i in range(t):
+  n = int(input())
+  a = list(map(int, input().split()))
+  b = list(map(int, input().split()))
+  li = [a,b]
+  if n >= 2:
+    sticker(li,n)
+  else:#예외처리
+    print(max(li[0][0], li[1][0]))
