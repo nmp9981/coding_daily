@@ -1,0 +1,25 @@
+#사전을 이용한 풀이
+def card(n,p,m,li):
+  #사전 생성
+  dic = dict()
+
+  #사전에 숫자가 있는가?
+  for i in p:
+    if i in dic:
+      dic[i] += 1
+    else:
+      dic[i] = 1
+
+  #출력
+  for i in li:
+    if i in dic:
+      print(dic[i],end=" ")
+    else:
+      print(0,end=" ")
+      
+#입력
+n = int(input())
+p = list(map(int, input().split()))
+m = int(input())
+li = list(map(int, input().split()))
+card(n,p,m,li)
