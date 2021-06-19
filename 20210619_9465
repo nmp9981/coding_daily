@@ -1,0 +1,22 @@
+#스티커
+def sticker(n,p):
+  #초기값
+  p[0][1] = p[0][1] + p[1][0]
+  p[1][1] = p[0][0] + p[1][1]
+  #점화식
+  for i in range(2,n):
+    p[0][i] += max(p[1][i-2], p[1][i-1])
+    p[1][i] += max(p[0][i-2], p[0][i-1])
+  #출력
+  print(max(p[0][n-1], p[1][n-1]))
+#입력
+t = int(input())
+for i in range(t):
+  n = int(input())
+  a = list(map(int, input().split()))
+  b = list(map(int, input().split()))
+  p = [a,b]
+  if n >= 2:
+    sticker(n,p)
+  else:
+    print(max(p[0][0], p[1][0]))
