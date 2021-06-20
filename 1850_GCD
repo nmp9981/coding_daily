@@ -1,0 +1,14 @@
+#GCD
+def gcd(a,b):
+  x = max(a,b)
+  y = min(a,b)
+  #유클리드 호제법으로 구함
+  while y != 0:
+    r = x % y
+    x = y
+    y = r
+  return x
+#입력
+a,b = map(int, input().split())
+g = gcd(a,b)
+print('1'*g)
