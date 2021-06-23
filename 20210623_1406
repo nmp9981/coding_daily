@@ -1,0 +1,30 @@
+import sys
+#입력
+string = sys.stdin.readline().rstrip()
+
+#2개의 스택
+left = list(string)#리스트로
+right = []
+
+#editor
+n = int(input())
+for i in range(n):
+  com = sys.stdin.readline().rstrip().split()
+  #명령어 수행
+  if com[0] == 'L':
+    if left:
+      right.append(left.pop())
+  elif com[0] == 'D':
+    if right:
+      left.append(right.pop())
+  elif com[0] == 'B':
+    if left:
+      left.pop()
+  elif com[0] == 'P':
+    left.append(com[1])
+
+#출력
+right.reverse()
+s = left + right
+for i in s:
+  print(i,end="")
