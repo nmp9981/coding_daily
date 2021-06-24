@@ -1,0 +1,22 @@
+#암호
+def password(s):
+  p = [0]*5001
+  #초기화
+  p[1] = 1
+  p[0] = 1
+  l = len(s)
+  #경우의수 구하기
+  for i in range(2, l+1):
+    if s[i-1] != '0':#현재 자리가 0이 아니면 알파벳 그대로 붙임
+      p[i] += p[i-1]
+    alpha = int(s[i-2:i])
+    if alpha >= 10 and alpha <= 26: #마지막 두 자리가 알파벳성립이면 해당 알파벳까지 붙임
+      p[i] += p[i-2]
+  #출력
+  print(p[l])
+#입력
+s = input()
+if s[0] == '0':
+  print(0)
+else:
+  password(s)
