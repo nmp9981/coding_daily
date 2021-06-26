@@ -1,0 +1,26 @@
+#입력
+s = input()
+
+#초기값
+sum = 0 #전체 막대 개수
+stick = 1 #현 막대 개수
+l = len(s)
+stack = [')'] #맨뒤
+for i in range(l-2,-1,-1):
+  stack.append(s[i])
+  if s[i] != s[i+1] and s[i] == '(' and len(stack) >= 2: #레이저
+    stack.pop()
+    stack.pop()
+    stick -= 1
+    sum += stick
+  else:
+    if stack[-1] == '(': #막대 끝
+      sum += 1 #잔여 막대
+      stack.pop()
+      stack.pop()
+      stick -= 1
+    else: #막대 시작
+      stick += 1
+
+#출력
+print(sum)
