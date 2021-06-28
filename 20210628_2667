@@ -1,0 +1,45 @@
+import sys
+sys.setrecursionlimit(10**6)
+from collections import deque
+
+#입력
+n = int(input())
+matrix = []
+for i in range(n):
+	a = list(map(int, input()))
+	matrix.append(a)
+
+#위치변수
+dx = [1,-1,0,0]
+dy = [0,0,1,-1]
+
+#dfs
+def dfs(x,y):
+	global count
+	#탐색범위를 벗어난 경우
+	if x >= n or x < 0 or y >= n or y < 0:
+		return False
+	if matrix[x][y] == 1: #1 -> 0
+		count += 1
+		matrix[x][y] = 0
+		for i in range(4):
+			nx = x + dx[i]
+			ny = y + dy[i]
+			dfs(nx,ny)
+		return True
+
+grp = []
+count = 0
+ 
+#연결단지수 
+for i in range(n):
+	for j in range(n):
+		if dfs(i,j) == True:
+			grp.append(count)
+			count = 0 #count 초기화
+
+#출력
+print(len(grp))
+grp.sort()
+for i in grp:
+	print(i)
