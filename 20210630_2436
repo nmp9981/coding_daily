@@ -1,0 +1,25 @@
+#입력
+g,l = map(int, input().split())
+
+#유클리드 알고리즘
+def gcd(n,m):
+  x = max(n,m)
+  y = min(n,m)
+  while y != 0:
+    r = x % y
+    x = y
+    y = r
+  return x
+
+#최대공약수, 최소공배수 성질
+n = l/g #더 작은수로 계산하기 위함
+n_sqrt = round(n**0.5)
+#두 수 찾기
+for i in range(n_sqrt,0,-1):
+  b = n/i
+  if b % 1 == 0 and gcd(i,b) == 1:#b가 자연수고 두수가 서로소일 경우
+    #원래수로 돌려줌
+    A = i*g
+    B = round(b*g)
+    print(A,B)
+    break
