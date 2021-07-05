@@ -1,0 +1,31 @@
+import sys 
+sys.setrecursionlimit(10**6) #재귀깊이 늘려줌(dps시 참고)
+#dfs
+def dfs(x):
+  global team
+  visit[x] = 1 #방문 정점 기록
+  cycle.append(x) #탐색 경로 저장
+
+  w = p[x] #다음 방문 지점
+  if visit[w] == 1: #이미 방문함
+    if w in cycle: #다음 방문지점 존재
+      team += cycle[cycle.index(w):] #사이클이 되는 구간부터 팀을 이룸
+  else: #방문 x
+    dfs(w)
+
+#입력
+t = int(input())
+for i in range(t):
+  n = int(input())
+  p = [0] + list(map(int, input().split()))
+  visit = [0]*(n+1)
+  team = []
+
+  #방문노드 탐색
+  for i in range(1,n+1):
+    if visit[i] == 0:
+      cycle = []
+      dfs(i)
+  
+  #출력
+  print(n-len(team))
