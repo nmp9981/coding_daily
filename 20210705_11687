@@ -1,0 +1,18 @@
+#입력
+m = int(input())
+max = 5*(10**8)
+#함수입력
+def rest5(x):
+  count = 0
+  for i in range(12,0,-1):
+    count += x//(5**i)
+  return count
+
+#5의 거듭제곱의 수
+for i in range(4*m,max):
+  if rest5(i) == m:
+    print(i)
+    break
+  elif rest5(i) > m:
+    print(-1)
+    break
