@@ -1,0 +1,23 @@
+#입력
+n,m = map(int, input().split())
+tree = list(map(int, input().split()))
+l = 0
+r = max(tree)
+#나무의 높이
+def rest(x):
+  sum = 0
+  for i in tree:
+    if i >= x:
+      sum += i-x
+  return sum
+
+#이분탐색
+while l <= r:
+  k = (l+r)//2
+  if rest(k) >= m:
+    l = k + 1
+  else:
+    r = k - 1
+
+#출력
+print(r)
