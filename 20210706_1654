@@ -1,0 +1,25 @@
+#입력
+k,n = map(int, input().split())
+p = []
+for i in range(k):
+  m = int(input())
+  p.append(m)
+
+#나무의 개수
+def rest(x):
+  count = 0
+  for i in p:
+    count += i // x
+  return count
+
+#이분탐색
+l = 1
+r = max(p)
+while l<=r:
+  m = (l+r)//2#자르는 높이
+  if rest(m) >= n: #개수
+    l = m + 1
+  else:
+    r = m - 1
+#출력
+print(r)
