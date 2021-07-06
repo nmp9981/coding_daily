@@ -1,0 +1,18 @@
+#입력
+m = int(input())
+
+#5의 거듭제곱 개수(모든 n!에대해 2^n의 개수가 5^n개수보다 많음)
+def count(x):
+  sum = 0
+  for i in range(12,0,-1):
+    sum += x // (5**i)
+  return sum
+
+#범위내에서 탐색 (모든 결과값은 4m 이상)
+for i in range(4*m,6*m):
+  if count(i) == m:
+    print(i)
+    break
+  elif count(i) > m:
+    print(-1)
+    break
