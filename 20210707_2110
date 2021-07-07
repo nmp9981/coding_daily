@@ -1,0 +1,30 @@
+#입력
+n,c = map(int, input().split())
+li = []
+for i in range(n):
+  m = int(input())
+  li.append(m)
+
+#공유기의 개수
+def routor(x):
+  count = 1
+  house = li[0]
+  for i in range(1,n): #모든 집 탐색
+    if li[i] >= house + mid:
+      count += 1
+      house = li[i]
+  return count
+
+#이분탐색
+li.sort()
+start = 1
+end = li[-1] - li[0]
+while start <= end:
+  mid = (start + end)//2 #간격
+  if routor(mid) >= c:
+    start = mid + 1
+  else:
+    end = mid - 1
+
+#출력
+print(end)
