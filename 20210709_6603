@@ -1,0 +1,18 @@
+from itertools import combinations 
+#조합
+def comb(p):
+  case = list(combinations(p,6))
+  for i in case:
+    for j in i:
+      print(j,end=" ")
+    print()
+  print()
+
+#입력
+while True:
+  li = list(map(int,input().split()))
+  if li == [0]:
+    break
+  else:
+    p = li[1:] #맨앞 제거
+    comb(p)
