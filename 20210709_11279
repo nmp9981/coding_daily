@@ -1,0 +1,16 @@
+import heapq
+import sys
+#입력
+n = int(input())
+
+#최대 힙
+heap = []
+for i in range(n):
+  x = int(sys.stdin.readline())
+  if x > 0:
+    heapq.heappush(heap,(-x,x)) #튜플로 넣음 본래 최소로 넣어지지만 -x로 넣어져서 
+  else:
+    if len(heap) == 0:
+      print(0)
+    else:
+      print(heapq.heappop(heap)[1]) #우리가 구하려는건 x임
