@@ -1,0 +1,15 @@
+import sys
+import heapq
+
+#입력
+t = int(input())
+heap = []
+for i in range(t):
+  x = int(sys.stdin.readline())
+  if x >= 1:
+    heapq.heappush(heap,(-x,x)) #큰수를 구하므로 튜플로 저장한 뒤 -x를 노림
+  else:
+    if len(heap) == 0:
+      print(0)
+    else:
+      print(heapq.heappop(heap)[1]) #결국 뽑는 수는 x
