@@ -1,0 +1,22 @@
+import sys
+import heapq
+
+#입력
+t = int(input())
+left_heap = [] #작은 수 저장
+right_heap = [] #큰 수 저장
+for i in range(t):
+  x = int(sys.stdin.readline())
+  #x = int(input())
+  if i % 2 == 1: #큰수가 저장된 힙에서는 최소힙으로
+    heapq.heappush(right_heap,x)
+  else: #작은수가 저장된 힙에서는 최대힙으로
+    heapq.heappush(left_heap,-x) #왼쪽이 먼저
+  
+  #오른쪽힙에 왼쪽힙보다 작은수가 있을 경우 서로 swap
+  if right_heap and right_heap[0] < -left_heap[0]:
+    heapq.heappush(right_heap, -heapq.heappop(left_heap))
+    heapq.heappush(left_heap, -heapq.heappop(right_heap))
+
+  #출력, left_heap에서 가장 큰것
+  print(-left_heap[0])
