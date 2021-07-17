@@ -1,0 +1,25 @@
+#입력
+n = int(input())
+li = []
+for i in range(n):
+	t = int(input())
+	li.append(t)
+
+p = [0]*10001
+if n>=3:
+	#초기값
+	p[0] = li[0]
+	p[1] = li[0] + li[1]
+	p[2] = max(p[1],li[2]+li[0],li[2]+li[1])
+
+	#점화식
+	for i in range(3,n):
+		p[i] = max(p[i-2]+li[i], p[i-3]+li[i]+li[i-1],p[i-1])
+
+	#출력
+	print(p[n-1])
+	
+elif n == 2:
+	print(li[0]+li[1])
+elif n == 1:
+	print(li[0])
