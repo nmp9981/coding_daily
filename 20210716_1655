@@ -1,0 +1,23 @@
+import sys
+import heapq
+
+#2개의 리스트
+left = []
+right = []
+#입력
+t = int(input())
+for i in range(t):
+	x = int(input())
+	#x = int(sys.stdin.readline())
+	if i % 2 == 1: #최소힙으로
+		heapq.heappush(right, x)
+	else: #최대힙으로, 왼쪽부터 넣기
+		heapq.heappush(left, -x)
+	#부호주의
+	if right and -left[0] > right[0] :
+		heapq.heappush(left, -heapq.heappop(right))
+		heapq.heappush(right, -heapq.heappop(left))
+	
+	#출력(부호주의)
+	print(-left[0])
+		
