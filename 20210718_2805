@@ -1,0 +1,25 @@
+#입력
+n,m = map(int,input().split())
+tree = list(map(int, input().split()))
+tree.sort()
+
+#남은 나무의 길이
+def cut(x):
+	sum = 0
+	for i in tree:
+		if i-x > 0:
+			sum += (i-x)
+	return sum
+	
+#이분탐색
+start = 1
+end = tree[-1]
+while start <= end:
+	mid = (start + end)//2 #자르는 길이
+	if cut(mid) >= m:
+		start = mid + 1
+	else:
+		end = mid - 1
+
+#결과
+print(end) 
