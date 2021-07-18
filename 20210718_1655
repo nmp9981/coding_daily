@@ -1,0 +1,23 @@
+import sys
+import heapq
+#입력
+t = int(input())
+
+#가운데 힙
+left = []
+right = []
+for i in range(t):
+	#x = int(input())
+	x = int(sys.stdin.readline())
+	if i % 2 == 0: #왼쪽은 최대힙으로
+		heapq.heappush(left, -x)
+	else: #오른쪽은 최소힙으로
+		heapq.heappush(right, x)
+		
+	#swap
+	if right and -left[0] > right[0]: #이 경우 swap
+		heapq.heappush(left, -heapq.heappop(right))
+		heapq.heappush(right, -heapq.heappop(left))
+	#출력
+	print(-left[0])
+	
