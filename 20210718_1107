@@ -1,0 +1,25 @@
+#입력
+n = int(input())
+m = int(input())
+if m > 0:
+	li = list(map(str ,input().split()))
+else:
+	li = []
+
+#0~1000000까지 순회
+ans = abs(n-100)
+for i in range(0,1000000):
+	num = list(str(i))
+	flag = True
+	#누를 수 없을 경우
+	for k in num:
+		if k in li:
+			flag = False
+			break
+	#최종
+	if flag == False:
+		continue
+	else:
+		ans = min(ans, abs(n-i)+len(str(i)))
+#출력
+print(ans)
