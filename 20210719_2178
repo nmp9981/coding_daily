@@ -1,0 +1,31 @@
+from collections import deque
+#bfs
+def bfs(x,y):
+	q = deque()
+	q.append([x,y])
+	while q:
+		[x,y] = q.popleft()
+		for i in range(4): #4군데에 큐 담기
+			nx = x + dx[i]
+			ny = y + dy[i]
+			#범위내에 들고 방문을 안했으면
+			if 0 <= nx < n and 0 <= ny < m and matrix[nx][ny] == 1:
+				q.append([nx,ny])
+				matrix[nx][ny] = matrix[x][y] + 1
+
+#위치변수
+dx = [0,0,1,-1]
+dy = [1,-1,0,0]
+
+#입력
+n,m = map(int, input().split())
+matrix = []
+for i in range(n):
+	li = list(map(int, input()))
+	matrix.append(li)
+
+#미로탐색
+bfs(0,0)
+
+#출력
+print(matrix[-1][-1])
