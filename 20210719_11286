@@ -1,0 +1,17 @@
+import sys
+import heapq
+
+#입력
+t = int(input())
+heap = []
+#절댓값 힙
+for i in range(t):
+	x = int(input())
+	#x = int(sys.stdin.readline())
+	if abs(x) > 0:
+		heapq.heappush(heap, (abs(x),x))
+	else:
+		if heap:
+			print(heapq.heappop(heap)[1])
+		else:
+			print(0)
