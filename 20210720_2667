@@ -1,0 +1,41 @@
+#dfs(재귀)
+def dfs(x,y):
+	global count
+	#탐색범위를 벗어난 경우
+	if x < 0 or x >= n or y < 0 or y >= n:
+		return False
+	
+	if matrix[x][y] == 1: #아직 미방문(1->0)
+		matrix[x][y] = 0
+		count += 1
+		for k in range(4): #4방향 탐색
+			nx = x + dx[k]
+			ny = y + dy[k]
+			dfs(nx,ny) #재귀
+		return True
+		
+#지도입력
+n = int(input())
+matrix = []
+for i in range(n):
+	li = list(map(int, input()))
+	matrix.append(li)
+
+#방향변수
+dx = [-1,1,0,0]
+dy = [0,0,-1,1]
+
+#지도순회
+group = []
+count = 0
+for i in range(n):
+	for j in range(n):
+		if dfs(i,j) == True:
+			group.append(count)
+			count = 0 #초기화
+			
+#출력
+group.sort()
+print(len(group))
+for i in group:
+	print(i)
