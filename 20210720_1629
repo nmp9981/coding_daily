@@ -1,0 +1,18 @@
+#거듭제곱(분할)
+def power(r,n):
+	if n == 1:
+		r = r%c
+		return r
+	if n % 2 == 0:
+		p = power(r,n//2) % c
+		return p*p
+	else:
+		p = power(r, (n-1)//2) % c
+		return p*p*r
+
+#입력
+a,b,c = map(int, input().split())
+
+#출력
+rn = power(a,b) % c
+print(rn)
