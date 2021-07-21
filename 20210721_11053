@@ -1,0 +1,14 @@
+#가장 긴 부분 증가 수열
+def lis(n, li):
+	dp = [1]*n #기본적으로 길이 1
+	for i in range(1,n):
+		for j in range(i):
+			if li[j] < li[i]:
+				dp[i] = max(dp[j] + 1,dp[i])
+	print(max(dp)) 
+	
+#입력
+n = int(input())
+li = list(map(int, input().split()))
+
+lis(n, li)
