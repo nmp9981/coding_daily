@@ -1,0 +1,46 @@
+from collections import deque
+#bfs
+def bfs():
+	while q:
+		[x,y] = q.popleft()
+		for i in range(4):
+			nx = x + dx[i]
+			ny = y + dy[i]
+			if 0 <= nx < m and 0 <= ny < n and matrix[nx][ny] == 0: #범위내에 있고 미방문
+				q.append([nx,ny])
+				matrix[nx][ny] = matrix[x][y] + 1
+
+#지도 제작
+n,m = map(int, input().split())
+matrix = []
+for i in range(m):
+	li = list(map(int, input().split()))
+	matrix.append(li)
+
+#방향변수
+dx = [0,0,-1,1]
+dy = [-1,1,0,0]
+
+#순회(동시진행하므로 1인요소를 큐에 담기)
+q = deque()
+for i in range(m):
+	for j in range(n):
+		if matrix[i][j] == 1:
+			q.append([i,j])
+
+#bfs
+bfs()
+
+#며칠소요되는가?
+day = 0
+for i in range(m):
+	for j in range(n):
+		if day < matrix[i][j]:
+			day = matrix[i][j]
+		if matrix[i][j] == 0:
+			print(-1)
+			exit()
+		day = max(1,day)
+
+#출력
+print(day-1)
