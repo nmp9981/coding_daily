@@ -1,0 +1,29 @@
+import math
+#보석분배
+def ruby(x):
+	sum = 0
+	for i in li:
+		sum += math.ceil(i/x)
+	return sum
+	
+#입력
+n,m = map(int, input().split())
+li = []
+for i in range(m):
+	x = int(input())
+	li.append(x)
+
+#이분탐색
+start = 1
+end = max(li)
+ans = 10**9 
+while start <= end:
+	mid = (start + end)//2 #질투심
+	if ruby(mid) > n:
+		start = mid + 1
+	else:
+		end = mid - 1
+		ans = min(mid, ans)#n은 같은데 답이 여러개일 경우
+		
+#출력
+print(ans)
