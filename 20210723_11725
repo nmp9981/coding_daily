@@ -1,0 +1,26 @@
+import sys
+sys.setrecursionlimit(10**6)
+#dfs
+def dfs(x):
+	for i in matrix[x]: #인접한 노드부터 탐색
+		if p[i] == 0: #미방문
+			p[i] = x #부모노드 넣기
+			dfs(i)
+#입력
+n = int(input())
+#인접행렬
+matrix = [[]for i in range(n+1)]
+for i in range(1,n):
+	a,b = map(int, input().split())
+	matrix[a].append(b)
+	matrix[b].append(a)
+
+#부모노드
+p = [0]*(n+1)
+
+#dfs
+dfs(1)
+
+#출력
+for i in range(2,n+1):
+	print(p[i])
