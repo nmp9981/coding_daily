@@ -1,0 +1,31 @@
+import math
+#블루레이
+def lesson(x):
+	sum = 0
+	count = 0
+	for i in range(n):
+		if sum + li[i] > x: #한도 초과시
+			count += 1
+			sum = 0
+		sum += li[i]
+	if sum:
+		count += 1
+	return count
+	
+#입력
+n,m = map(int, input().split())
+li = list(map(int, input().split()))
+
+#이분탐색
+start = max(li)
+end = sum(li)
+ans = 10**9
+while start <= end:
+	mid = (start + end)//2 #블루레이의 최대길이
+	if lesson(mid) > m:
+		start = mid + 1
+	else:
+		end = mid - 1
+
+#출력
+print(start)
