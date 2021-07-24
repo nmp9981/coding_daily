@@ -1,0 +1,29 @@
+#블루레이 개수
+def lesson(x):
+	sum = 0
+	count = 0
+	for i in range(len(li)):
+		if sum + li[i] > x: #용량 초과
+			sum = 0
+			count += 1
+		sum += li[i]
+	if sum:
+		count += 1
+	return count
+	
+#입력
+n,m = map(int, input().split())
+li = list(map(int, input().split()))
+
+#이분탐색
+start = max(li) #각각 1개씩 담을경우
+end = sum(li) #모두 1개에 담을 경우
+while start <= end:
+	mid = (start + end)//2
+	if lesson(mid) > m:
+		start = mid + 1
+	else:
+		end = mid - 1
+
+#출력
+print(start)
