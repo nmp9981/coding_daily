@@ -1,0 +1,35 @@
+#입력
+x1,y1,x2,y2,x3,y3,x4,y4 = map(float,input().split())
+
+#거리비율
+def minho(p):
+	return [x1+(x2-x1)*p/100, y1+(y2-y1)*p/100]
+
+def kangho(p):
+	return [x3+(x4-x3)*p/100, y3+(y4-y3)*p/100]
+
+#각 지점에서의 거리비율
+start = 0
+end = 100
+length = 200000
+while end-start >= 10**(-7):
+	k1 = (start*2 + end)/3
+	k2 = (start + end*2)/3
+	#각 지점에서의 좌표
+	m_k1 = minho(k1)
+	m_k2 = minho(k2)
+	h_k1 = kangho(k1)
+	h_k2 = kangho(k2)
+	
+	#각 지점에서의 두사람간 거리
+	dist_k1 = ((m_k1[0] - h_k1[0])**2 + (m_k1[1] - h_k1[1])**2)**0.5
+	dist_k2 = ((m_k2[0] - h_k2[0])**2 + (m_k2[1] - h_k2[1])**2)**0.5
+	length = min(length, min(dist_k1,dist_k2))
+	
+	#삼분탐색
+	if dist_k1 >= dist_k2: #거리가 더 멀면
+		start = k1
+	else:
+		end = k2
+#출력
+print('%.10f' %length)
