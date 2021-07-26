@@ -1,0 +1,45 @@
+import sys
+from collections import deque
+#이분그래프
+#bfs
+def bfs(start):
+	visit[start] = 1 #방문함
+	q = deque()
+	q.append(start)
+	while q:
+		x = q.popleft()
+		for i in matrix[x]:
+			if visit[i] == 0: #미방문
+				visit[i] = -visit[x] #색구별
+				q.append(i)
+			else:
+				#같은색이면 탈락
+				if visit[i] == visit[x]:
+					return False
+	return True
+	
+#입력
+t = int(input())
+for i in range(t):
+	v,e = map(int, input().split())
+	matrix = [[]for i in range(v+1)]#빈 그래프
+	visit = [0]*(v+1) #방문 정점
+	#무방향 그래프
+	for j in range(e):
+		a,b = map(int, input().split())
+		matrix[a].append(b)
+		matrix[b].append(a)
+	
+	bi = True
+	#방문정점 순회
+	for i in range(1,v+1):
+		if visit[i] == 0: #방문 안했으면
+			bi = bfs(i)
+			if bi == False:
+				break
+	
+	#출력
+	if bi == True:
+		print('YES')
+	else:
+		print('NO')
