@@ -1,0 +1,34 @@
+def devide(x,y,n):
+	global white, blue
+	color = matrix[x][y]
+	
+	for i in range(x, x+n):
+		for j in range(y,y +n):
+			#색이 하나라도 다르면
+			if color != matrix[i][j]:
+				#4등분
+				devide(x,y,n//2)
+				devide(x+n//2,y,n//2)
+				devide(x,y+n//2,n//2)
+				devide(x+n//2, y+n//2, n//2)
+				return
+	if color == 1:
+		blue += 1
+		return
+	else:
+		white += 1
+		return
+		
+#입력
+n = int(input())
+matrix = []
+for i in range(n):
+	li = list(map(int, input().split()))
+	matrix.append(li)
+
+#출력
+white = 0
+blue = 0
+devide(0,0,n)
+print(white)
+print(blue)
