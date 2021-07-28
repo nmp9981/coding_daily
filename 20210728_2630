@@ -1,0 +1,41 @@
+#쿼드트리
+def paper(x,y,n):
+	global white, blue
+	color = matrix[x][y]
+	
+	#트리순회
+	for i in range(x,x+n):
+		for j in range(y,y+n):
+			if color != matrix[i][j]:
+				#4등분(순서주의)
+				paper(x,y,n//2)
+				paper(x,y+n//2,n//2)
+				paper(x+n//2,y,n//2)
+				paper(x+n//2,y+n//2,n//2)
+				return
+	
+	if color == 0:
+		white += 1
+		return
+	else:
+		blue += 1
+		return
+		
+#입력
+n = int(input())
+matrix = []
+for i in range(n):
+	li = map(str, input().split())
+	matrix.append(list(li))
+
+#정수화
+for i in range(n):
+	for j in range(n):
+		matrix[i][j] = int(matrix[i][j])
+
+#결과 출력
+white = 0
+blue = 0
+paper(0,0,n)
+print(white)
+print(blue)
