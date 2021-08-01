@@ -1,0 +1,28 @@
+#분할
+def z(n,x,y):
+  global count
+
+  for i in range(x,x+n):
+    for j in range(y,y+n):
+      if n >= 2: #n=1 허용시 추가로 4개를 또 분할해야함
+        if not (x<=r<x+n and y<=c<y+n): #해당 지점이 있는 지역만 탐색
+          count += n*n
+          return
+          #4등분
+        z(n//2,x,y)
+        z(n//2,x,y+n//2)
+        z(n//2,x+n//2,y)
+        z(n//2,x+n//2,y+n//2)
+        return
+
+  count += 1
+
+  if x == r and y == c:
+    print(count)
+    return
+
+#입력
+N,r,c = map(int, input().split())
+n = 2**N
+count = -1 #방문번호(1씩 증가)
+z(n,0,0)
