@@ -1,0 +1,26 @@
+import math
+#소수 리스트
+prime = [True]*1003001
+for i in range(3,1003,2):
+  if prime[i] == True:
+    for j in range(i**2,1003001,i):
+      prime[j] == False
+
+#소수 제곱
+p2 = [4]
+for i in range(3,1003001,2):
+  if prime[i] == True:
+    p2.append(i**2)
+
+#입력
+mini, maxi = map(int, input().split())
+li = [1]*(maxi-mini+1)
+len_li = len(li)
+
+for i in p2:
+  erase_min = math.ceil(mini/i)*i #지워야하는 최소의 수
+  if maxi >= i:
+    for j in range(erase_min-mini,len_li,i):#소수 제곱의 배수는 모두 지움
+      li[j] = 0
+#결과
+print(sum(li))
