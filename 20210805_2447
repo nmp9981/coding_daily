@@ -1,0 +1,25 @@
+#별찍기
+def stars(star):
+  matrix = []
+  for i in range(3*len(star)):
+    if i//len(star) == 1:
+      matrix.append(star[i%len(star)]+" "*len(star)+star[i%len(star)])
+    else:
+      matrix.append(star[i%len(star)]*3)
+  return list(matrix)
+
+#입력
+n = int(input())
+k = 0
+star = ["***","* *","***"]
+
+#몇번 해야하는가?
+while n!=3:
+  n = int(n/3)
+  k += 1
+
+#출력
+for i in range(k):
+  star = stars(star)
+for i in star:
+  print(i)
