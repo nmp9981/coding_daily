@@ -1,0 +1,17 @@
+#하노이탑
+def hanoi(n,x,y):
+  if n > 1:
+    #n-1개의 원반을 2번으로
+    hanoi(n-1,x,6-x-y)
+  
+  print(x,y)
+
+  if n > 1:
+    #n-1개를 2->3
+    hanoi(n-1,6-x-y,y)
+
+#입력
+n = int(input())
+print(2**n-1)#경우의 수
+if n <= 20:
+  hanoi(n,1,3)
