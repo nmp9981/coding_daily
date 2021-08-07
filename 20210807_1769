@@ -1,0 +1,22 @@
+#재귀함수
+def multi3(x):
+  
+  #출력후 종료
+  if len(x) == 1:
+    print(len(matrix)-1)
+    if matrix[-1] % 3 == 0:
+      print('YES')
+    else:
+      print('NO')
+    return
+
+  s = 0
+  for i in range(len(x)):
+    s += int(x[i])
+  matrix.append(s)
+  multi3(str(s))
+
+#입력
+n = input()
+matrix = [int(n)]
+multi3(n)
