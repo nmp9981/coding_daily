@@ -1,0 +1,35 @@
+#퀸을 놓을 수 있는가?
+def isTrue(x):
+  for i in range(x):
+    #대각선에 퀸이 잇는가?(윗부분만 비교)
+    if abs(row[x]-row[i]) == abs(x-i):
+      return False
+  return True
+
+#퀸을 모든행,열에 넣어봄
+def queen(x):
+  global result
+
+  if x == n:
+    result += 1
+    return
+  else:
+    #모든열 검사
+    for i in range(n):
+      if visit[i]:
+        continue
+
+      row[x] = i #퀸을 배치
+      if isTrue(x):
+        visit[i] = True
+        queen(x+1)
+        visit[i] = False
+
+#입력
+n = int(input())
+row = [0]*n #행
+visit = [0]*n #퀸이 있는가?
+result = 0 #총 경우의 수
+queen(0)#첫행부터 방문
+#출력
+print(result)
