@@ -1,0 +1,19 @@
+#1111...
+def one(n):
+  s = 1 #배수
+  cnt = 1 #자릿수
+  while True:
+    if s%n == 0:
+      print(cnt)
+      return
+    else:
+      s += 10**cnt
+      cnt += 1
+
+#입력
+while True:
+  try:
+    n = int(input())
+    one(n)
+  except:
+    break
