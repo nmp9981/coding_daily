@@ -1,0 +1,27 @@
+#입력
+s = input()
+stack = []
+l = 0 #문자열 길이
+#문자열 순회
+for i in range(len(s)):
+  if s[i] == '(':
+    stack.append('(')
+  elif s[i] == ')':
+    # ( 가 나올때까지 순회
+    l = 0 #문자열 길이
+    while True:
+      st = stack.pop()
+      if st == '(':
+        l = l * int(stack.pop())
+        break
+      else:
+        l += int(st)
+    stack.append(l)
+  else:
+    if i < len(s)-1 and s[i+1] == '(':
+      stack.append(int(s[i]))
+    else:
+      stack.append(1)
+
+#출력
+print(sum(stack))
