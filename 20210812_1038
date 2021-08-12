@@ -1,0 +1,38 @@
+#백트래킹
+def backt(depth,x):
+  if depth == x:
+    m = []
+    #내림차순
+    for i in range(len(s)-1,-1,-1):
+      m.append(s[i])
+    mat.append(m)
+    return
+  
+  for i in range(10):
+    if i not in s:
+      if depth == 0 or s[len(s)-1] < i:
+        s.append(i)
+        backt(depth+1,x)
+        s.pop()
+
+#입력
+n = int(input())
+#최대 9876543210
+if n >= 1023:
+  print(-1)
+elif n == 1022:
+  print(9876543210)
+elif n < 10:
+  print(n)
+else:
+  matrix = []
+  for i in range(2,10):
+    s = []
+    mat = []
+    backt(0,i)
+    mat.sort()
+    matrix += mat
+  result = matrix[n-10]
+  #출력
+  for i in result:
+    print(i,end="")
