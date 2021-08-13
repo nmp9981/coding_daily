@@ -1,0 +1,33 @@
+#백트래킹
+def backt(depth,n,x):
+  global count
+  if depth == x:
+    sum = 0
+    for i in s:
+      sum += li[i]
+    
+    if sum == k:
+      count += 1
+    return
+  
+  for i in range(n):
+    if i not in s:
+      if depth == 0 or s[len(s)-1] < i:
+        s.append(i)
+        backt(depth+1,n,x)
+        s.pop()
+
+#입력
+n,k = map(int, input().split())
+li = list(map(int, input().split()))
+tot = sum(li)
+#n개중 i개
+count = 0
+for i in range(1,n):
+  s = []
+  backt(0,n,i)
+
+#출력
+if tot == k:#모두 뽑을 경우
+  count += 1
+print(count)
