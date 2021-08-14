@@ -1,0 +1,41 @@
+import itertools
+import sys
+#입력
+word1, word2, word3 = map(list,input().split())
+set_s = list(set(word1+word2+word3))
+l = len(set_s)
+num = [0,1,2,3,4,5,6,7,8,9]
+word = {}
+
+#각 자릿수의 합 구하기
+def add():
+  one = 0
+  two = 0
+  three = 0
+  for i in word1:
+    one *= 10
+    one += word[i]
+  for i in word2:
+    two *= 10
+    two += word[i]
+  for i in word3:
+    three *= 10
+    three += word[i]
+  
+  return one + two == three
+
+#10개중 l개를 뽑기
+for li in itertools.permutations(num,l):
+  if l > 10:
+    break
+  
+  #사전생성
+  for i in range(len(li)):
+    word[set_s[i]] = li[i]
+  
+  if add():
+    print('YES')
+    sys.exit()
+
+#답이 없는 경우
+print('No')
