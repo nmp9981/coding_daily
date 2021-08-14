@@ -1,0 +1,25 @@
+import itertools
+import sys
+#입력
+n = int(input())
+num = [0,1,2,3,4,5,6,7,8,9]
+#10개중 7개를 뽑기
+for li in itertools.permutations(num,7):
+  #dehlorw
+  hello = li[2]*10000+li[1]*1000+li[3]*110+li[4]
+  world = li[6]*10000+li[4]*1000+li[5]*100+li[3]*10+li[0]
+  
+  #조건 만족시 출력
+  if li[2] != 0 and li[6] != 0 and hello + world == n:
+    print(' ',hello)
+    print('+',world)
+    print('-------')
+    if n>=100000:
+      print(' ',end='')
+      print(n)
+    else:
+      print(' ',n)
+    sys.exit()
+
+#답이 없는 경우
+print('No Answer')
