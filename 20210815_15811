@@ -1,0 +1,41 @@
+import sys
+import itertools
+#복면산 연산
+def add():
+  one = 0
+  two = 0
+  three = 0
+  for i in word1:
+    one *= 10
+    one += dic_word[i]
+  for i in word2:
+    two *= 10
+    two += dic_word[i]
+  for i in word3:
+    three *= 10
+    three += dic_word[i]
+  return three == one + two
+
+#입력
+word1,word2,word3 = map(list,input().split())
+set_w = list(set(word1+word2+word3))
+dic_word = {}
+
+#알파벳의 모든경우
+l = len(set_w)
+num = [0,1,2,3,4,5,6,7,8,9]
+for li in itertools.permutations(num,l):
+  if l > 10: #답이 존재할 수 없음
+    break
+  
+  #알파벳 지정
+  for i in range(l):
+    dic_word[set_w[i]] = li[i]
+  
+  #복면산이 성립하는가?
+  if add():
+    print('YES')
+    sys.exit(0)
+
+#모든경우가 없을 경우
+print('NO')
