@@ -1,0 +1,43 @@
+#행렬의 곱
+def mul(p,q):
+  mat = [[0,0],[0,0]]
+  for i in range(2):
+    for j in range(2):
+      sum = 0
+      for k in range(2):
+        sum += (p[i][k] * q[k][j])%mod
+      #뺄셈에 대한 모듈러 연산
+      mat[i][j] = (sum + mod) % mod
+  return mat
+
+#분할
+def tile(m,n):
+  if n == 1:
+    return m
+  
+  if n % 2 == 0:
+    p = tile(m,n//2)
+    return mul(p,p)
+  else:
+    p = tile(m,n//2)
+    return mul(mul(p,p),m)
+
+#입력
+n = int(input())
+mod = 1000000007
+if n % 2 == 1:
+  print(0)
+elif n == 2:
+  print(3)
+else:
+  n = (n-2)//2
+  #초기행렬
+  m0 = [[3,1],[-1,0]]
+  m = [[4,1],[-1,0]]
+
+  matrix = []
+  matrix = tile(m,n)
+  result = mul(m0,matrix)
+
+  #출력
+  print(result[0][0])
