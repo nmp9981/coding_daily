@@ -1,0 +1,29 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+
+using namespace std;//이름공간 선언
+
+int main() {
+  
+  //입력
+  int n,t;
+  cin>>t;
+  
+  for(int j=0;j<t;j++){
+    cin>>n;
+    //로그 덧셈의 성질 이용
+    double log = 0;
+    if(n==1){
+      cout<<1<<endl;
+    }else{
+      for(int i = 2;i<=n;i++){
+        log += log10(i);
+      }
+    cout<<(int)ceil(log)<<endl;
+  }
+  }
+  return 0;
+}
