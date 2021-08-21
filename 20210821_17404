@@ -1,0 +1,74 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+
+using namespace std;//이름공간 선언
+
+int main() {
+  
+  //입력
+  int n;
+  cin>>n;
+  int li[n][3];
+  for(int i=0;i<n;i++){
+    cin>>li[i][0]>>li[i][1]>>li[i][2];
+  }
+
+  //rgb거리
+  int p[n][n];
+  int p1[n][n];
+  int p2[n][n];
+  int trash = 1000*1000+10;
+  //맨처음에 0번
+  p[0][0] = li[0][0];
+  for(int i=1;i<n;i++){
+    if(i==1){
+      p[i][0] = trash;
+      p[i][1] = p[0][0] + li[i][1];
+      p[i][2] = p[0][0] + li[i][2];
+    }else{
+      p[i][0] = li[i][0] + min(p[i-1][1],p[i-1][2]);
+      p[i][1] = li[i][1] + min(p[i-1][0],p[i-1][2]);
+      p[i][2] = li[i][2] + min(p[i-1][1],p[i-1][0]);
+    }
+  }
+
+  //맨처음에 1번
+  p1[0][1] = li[0][1];
+  for(int i=1;i<n;i++){
+    if(i==1){
+      p1[i][0] = p1[0][1] + li[i][0];
+      p1[i][1] = trash;
+      p1[i][2] = p1[0][1] + li[i][2];
+    }else{
+      p1[i][0] = li[i][0] + min(p1[i-1][1],p1[i-1][2]);
+      p1[i][1] = li[i][1] + min(p1[i-1][0],p1[i-1][2]);
+      p1[i][2] = li[i][2] + min(p1[i-1][1],p1[i-1][0]);
+    }
+  }
+
+  //맨처음에 2번
+  p2[0][2] = li[0][2];
+  for(int i=1;i<n;i++){
+    if(i==1){
+      p2[i][0] = p2[0][2] + li[i][0];
+      p2[i][1] = p2[0][2] + li[i][1];
+      p2[i][2] = trash;
+    }else{
+      p2[i][0] = li[i][0] + min(p2[i-1][1],p2[i-1][2]);
+      p2[i][1] = li[i][1] + min(p2[i-1][0],p2[i-1][2]);
+      p2[i][2] = li[i][2] + min(p2[i-1][1],p2[i-1][0]);
+    }
+  }
+  
+  //최솟값
+  int r0,r1,r2,result;
+  r0 = min({p[n-1][1],p[n-1][2]});
+  r1 = min({p1[n-1][0],p1[n-1][2]});
+  r2 = min({p2[n-1][0],p2[n-1][1]});
+  result = min({r0,r1,r2});
+  cout<<result<<endl;
+  return 0;
+}
