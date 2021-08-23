@@ -1,0 +1,35 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int main() {
+  //입력
+  int n;
+  cin>>n;
+
+  //점화식
+  int p[n+1];
+  p[1] = 0;
+  for(int i=2;i<=n;i++){
+    //-1
+    p[i] = p[i-1] + 1;
+    //3으로 나누어 떨어짐
+    if(i%3==0){
+      p[i] = min(p[i],p[i/3]+1);
+    }
+    //2로 나눠떨어짐
+    if(i%2==0){
+      p[i] = min(p[i],p[i/2]+1);
+    }
+  }
+  //출력
+  cout<<p[n]<<endl;
+  return 0;
+}
