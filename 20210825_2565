@@ -1,0 +1,50 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int main() {
+  //입력
+  int n;
+  cin>>n;
+  vector<vector<int>> li(n,vector<int>(2,0));
+  for(int i=0;i<n;i++){
+    cin>>li[i][0]>>li[i][1];
+  }
+
+  //왼쪽열 기준 정렬
+  sort(li.begin(),li.end());
+  int p[n];
+  for(int i=0;i<n;i++){
+    p[i] = li[i][1];
+  }
+
+  //LIS
+  int dp[n];
+  for(int i=0;i<n;i++){
+    dp[i] = 1;
+  }
+  for(int i=1;i<n;i++){
+    for(int j=0;j<i;j++){
+      if(p[j]<p[i]){
+        dp[i] = max(dp[i],dp[j]+1);
+      }
+    }
+  }
+  //없애야하는 전깃줄의 개수
+  int maxi = 0;
+  for(int i=0;i<n;i++){
+    if(dp[i]>maxi){
+      maxi = dp[i];
+    }
+  }
+  cout<<n-maxi<<endl;
+  return 0;
+}
