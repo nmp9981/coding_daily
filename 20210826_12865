@@ -1,0 +1,53 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int main() {
+  ios_base::sync_with_stdio(0);
+  cin.tie(0); //실행속도 향상
+  
+  //입력
+  int n,k;
+  cin>>n>>k;
+  vector<int> weight;
+  vector<int> value;
+  weight.push_back(0);
+  value.push_back(0);
+  for(int i=0;i<n;i++){
+    int w,v;
+    cin>>w>>v;
+    weight.push_back(w);
+    value.push_back(v);
+  }
+
+  //배낭
+  int p[n+1][k+1];
+  //초기화
+  for(int i=0;i<=n;i++){
+    for(int j=0;j<=k;j++){
+      p[i][j] = 0;
+    }
+  }
+  //점화식
+  for(int i=1;i<=n;i++){
+    for(int j=1;j<=k;j++){
+      //넣을 수 있는가?
+      if(weight[i]<=j){
+        p[i][j] = max(p[i-1][j],value[i]+p[i-1][j-weight[i]]);
+      }else{
+        p[i][j] = p[i-1][j];
+      }
+    }
+  }
+  //출력
+  cout<<p[n][k];
+  return 0;
+}
