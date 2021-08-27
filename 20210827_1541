@@ -1,0 +1,50 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+//역정렬
+bool compare(int i,int j){
+  return j<i;
+}
+
+int main() {
+  ios_base::sync_with_stdio(0);
+  cin.tie(0); //실행속도 향상
+  
+  //입력
+  string s;
+  cin>>s;
+  vector<int> p;
+  for(int i=0;i<s.size();i++){
+    p.push_back(s[i]);
+  }
+
+  //연산, 뺄셈이 나오면 계속 빼면서 진행
+  int add = 0;
+  int total = 0;
+  int minus = 1;
+  for(int i=0;i<p.size();i++){
+    if(p[i] == '+'){
+      total += add*minus;
+      add = 0;
+    }else if(p[i] == '-'){
+      total += add*minus;
+      add = 0;
+      minus = -1;
+    }else{
+      add *= 10;
+      add += (int)p[i]-48;//아스키 코드 활용
+    }
+  }
+  //출력(마지막에 add를 남기고 for문이 종료됨)
+  cout<<total+add*minus<<endl;
+
+}
