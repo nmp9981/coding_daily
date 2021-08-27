@@ -1,0 +1,44 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+//역정렬
+bool compare(int i,int j){
+  return j<i;
+}
+
+int main() {
+  ios_base::sync_with_stdio(0);
+  cin.tie(0); //실행속도 향상
+  
+  //입력
+  int n;
+  cin>>n;
+  vector<int> p;
+  for(int i=0;i<n;i++){
+    int x;
+    cin>>x;
+    p.push_back(x);
+  }
+
+  //역정렬
+  sort(p.begin(),p.end(),compare);
+  
+  //로프
+  int maxi = 0;
+  for(int i=0;i<n;i++){
+    if(maxi < (i+1)*p[i]){
+      maxi = (i+1)*p[i];
+    }
+  }
+  //출력
+  cout<<maxi<<endl;
+}
