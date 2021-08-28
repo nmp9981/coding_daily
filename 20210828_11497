@@ -1,0 +1,65 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+//2번째줄 기준으로 정렬
+bool compare(vector <int> v1,vector <int> v2){
+  if(v1[1] == v2[1]){
+    return v1[0]<v2[0];
+  }
+  return v1[1]<v2[1];
+}
+
+int main() {
+  ios_base::sync_with_stdio(0);
+  cin.tie(0); //실행속도 향상
+  
+  //입력
+  int t;
+  cin>>t;
+  for(int i=0;i<t;i++){
+    int n;
+    cin>>n;
+    //리스트 생성
+    vector<int> p;
+    for(int i=0;i<n;i++){
+      int x;
+      cin>>x;
+      p.push_back(x);
+    }
+    sort(p.begin(),p.end());
+
+    vector<int> li1;
+    vector<int> li2;
+    for(int j = 0;j<n;j++){
+      if(j%2 == 0){
+        li1.push_back(p[j]);
+      }else{
+        li2.push_back(p[j]);
+      }
+    }
+    //최소난이도(종모양)
+    int mini = p[n-1] - p[n-3];
+    for(int j=0;j<li1.size()-1;j++){
+      if(mini < abs(li1[j+1]-li1[j])){
+        mini = abs(li1[j+1]-li1[j]);
+      }
+    }
+    for(int j=0;j<li2.size()-1;j++){
+      if(mini < abs(li2[j+1]-li2[j])){
+        mini = abs(li2[j+1]-li2[j]);
+      }
+    }
+
+    //출력
+    cout<<mini<<endl;
+  }
+}
