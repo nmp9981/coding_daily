@@ -1,0 +1,27 @@
+import sys
+import heapq
+
+#입력
+n = int(input())
+p = []
+for i in range(n):
+  x = int(input())
+  p.append(x)
+p.sort()
+
+#예외처리 : 길이가 1이면 바꿀 필요 없음
+if len(p) == 1:
+  print(0)
+  sys.exit(0)
+
+#앞2개를 지우고 더한값 삽입
+heapq.heapify(p) #힙 자료구조로 변환
+total = 0
+while len(p)>=2:
+  compare1 = heapq.heappop(p)
+  compare2 = heapq.heappop(p)
+  heapq.heappush(p,compare1+compare2)
+  total += compare1 + compare2
+
+#출력
+print(total)
