@@ -1,0 +1,62 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+long long mod = 1000000007;
+int maxi = 4000001;
+
+//거듭제곱 구하기
+long long power(long long a,long long b){
+  if(b==0){
+    return 1;
+  }
+
+  if(b % 2==0){
+    long long p = power(a,b/2);
+    return (p*p)%mod;
+  }else{
+    long long p = power(a,b/2);
+    return (((p*p)%mod)*a)%mod; 
+  }
+}
+
+//팩토리얼 구하기
+long long fact(long long x){
+  long long f=1;
+  if(x < 2){
+    return 1;
+  }else{
+    for(int i=2;i<=x;i++){
+      f *= i;
+      f %= mod;
+    }
+    return f;
+  }
+}
+
+int main() {
+  cin.tie(0); //실행속도 향상
+  //입력
+  int n,k;
+  cin>>n>>k;
+  //팩토리얼 계산
+  long long up = fact(n);
+  long long k_fact = fact(k);
+  long long nk_fact = fact(n-k);
+  //모듈러 역원,페르마 소정리
+  long long down = (k_fact*nk_fact)%mod;
+  long long reverse = power(down,mod-2)%mod;
+  long long result = (reverse * up)%mod;
+  //출력
+  cout<<result<<endl;
+
+return 0;
+}
