@@ -1,0 +1,25 @@
+import sys
+import heapq
+
+#입력
+n = int(input())
+p = []
+for i in range(n):
+  x = int(input())
+  p.append(x)
+
+#정렬
+p.sort()
+
+#두번의 팝, 한번의 푸쉬
+#중간에 최솟값을 pop, 더한값을 적당한 위치에 푸쉬하므로 힙 자료구조 사용
+heapq.heapify(p)
+result = 0
+while len(p)>=2:
+  pop1 = heapq.heappop(p)
+  pop2 = heapq.heappop(p)
+  heapq.heappush(p,pop1+pop2)
+  result += (pop1 + pop2)
+
+#출력
+print(result)
