@@ -1,0 +1,59 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+long long mod = 1000000007;
+//팩토리얼 구하기
+long long fact(int x){
+  if(x<=1){
+    return 1;
+  }else{
+    long long f = 1;
+    for(int i=2;i<=x;i++){
+      f = (f*i)%mod;
+    }
+    return f%mod;
+  }
+}
+
+//거듭제곱 구하기
+long long power(long long x,long long y){
+  if(y==0){
+    return 1;
+  }else{
+    long long p = power(x,y/2);
+    if(y%2==0){
+      return (p*p)%mod;
+    }else{
+      return ((p*p)%mod)*x%mod;
+    }
+  }
+}
+
+int main() {
+  cin.tie(0); //실행속도 향상
+  //입력
+  long long n,k;
+  cin>>n>>k;
+  
+  //팩토리얼값 구하기
+  long long up = fact(n);
+  long long fac_k = fact(k);
+  long long fac_nk = fact(n-k);
+  
+  //페르마 소정리, 모듈로 역원
+  long long down = (fac_k*fac_nk)%mod;
+  long long re_down = power(down,mod-2)%mod;
+  long long result = up*re_down%mod;
+  cout<<result<<endl;
+  return 0;
+}
