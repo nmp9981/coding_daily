@@ -1,0 +1,79 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+bool compare(int a, int b){
+  return a>b;
+}
+
+int main() {
+  cin.tie(0); //실행속도 향상
+  
+  //입력
+  int n;
+  cin>>n;
+
+  vector<string> s;
+  for(int i=0;i<n;i++){
+    string x;
+    cin>>x;
+    s.push_back(x);
+  }
+
+  //덧셈
+  int alpha[26];
+  vector<int> alphabet;
+  //초기화
+  for(int i=0;i<26;i++){
+    alphabet.push_back(0);
+  }
+  //복면산
+  for(int i=0;i<s.size();i++){
+    //초기화
+    for(int i=0;i<26;i++){
+      alpha[i] = 0;
+    }
+    //단어의 자릿수를 더해감
+    int digit = 1;
+    for(int j=s[i].size()-1;j>=0;j--){
+      //아스키 코드 활용
+      alpha[s[i][j]-'A'] += digit;
+      digit *= 10;
+    }
+
+    //합을 누적
+    for(int i=0;i<26;i++){
+      alphabet[i] += alpha[i];
+    }
+  }
+  
+  //총합 역정렬
+  sort(alphabet.begin(),alphabet.end(),compare);
+
+  //9부처 차례대로 넣기
+  int sum = 0;
+  int count = 9;
+  for(int i=0;i<26;i++){
+    if(alphabet[i]!=0){
+      sum += (count * alphabet[i]);
+      count --;
+    }
+    if(count == 0){
+      break;
+    }
+  }
+
+  //출력
+  cout<<sum<<"\n";
+  return 0;
+}
