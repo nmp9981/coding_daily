@@ -1,0 +1,74 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+long long c[2000][2000];
+void comb(int m){
+  //초기화
+  for(int i=0;i<2000;i++){
+    for(int j=0;j<2000;j++){
+      c[i][j] = 0;
+    }
+  }
+  //조합
+  c[0][0] = 1;
+  c[1][0] = 1;
+  c[1][1] = 1;
+  for(int i=2;i<2000;i++){
+    for(int j=0;j<=i;j++){
+      if(j==0 || j==i){
+        c[i][j] = 1;
+      }else{
+        c[i][j] = (c[i-1][j] + c[i-1][j-1])%m;
+      }
+    }
+  }
+}
+
+int main() {
+  cin.tie(0); //실행속도 향상
+  
+  //입력
+  long long n,k,m;
+  cin>>n>>k>>m;
+
+  //n,k을 p진법으로
+  vector<long long> np;
+  vector<long long> kp;
+  while(n>0){
+    np.push_back(n%m);
+    n /= m;
+  }
+  while(k>0){
+    kp.push_back(k%m);
+    k /= m;
+  }
+  
+  //자릿수가 다를 경우 : k에 0넣기
+  while(np.size() != kp.size()){
+    kp.push_back(0);
+  }
+
+  //조합을 미리 구하기
+  comb(m);
+
+  //뤼카의 정리
+  long long result = 1;
+  for(int i=0;i<np.size();i++){
+    result *= c[np[i]][kp[i]];
+    result %= m;
+  }
+
+  //결과
+  cout<<result % m<<endl;
+  return 0;
+}
