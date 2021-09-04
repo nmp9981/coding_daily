@@ -1,0 +1,50 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int main() {
+  cin.tie(0); //실행속도 향상
+  //입력(공백포함))
+  string s;
+  getline(cin,s);
+  string word;
+  getline(cin,word);
+
+  //문서검색
+  int s_size = s.size();
+  int word_size = word.size();
+  int count = 0;
+  int i = 0;
+  while(i<=s_size-word_size){
+    //단어의 첫 글자가 일치시 검색
+    if(s[i]==word[0]){
+      int w = 1;
+      for(int j=1;j<word_size;j++){
+        if(s[i+j]==word[j]){
+          w += 1;
+        }
+      }
+      //글자가 모두 일치한가?
+      if(w == word_size){
+        count += 1;
+        i+=word_size;
+        continue;
+      }
+    }
+    i++;
+  }
+
+  //결과
+  cout<<count<<endl;
+  return 0;
+}
