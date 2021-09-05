@@ -1,0 +1,53 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int main() {
+  cin.tie(0); //실행속도 향상
+  //입력
+  int n;
+  cin>>n;
+  
+  stack<int> stack;
+  vector<string> result;
+
+  int num = 1;
+  for(int i=0;i<n;i++){
+    int x;
+    cin>>x;
+
+    //num보다 더 큰수가 들어옴
+    while(num<=x){
+      stack.push(num);
+      result.push_back("+");
+      num += 1;
+    }
+
+    //수열이 존재
+    if(stack.top()==x){   
+      stack.pop();
+      result.push_back("-"); 
+    }else{//존재할 수 없음
+      cout<<"NO"<<endl;
+      return 0;
+    }
+    
+  }
+
+  //출력
+  for(int i=0;i<result.size();i++){
+    cout<<result[i]<<"\n";
+  }
+
+  return 0;
+}
