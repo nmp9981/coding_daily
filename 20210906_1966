@@ -1,0 +1,62 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int main() {
+  cin.tie(0); //실행속도 향상
+  ios::sync_with_stdio(false);
+  
+  //입력
+  int t;
+  cin>>t;
+  for(int i=0;i<t;i++){
+    int n,m;
+    cin>>n>>m;
+    //프린터
+    deque<int> print;
+    for(int j=0;j<n;j++){
+      int x;
+      cin>>x;
+      print.push_back(x);
+    }
+    //위치
+    deque<int> docu;
+    for(int j=0;j<n;j++){
+      docu.push_back(0);
+    }
+    docu[m] = 1;
+    
+    //큐를 사용
+    int count = 1;
+    while(!print.empty()){
+      if(print[0] == *max_element(print.begin(),print.end())){
+        if(docu[0]==1){
+          cout<<count<<endl;
+          break;
+        }else{
+          count += 1;
+          print.pop_front();
+          docu.pop_front();
+        }
+      }else{
+        print.push_back(print[0]);
+        docu.push_back(docu[0]);
+        print.pop_front();
+        docu.pop_front();
+      }
+    }
+  }
+  
+  return 0;
+}
