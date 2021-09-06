@@ -1,0 +1,59 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int main() {
+  cin.tie(0); //실행속도 향상
+  ios::sync_with_stdio(false);
+  
+  //입력
+  int n;
+  cin>>n;
+
+  stack<int> tower;
+  stack<int> index;
+  vector<int> result;
+  //입력 받으면서 진행
+  for(int i=1;i<=n;i++){
+    int x;
+    cin>>x;
+    
+    if(!tower.empty()){
+      //입력한 수가 더 크면
+      if(tower.top()<x){
+        //수신가능한 탑이 나올때까지 빼줌
+        while(!tower.empty() && tower.top()<x){
+          tower.pop();
+          index.pop();
+        }
+      }
+    }
+
+    //수신 가능한 탑이 있으면
+    if(!tower.empty()){
+      result.push_back(index.top());
+    }else{
+      //아무것도 없으면(수신가능탑 x)
+      result.push_back(0);
+    }
+    tower.push(x);
+    index.push(i);
+  }
+
+  //결과
+  for(int i=0;i<n;i++){
+    cout<<result[i]<<" ";
+  }
+  return 0;
+}
