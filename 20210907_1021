@@ -1,0 +1,74 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int main() {
+  cin.tie(0); //실행속도 향상
+  ios::sync_with_stdio(false);
+  
+  //입력
+  int n,m;
+  cin>>n>>m;
+
+  deque<int> p;
+  for(int i=0;i<m;i++){
+    int x;
+    cin>>x;
+    p.push_back(x);
+  }
+
+  deque<int> q;
+  for(int i=1;i<=n;i++){
+    q.push_back(i);
+  }
+
+  //회전하는 큐
+  int count = 0;
+  for(int i=0;i<m;i++){
+    //x의 위치
+    int index = 0;
+    for(int j=0;j<q.size();j++){
+      if(q[j]==p[i]){
+        index = j;
+      }
+    }
+
+    //최대 이동값
+    int std = q.size()/2;
+    //2번이 이득
+    if(index<=std){
+      while(q[0] != p[i]){
+        q.push_back(q[0]);
+        q.pop_front();
+        count += 1;
+      }
+    }else{
+      //3번이 이득
+      while(q[0] != p[i]){
+        q.push_front(q[q.size()-1]);
+        q.pop_back();
+        count += 1;
+      }
+    }
+
+    //뽑기
+    if(!q.empty() && q[0]==p[i]){
+      q.pop_front();
+    }
+  }
+  //결과
+  cout<<count<<endl;
+
+  return 0;
+}
