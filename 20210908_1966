@@ -1,0 +1,74 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+long long win(long long m,long long x,long long y){
+  return (100*(y+m))/(x+m);
+}
+
+int main() {
+  cin.tie(0); //실행속도 향상
+  ios::sync_with_stdio(false);
+  
+  //입력
+  int t;
+  cin>>t;
+  
+  for(int i=0;i<t;i++){
+    //입력
+    int n,m;
+    cin>>n>>m;
+
+    //중요도
+    deque<int> import;
+    for(int j=0;j<n;j++){
+      int x;
+      cin>>x;
+      import.push_back(x);
+    }
+
+    //문서 출력
+    deque<int> index;
+    for(int j=0;j<n;j++){
+      index.push_back(0);
+    }
+    index[m] = 1;//출력할 문서
+
+    //큐를 사용하여 출력
+    int count = 1;
+    while(true){
+      //가장 큰수를 만남
+      if(import[0] == *max_element(import.begin(),import.end())){
+        if(index[0]==1){
+          //인쇄하고 종료
+          cout<<count<<endl;
+          break;
+        }else{
+          //우리가 목표한 출력물이 아님
+          count += 1;
+          index.pop_front();
+          import.pop_front();
+        }
+      }else{
+        //문서 이동(중요도가 가장 큰것이 아니므로)
+        index.push_back(index[0]);
+        import.push_back(import[0]);
+        index.pop_front();
+        import.pop_front();
+      }
+    }
+
+  }
+  return 0;
+}
