@@ -1,0 +1,50 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+long long win(long long m,long long x,long long y){
+  return (100*(y+m))/(x+m);
+}
+
+int main() {
+  cin.tie(0); //실행속도 향상
+  ios::sync_with_stdio(false);
+  
+  //입력
+  long long x,y;
+  cin>>x>>y;
+  
+  //예외
+  long long winner = (100*y)/x;
+  if(winner>=99){
+    cout<<-1<<endl;
+    return 0;
+  }
+
+  //이분탐색
+  long long start = 1;
+  long long end = 2100000000;
+  long long mid;
+  while(start<=end){
+    mid = (start+end)/2;
+    if(win(mid,x,y)>winner){
+      end = mid - 1;
+    }else{
+      start = mid+1;
+    }
+  }
+  //출력
+  cout<<start<<endl;
+  return 0;
+}
