@@ -1,0 +1,69 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int main() {
+  cin.tie(0); //실행속도 향상
+  ios::sync_with_stdio(false);
+  
+  //입력
+  int n,m;
+  cin>>n>>m;
+  
+  deque<int> q;
+  for(int i=1;i<=n;i++){
+    q.push_back(i);
+  }
+ 
+  //회전하는 큐
+  int count = 0;
+  for(int i=0;i<m;i++){
+    int x;
+    cin>>x;
+    
+    //x의 위치
+    int index;
+    for(int i=0;i<q.size();i++){
+      if(x==q[i]){
+        index = i;
+      }
+    }
+
+    //2,3번중 어느것이 이득인가?
+    int mid = q.size()/2;
+    //2번
+    if(index<=mid){
+      while(x!=q[0]){
+        q.push_back(q[0]);
+        q.pop_front();
+        count += 1;
+      }
+    }else{
+      //3번
+      while(x!=q[0]){
+        q.push_front(q[q.size()-1]);
+        q.pop_back();
+        count += 1;
+      }
+    }
+
+    //맨 처음원소와 일치
+    if(x == q[0]){
+      q.pop_front();
+    }
+  }
+  //출력
+  cout<<count<<endl;
+  return 0;
+}
