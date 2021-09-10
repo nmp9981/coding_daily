@@ -1,0 +1,44 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int main() {
+  cin.tie(0); //실행속도 향상
+  ios::sync_with_stdio(false);
+  
+  //입력
+  int n;
+  cin>>n;
+  
+  vector <int> a;
+  for(int i=0;i<n;i++){
+    int x;
+    cin>>x;
+    a.push_back(x);
+  }
+  //회전하는 큐
+  vector<int> p;
+  p.push_back(a[0]);
+  for(int i=1;i<n;i++){
+    int y = a[i];
+    if(p.back()<y){
+      p.push_back(y);
+    }else{
+      *lower_bound(p.begin(),p.end(),y) = y;
+    }
+  }
+  //출력
+  cout<<p.size()<<endl;
+  return 0;
+}
