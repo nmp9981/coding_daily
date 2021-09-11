@@ -1,0 +1,69 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int map[25][25];
+int cnt;
+int n;
+int dx[] = {-1,1,0,0};
+int dy[] = {0,0,-1,1};
+
+bool dfs(int x,int y){
+  //범위를 넘는다면 탐색종료
+  if(x<0 || x>=n || y<0 || y>=n){
+    return false;
+  }
+
+  //1->0
+  if(map[x][y]==1){
+    map[x][y] = 0;
+    cnt += 1;
+    for(int i=0;i<4;i++){
+      int nx = x + dx[i];
+      int ny = y + dy[i];
+      dfs(nx,ny);
+    }
+  }
+  return true;
+}
+
+int main(){
+  //입력
+  cin>>n;
+  //지도 만들기
+  for(int i=0;i<n;i++){
+    for(int j=0;j<n;j++){
+      scanf("%1d",&map[i][j]);
+    }
+  }
+
+  vector<int> danji;
+  //지도를 순회하면서 1->0
+  for(int i=0;i<n;i++){
+    for(int j=0;j<n;j++){
+      if(dfs(i,j)==true && cnt>=1){
+        danji.push_back(cnt);
+        cnt = 0;
+      }
+    }
+  }
+
+  //결과 출력
+  cout<<danji.size()<<endl;
+  sort(danji.begin(),danji.end());
+  for(int i=0;i<danji.size();i++){
+    cout<<danji[i]<<"\n";
+  }
+  return 0;
+}
