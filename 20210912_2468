@@ -1,0 +1,82 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int n,cnt;
+int map_ori[100][100];
+int map[100][100];
+int maxi = -1;
+int dx[] = {-1,1,0,0};
+int dy[] = {0,0,-1,1};
+
+//dfs
+bool dfs(int x,int y,int k){
+  //범위를 벗어난 경우
+  if(x<0 || x>=n || y<0 || y>=n){
+    return false;
+  }
+
+  //k->0
+  //k초과이면 잠기지 않음
+  if(map[x][y] > k){//아직 미방문
+    map[x][y] = 0;
+    cnt ++;
+    for(int i=0;i<4;i++){
+      int nx = x + dx[i];
+      int ny = y + dy[i];
+      dfs(nx,ny,k);
+    }
+  }
+  return true;
+}
+
+int main(){
+  //입력
+  cin>>n;
+  for(int i=0;i<n;i++){
+    for(int j=0;j<n;j++){
+      cin>>map_ori[i][j];
+    }
+  }
+  
+  //강수량에 따른 안전지대의 수
+  for(int rain = 0;rain<=100;rain++){
+    //지도 초기화
+    for(int i=0;i<n;i++){
+      for(int j=0;j<n;j++){
+        map[i][j] = map_ori[i][j];
+      }
+    }
+
+    //지도를 순회하면서 안전지대 찾음
+    int area = 0;
+    for(int i=0;i<n;i++){
+      for(int j=0;j<n;j++){
+        if(dfs(i,j,rain)==true && cnt>=1){
+          area ++ ;
+          cnt = 0;
+        }
+      }
+    }
+    
+    //안전지대 개수 갱신
+    if(area>maxi){
+      maxi = area;
+    }
+  }
+
+  //최대 안전지대 수
+  cout<<maxi<<endl;
+
+}
