@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+long long n,k;
+long long kth(long long x,long long n){
+  long long cnt = 0;
+  for(long long i=1;i<=n;i++){
+    cnt += min(x/i,n);
+  }
+  return cnt;
+}
+
+int main(){
+  //입력
+  cin>>n;
+  cin>>k;
+  
+  //이분탐색
+  long long start = 1;
+  long long end = 2000000000;
+  long long mid;
+  while(start<=end){
+    mid = (start+end)/2;
+    if(kth(mid,n)>=k){
+      end = mid - 1;
+    }else{
+      start  = mid + 1;
+    }
+  }
+  //결과
+  cout<<start<<endl;
+
+}
