@@ -1,0 +1,52 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+//3^n의 개수
+long long three(long long x){
+  long long cnt = 0;
+  while(x%3==0){
+    x = x/3;
+    cnt ++;
+  }
+  return cnt;
+}
+
+//3^n기준으로 내림차순 정렬
+bool compare(vector<long long> v1, vector<long long> v2){
+  if(v1[1]==v2[1]){
+    return v1[0]<v2[0];
+  }
+  return v1[1]>v2[1];
+}
+
+int main(){
+  //입력
+  int n;
+  cin>>n;
+  vector<vector<long long>> p(n,vector<long long>(2,0));
+  for(int i=0;i<n;i++){
+    cin>>p[i][0];
+    p[i][1] = three(p[i][0]);
+  }
+
+  //3^n기준으로 정렬
+  sort(p.begin(),p.end(),compare);
+
+  //출력
+  for(int i=0;i<n;i++){
+    cout<<p[i][0]<<" ";
+  }
+  return 0;
+}
