@@ -1,0 +1,79 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int m,n,k;
+int map[50][50];
+int cnt = 0;
+int dx[] = {-1,1,0,0};
+int dy[] = {0,0,-1,1};
+
+//3^n기준으로 내림차순 정렬
+bool dfs(int x,int y){
+  //범위를 넘어가는가?
+  if(x<0 || x>=n || y<0 || y>=m){
+    return false;
+  }
+
+  //방문시 1->0
+  if(map[x][y]==1){//미방문인가?
+    map[x][y] = 0;
+    cnt ++;
+    //4방향 탐색
+    for(int i=0;i<4;i++){
+      int nx = x + dx[i];
+      int ny = y + dy[i];
+      dfs(nx,ny);
+    }
+  }
+  return true;
+}
+
+int main(){
+  //입력
+  int t;
+  cin>>t;
+  for(int num=0;num<t;num++){
+    cin>>m>>n>>k;
+
+    //지도 초기화
+    for(int i=0;i<n;i++){
+      for(int j=0;j<m;j++){
+        map[i][j] = 0;
+      }
+    }
+
+    //배추 심기
+    for(int i=0;i<k;i++){
+      int x,y;
+      cin>>x>>y;
+      map[y][x] = 1;
+    }
+
+    //지도순회
+    int area = 0;
+    for(int i=0;i<n;i++){
+      for(int j=0;j<m;j++){
+        if(dfs(i,j)==true && cnt >= 1){
+          area++;
+          cnt = 0;//초기화
+        }
+      }
+    }
+
+    //출력
+    cout<<area<<"\n";
+  }
+  return 0;
+}
