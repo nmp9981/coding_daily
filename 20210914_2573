@@ -1,0 +1,113 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int n,m;
+int map[300][300];
+int map_ori[300][300];
+int melt[300][300];
+int cnt = 0;
+int dx[] = {-1,1,0,0};
+int dy[] = {0,0,-1,1};
+//dfs
+bool dfs(int x,int y){
+  //범위를 벗어나는가?
+  if(x<0 || x>=n || y<0 || y>=m){
+    return false;
+  }
+
+  //k->0
+  if(map[x][y]>=1){
+    map[x][y] = 0;
+    cnt += 1;
+    for(int i=0;i<4;i++){
+      int nx = x + dx[i];
+      int ny = y + dy[i];
+      dfs(nx,ny);
+    }
+  }
+  return true;
+}
+
+int main(){
+  int year = 0;
+  cin>>n>>m;
+
+   //지도 입력
+  for(int i=0;i<n;i++){
+    for(int j=0;j<m;j++){
+      cin>>map_ori[i][j];
+    }
+  }
+  while(true){
+    if(year>=1){
+      //빙하 녹이기
+      for(int i=1;i<n-1;i++){
+        for(int j=1;j<m-1;j++){
+          //얼마나 녹일것인가?
+          int melts = 0;
+          for(int k=0;k<4;k++){
+            int a = i+dx[k];
+            int b = j+dy[k];
+            if(map_ori[a][b]==0){
+              melts ++;
+            }
+          }
+          //녹는 양
+          melt[i][j] = melts;
+        }
+      }
+      //녹은뒤
+      for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+          map_ori[i][j] = max(0,map_ori[i][j]-melt[i][j]);
+        }
+      }
+    }
+
+    //지도 초기화
+    for(int i=0;i<n;i++){
+      for(int j=0;j<m;j++){
+        map[i][j] = map_ori[i][j];
+      }
+    }
+    
+    //지도순회
+    int land = 0;
+    for(int i=0;i<n;i++){
+      for(int j=0;j<m;j++){
+        if(dfs(i,j)==true && cnt>0){
+          land ++;
+          cnt = 0;
+        }
+      }
+    }
+
+    //2덩어리이상 분리가능
+    if(land >= 2){
+      cout<<year<<endl;
+      return 0;
+    }
+
+    //분리되지 않음
+    if(land==0){
+      cout<<0<<endl;
+      return 0;
+    }
+
+    //연도 증가
+    year++;
+  }
+  return 0;
+}
