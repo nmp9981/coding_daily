@@ -1,0 +1,80 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int w,h;
+int map[50][50];
+int cnt = 0;
+int dx[] = {-1,1,0,0,-1,-1,1,1};
+int dy[] = {0,0,-1,1,1,-1,1,-1};
+//dfs
+bool dfs(int x,int y){
+  //범위를 벗어나는가?
+  if(x<0 || x>=h || y<0 || y>=w){
+    return false;
+  }
+
+  //1->0
+  if(map[x][y]==1){
+    map[x][y] = 0;
+    cnt += 1;
+    for(int i=0;i<8;i++){
+      int nx = x + dx[i];
+      int ny = y + dy[i];
+      dfs(nx,ny);
+    }
+  }
+  return true;
+}
+
+int main(){
+  while(true){
+    //입력
+    cin>>w>>h;
+
+    //종료
+    if(w==0 && h==0){
+      break;
+    }
+
+    //지도 초기화
+    for(int i=0;i<h;i++){
+      for(int j=0;j<w;j++){
+        map[i][j] = 0;
+      }
+    }
+
+    //지도 입력
+    for(int i=0;i<h;i++){
+      for(int j=0;j<w;j++){
+        cin>>map[i][j];
+      }
+    }
+
+    //지도순회
+    int land = 0;
+    for(int i=0;i<h;i++){
+      for(int j=0;j<w;j++){
+        if(dfs(i,j)==true && cnt>0){
+          land ++;
+          cnt = 0;
+        }
+      }
+    }
+
+    //결과
+    cout<<land<<"\n";
+  }
+  return 0;
+}
