@@ -1,0 +1,71 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int n,m;
+int map[25][25];
+int check[25][25];
+int cnt = 0;
+int dx[] = {-1,1,0,0};
+int dy[] = {0,0,-1,1};
+//dfs
+bool dfs(int x,int y){
+  //범위를 벗어나는가?
+  if(x<0 || x>=n || y<0 || y>=n){
+    return false;
+  }
+
+  //1->0
+  if(map[x][y]==1){
+    map[x][y] = 0;
+    cnt += 1;
+    for(int i=0;i<4;i++){
+      int nx = x + dx[i];
+      int ny = y + dy[i];
+      dfs(nx,ny);
+    }
+  }
+  return true;
+}
+
+int main(){
+  //입력
+  cin>>n;
+
+  //지도 입력
+  for(int i=0;i<n;i++){
+    for(int j=0;j<n;j++){
+      scanf("%1d",&map[i][j]);
+    }
+  }
+
+  //지도순회
+  vector<int> apart;
+  for(int i=0;i<n;i++){
+    for(int j=0;j<n;j++){
+      if(dfs(i,j)==true && cnt>0){
+        apart.push_back(cnt);
+        cnt = 0;
+      }
+    }
+  }
+
+  //결과
+  cout<<apart.size()<<"\n";
+  sort(apart.begin(),apart.end());
+  for(int i=0;i<apart.size();i++){
+    cout<<apart[i]<<"\n";
+  }
+  return 0;
+}
