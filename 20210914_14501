@@ -1,0 +1,50 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int n;
+int main(){
+  cin.tie(0);
+  cout.tie(0);
+
+  cin>>n;
+  //지도 입력
+  vector<int> t;
+  vector<int> p;
+  vector<int> dp;
+  for(int i=0;i<n;i++){
+    int ti,pi;
+    cin>>ti>>pi;
+    t.push_back(ti);
+    p.push_back(pi);
+    dp.push_back(0);//초기화
+  }
+
+  //뒤에서부터 순회
+  int maxi = 0;
+  for(int i=n-1;i>=0;i--){
+    //상담이 가능하면
+    if(i+t[i] <= n){
+      dp[i] = max(p[i] + dp[i+t[i]],maxi);
+      maxi = dp[i];//갱신
+    }else{
+      //상담 불가능
+      dp[i] = maxi;
+    }
+  }
+
+  //출력
+  cout<<maxi<<"\n";
+  return 0;
+}
