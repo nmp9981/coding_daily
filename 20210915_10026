@@ -1,0 +1,107 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int n;
+int cnt;
+string map[100][100];
+string map_ori[100][100];
+int dx[] = {-1,1,0,0};
+int dy[] = {0,0,-1,1};
+string color[] = {"R","G","B","X"};
+//dfs
+bool dfs(int x,int y,int k){
+  //범위를 벗어난 경우
+  if(x<0 || x>=n || y<0 || y>=n){
+    return false;
+  }
+
+  //k->0
+  if(map[x][y] == color[k]){
+    map[x][y] = "0";
+    cnt ++;
+    //4방향 탐색
+    for(int i=0;i<4;i++){
+      int nx = x + dx[i];
+      int ny = y + dy[i];
+      dfs(nx,ny,k);
+    }
+  }
+  return true;
+}
+
+int main(){
+  cin.tie(0);
+  cout.tie(0);
+
+  cin>>n;
+  //지도 입력
+  string line;
+  for(int i=0;i<n;i++){
+    cin>>line;
+    for(int j=0;j<n;j++){
+      map_ori[i][j] = line[j];
+    }
+  }
+
+  //정상인 경우
+  vector<int> rgb;
+  for(int k=0;k<3;k++){
+    //지도 초기화
+    for(int i=0;i<n;i++){
+      for(int j=0;j<n;j++){
+        map[i][j] = map_ori[i][j];
+      }
+    }
+
+    //지도순회
+    int area = 0;
+    for(int i=0;i<n;i++){
+      for(int j=0;j<n;j++){
+        if(dfs(i,j,k)==true && cnt > 0){
+          area++;
+          cnt = 0;
+        }
+      }
+    }
+    rgb.push_back(area);
+  }
+
+  //색맹인 경우
+  //지도 초기화
+  for(int i=0;i<n;i++){
+    for(int j=0;j<n;j++){
+      map[i][j] = map_ori[i][j];
+      if(map[i][j] != "B"){
+        map[i][j] = "X";
+      }
+    }
+  }
+
+  //지도순회
+  int not_blue = 0;
+  for(int i=0;i<n;i++){
+    for(int j=0;j<n;j++){
+      if(dfs(i,j,3)==true && cnt > 0){
+        not_blue++;
+        cnt = 0;
+      }
+    }
+  }
+  
+  //출력
+  cout<<rgb[0]+rgb[1]+rgb[2]<<" "<<rgb[2]+not_blue<<"\n";
+
+  return 0;
+}
