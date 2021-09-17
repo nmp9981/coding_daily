@@ -1,0 +1,51 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int main(){
+  cin.tie(0);
+  cout.tie(0);
+	
+  //입력
+  int n;
+  cin>>n;
+  vector<int> p;
+  vector<int> t;
+  vector<int> dp;
+  //상담일정 입력
+  for(int i=0;i<n;i++){
+  	int ti,pi;
+	cin>>ti>>pi;
+	t.push_back(ti);
+	p.push_back(pi);
+	dp.push_back(0);
+  }
+  
+  //점화식
+  //상담이 가능한가?
+  int maxi = 0;
+  for(int i=n-1;i>=0;i--){
+    if(i+t[i] > n){
+	  dp[i] = maxi;
+	}else{
+	  //상담을 하는것이 이득인가?
+	  dp[i] = max(maxi,p[i]+dp[i+t[i]]);
+	  maxi = dp[i];
+	}
+  }
+  
+  //출력
+  cout<<*max_element(dp.begin(),dp.end())<<"\n";
+  return 0;
+}
