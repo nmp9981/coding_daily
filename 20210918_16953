@@ -1,0 +1,55 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+long long a,b;
+long long maxi = 1000000000;
+long long ans = -1;
+queue<pair<long long,long long>> q;
+
+void bfs(){
+  while(!q.empty()){
+    //현재 위치
+    long long x = q.front().first;
+    long long y = q.front().second;
+    q.pop();
+
+    //목표 도달
+    if(x==b){
+      ans = y;
+      break;
+    }
+
+    //*2
+    if(2*x<=2*maxi){
+      q.push(make_pair(2*x,y+1));
+    }
+
+    //1추가
+    if(10*x+1<=10*maxi+1){
+      q.push(make_pair(10*x+1,y+1));
+    }
+  }
+}
+int main(){
+  cin.tie(0);
+  cout.tie(0);
+
+  //입력
+  cin>>a>>b;
+  q.push(make_pair(a,1));
+  bfs();
+  cout<<ans<<"\n";
+  return 0;
+}
