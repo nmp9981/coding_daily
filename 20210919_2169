@@ -1,0 +1,65 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int n,m;
+int map[1000][1000];
+int dp[1000][1000];
+
+int main()
+{
+    //입력
+    cin>>n>>m;
+    
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            cin>>map[i][j];
+        }
+    }
+    
+    //맨위
+    dp[0][0] = map[0][0];
+    for(int j=1;j<m;j++){
+        dp[0][j] = map[0][j]+dp[0][j-1];
+    }
+    
+    //2번째줄부터
+    //왼쪽부터
+    for(int i=1;i<n;i++){
+        //초기화
+        int l[1000];
+        int r[1000];
+        for(int j=0;j<m;j++){
+            if(j==0){
+                l[j]=map[i][j]+dp[i-1][j];
+            }else{
+                l[j]=map[i][j]+max(l[j-1],dp[i-1][j]);
+            }
+        }
+        //오른쪽과 비교
+        for(int j=m-1;j>=0;j--){
+            if(j==m-1){
+                r[j]=map[i][j]+dp[i-1][j];
+            }else{
+                r[j]=map[i][j]+max(r[j+1],dp[i-1][j]);
+            }
+            dp[i][j] = max(l[j],r[j]);//둘중 더 큰것
+        }
+    }
+    
+    //출력
+    cout<<dp[n-1][m-1]<<"\n";
+    
+    return 0;
+}
