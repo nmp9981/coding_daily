@@ -1,0 +1,87 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int v,e,k;
+vector<int> map[20001];
+int visit[20001];//방문여부
+int cnt = 1;
+int ans = 1;
+
+//dfs
+void dfs(int start, int color){
+    int len = map[start].size();
+    for(int i=0;i<len;i++){
+        int next = map[start][i];//다음지점
+        if(visit[next]==0){//미방문이면
+            visit[next] = -color;//다른색으로 칠함
+            dfs(next,-color);
+        }
+    }
+}
+
+//이분그래프 판별
+bool istrue(){
+    for(int i=1;i<=v;i++){
+        int col = visit[i];
+        
+        //연결요소와 같은 집합인가?
+        for(int j=0;j<map[i].size();j++){
+            //색이 같으면 이분그래프가 아님
+            if(col==visit[map[i][j]]){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+int main()
+{   
+    cin.tie(0);
+    cout.tie(0);
+    //입력
+    cin>>k;
+    for(int test=0;test<k;test++){
+        cin>>v>>e;
+        //인접리스트
+        for(int i=0;i<e;i++){
+            int a,b;
+            cin>>a>>b;
+            map[a].push_back(b);
+            map[b].push_back(a);
+        }
+        
+        //방문정점순회
+        for(int i=1;i<=v;i++){
+            if(visit[i]==0){//미방문
+                dfs(i,1);//1번색부터 시작
+            }
+        }
+        
+        //이분그래프 판별 결과
+        if(istrue()){
+            cout<<"YES"<<"\n";
+        }else{
+            cout<<"NO"<<"\n";
+        }
+        
+        //초기화
+        for(int i=1;i<=20001;i++){
+            map[i].clear();
+            visit[i] = 0;
+        }
+    }
+    return 0;
+}
