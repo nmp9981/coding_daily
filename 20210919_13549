@@ -1,0 +1,65 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int n,k;
+int map[200001]={0,};
+vector<int> cnt;
+queue<pair<int,int>> q;
+
+void bfs(){
+    while(!q.empty()){
+        //현재위치 꺼내기
+        int x = q.front().first;
+        int times = q.front().second;
+        q.pop();
+        
+        //목표지점도달
+        if(x==k){
+            cnt.push_back(times);
+        }
+        
+        //범위내에 있고 미방문
+        if(2*x<=200000 && map[2*x]==0){
+            q.push({2*x,times});
+            map[2*x] = 1;//방문체크
+        }
+        if(x-1>=0 && map[x-1]==0){
+            q.push({x-1,times+1});
+            map[x-1] = 1;//방문체크
+        }
+        if(x+1<=100001 && map[x+1]==0){
+            q.push({x+1,times+1});
+            map[x+1] = 1;//방문체크
+        }
+    }
+}
+
+int main()
+{   
+    cin.tie(0);
+    cout.tie(0);
+    //입력
+    cin>>n>>k;
+    
+    //bfs탐색(맨처음값은 넣어줌)
+    q.push({n,0});
+    map[n] = 1;
+    bfs();
+    
+    //출력
+    cout<<*min_element(cnt.begin(),cnt.end());
+    
+    return 0;
+}
