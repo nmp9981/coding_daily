@@ -1,0 +1,93 @@
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int n,m;
+string map[50][50];
+string map_ori[50][50];
+queue<pair<pair<int,int>,int>> q;
+int dx[] = {-1,1,0,0};
+int dy[] = {0,0,-1,1};
+int ans = 0;
+
+void bfs(){
+    while(!q.empty()){
+        //현재좌표
+        int x = q.front().first.first;
+        int y = q.front().first.second;
+        int cnt = q.front().second;//최단 경로 길이
+        q.pop();
+        
+        //결과 갱신
+        ans = max(ans,cnt);
+        
+        //4방향탐색
+        for(int i=0;i<4;i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            //범위내에 있고 미방문
+            if(nx>=0 && nx<n && ny>=0 && ny<m){
+                if(map[nx][ny]=="L"){
+                    map[nx][ny] = "M";
+                    q.push({{nx,ny},cnt+1});
+                }
+            }
+        }
+    }
+}
+
+int main()
+{
+    cin.tie(0);
+    cout.tie(0);
+    
+    //입력
+    cin>>n>>m;
+    
+    //지도입력
+    string line;
+    for(int i=0;i<n;i++){
+        cin>>line;
+        for(int j=0;j<m;j++){
+            map_ori[i][j] = line[j];
+        }
+    }
+    
+    //지도순회
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(map_ori[i][j]=="L"){
+                //지도 초기화
+                for(int i=0;i<n;i++){
+                    for(int j=0;j<m;j++){
+                        map[i][j] = map_ori[i][j];
+                    }
+                }
+                //큐초기화
+                while(!q.empty()){
+                    q.pop();
+                }
+                //시작지점 넣기
+                q.push({{i,j},0});
+                map[i][j] = "W";
+                bfs();
+            }
+        }
+    }
+    
+    //결과출력
+    cout<<ans<<"\n";
+    return 0;
+}
