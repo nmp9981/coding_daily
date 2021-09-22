@@ -1,0 +1,116 @@
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int n,m;
+int map[8][8];//원래맵
+int visit[8][8];
+int dx[] = {-1,1,0,0};
+int dy[] = {0,0,-1,1};
+int ans = 0;
+
+int bfs(){
+    //바이러스 초기지점 모두 큐에넣기(동시탐색)
+    queue<pair<int,int>> q;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            visit[i][j] = map[i][j];//초기화
+            if(map[i][j]==2){
+                q.push({i,j});
+            }
+        }
+    }
+    
+    while(!q.empty()){
+        //현재좌표
+        int x = q.front().first;
+        int y = q.front().second;
+        q.pop();
+        
+        //4방향 탐색
+        for(int i=0;i<4;i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            
+            //범위내에 있고 미방문
+            if(nx>=0 && nx<n && ny>=0 && ny<m){
+                if(visit[nx][ny]==0){
+                    visit[nx][ny]=2;//바이러스 퍼트리기
+                    q.push({nx,ny});
+                }
+            }
+        }
+    }
+    //안전지대
+    int safe = 0;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(visit[i][j]==0){
+                safe++;
+            }
+        }
+    }
+    return safe;
+}
+
+void wall(int block){
+    if(block==3){
+        int safe_area = bfs();
+        ans = max(safe_area,ans);//갱신
+        return;
+    }
+    
+    //벽추가로 세우기
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(map[i][j]==0){
+                map[i][j]=1;//벽세우기
+                wall(block+1);
+                map[i][j]=0;//원래대로
+            }
+        }
+    }
+    
+}
+int main()
+{
+    cin.tie(0);
+    cout.tie(0);
+    
+    //입력
+    cin>>n>>m;
+    
+    //지도입력
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            cin>>map[i][j];
+        }
+    }
+    
+    //벽세우기
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(map[i][j]==0){
+                map[i][j] = 1;//벽세우기
+                wall(1);
+                map[i][j] = 0;//원래대로
+            }
+        }
+    }
+    
+    //결과
+    cout<<ans<<"\n";
+    return 0;
+}
