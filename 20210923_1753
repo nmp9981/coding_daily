@@ -1,0 +1,83 @@
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int v,e,start;
+int inf = 1000000000;
+vector<pair<int,int>> map[20001];
+int dist[20001];//비용
+
+void dijk(){
+    dist[start] = 0;
+    priority_queue<pair<int,int>> pq;//우선순위 큐, 비용,정점
+    pq.push({0,start});
+    
+    while(!pq.empty()){
+        int cost = -pq.top().first;//최소힙으로
+        int x = pq.top().second;//정점
+        pq.pop();
+        
+        //최소거리
+        if(dist[x]<cost){
+            continue;
+        }
+        
+        //이웃을 모두확인
+        for(int i=0;i<map[x].size();i++){
+            int next = map[x][i].first;
+            int nextcost = map[x][i].second;
+            //최소경로 발견시 업데이트
+            if(dist[next]>cost + nextcost){
+                dist[next] = cost + nextcost;
+                pq.push({-dist[next],next});
+            }
+        }
+    }
+    
+    //모든경로 출력
+    for(int i=1;i<=v;i++){
+        if(dist[i]==inf){
+            cout<<"INF"<<"\n";
+        }else{
+            cout<<dist[i]<<"\n";
+        }
+    }
+}
+int main()
+{
+    cin.tie(0);
+    cout.tie(0);
+    
+    //입력
+    cin>>v>>e;
+    cin>>start;
+    
+    //거리 초기화
+    for(int i=1;i<=v;i++){
+        dist[i] = inf;
+    }
+    
+    //간선 입력
+    for(int i=0;i<e;i++){
+        int a,b,c;
+        cin>>a>>b>>c;//노드,가중치
+        //양방향 간선
+        map[a].push_back({b,c});//방향그래프
+    }
+    
+    //다익스트라
+    dijk();
+    return 0;
+}
