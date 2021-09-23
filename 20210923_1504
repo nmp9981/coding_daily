@@ -1,0 +1,104 @@
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int v,e;
+int inf = 10000000;//다익을 3번 더하는 과정에서 오버플로우 발생하지않게 설정
+vector<pair<int,int>> map[801];
+int dist[801];//비용
+int goal1,goal2;
+
+void init_dist(){
+    //거리 초기화
+    for(int i=1;i<=v;i++){
+        dist[i] = inf;
+    }
+}
+
+int dijk(int start, int end){
+    dist[start] = 0;
+    priority_queue<pair<int,int>> pq;//우선순위 큐, 비용,정점
+    pq.push({0,start});
+    
+    while(!pq.empty()){
+        int cost = -pq.top().first;//최소힙으로
+        int x = pq.top().second;//정점
+        pq.pop();
+        
+        //최소거리
+        if(dist[x]<cost){
+            continue;
+        }
+        
+        //이웃을 모두확인
+        for(int i=0;i<map[x].size();i++){
+            int next = map[x][i].first;
+            int nextcost = map[x][i].second;
+            //최소경로 발견시 업데이트
+            if(dist[next]>cost + nextcost){
+                dist[next] = cost + nextcost;
+                pq.push({-dist[next],next});
+            }
+        }
+    }
+    return dist[end];
+}
+int main()
+{
+    cin.tie(0);
+    cout.tie(0);
+    
+    //입력
+    cin>>v>>e;
+    
+    //간선 입력
+    for(int i=0;i<e;i++){
+        int a,b,c;
+        cin>>a>>b>>c;//노드,가중치
+        //양방향 간선
+        map[a].push_back({b,c});
+        map[b].push_back({a,c});
+    }
+    //목표지점
+    cin>>goal1>>goal2;
+    
+    //다익스트라
+    int result1,result2;
+    
+    //1->goal1->goal2->n
+    init_dist();//거리초기화
+    result1 = dijk(1,goal1);
+    init_dist();
+    result1 += dijk(goal1,goal2);
+    init_dist();
+    result1 += dijk(goal2,v);
+    
+    //1->goal2->goal1->n(중간과정 순서는 무관하여 모든 경우 고려)
+    init_dist();
+    result2 = dijk(1,goal2);
+    init_dist();
+    result2 += dijk(goal2,goal1);
+    init_dist();
+    result2 += dijk(goal1,v);
+    
+    //결과
+    int result = min(result1,result2);
+    if(result>=inf){
+        cout<<-1;
+    }else{
+        cout<<result;
+    }
+    return 0;
+}
