@@ -1,0 +1,58 @@
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int n,s;
+vector<int> a;
+
+int main()
+{
+    cin.tie(0);
+    cout.tie(0);
+    
+    //입력
+    cin>>n>>s;
+    
+    //수열입력
+    for(int i=0;i<n;i++){
+        int x;
+        cin>>x;
+        a.push_back(x);
+    }
+    
+    //투포인터
+    int left = 0;
+    int right = 0;
+    int total = a[0];
+    int ans = 1000000;
+    while(left<=right && right<n){
+        if(total<s){
+            right++;
+            total+=a[right];
+        }else{
+            ans = min(ans,right-left+1);
+            total-=a[left];
+            left++;
+        }
+    }
+    
+    //출력
+    if(ans>n){
+        cout<<0;
+    }else{
+        cout<<ans<<"\n";
+    }
+    return 0;
+}
