@@ -1,0 +1,74 @@
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n;
+int maxi = 4000001;//n의 최댓값
+vector<int> prime;//소수를 담는 배열
+int num[4000001];//소수 여부 확인
+
+//소수 배열
+void prime_array(){
+    //에라토스테네스의 체
+    prime.push_back(2);//2는 소수
+    for(int i=3;i<2001;i+=2){
+        if(num[i]==0){
+            for(int j=i*i;j<maxi;j+=i){
+                num[j] = 1;//소수가 아님을 표시
+            }
+        }
+    }
+    
+    //n까지 소수 담기
+    for(int i=3;i<maxi;i+=2){
+        if(num[i]==0){
+            prime.push_back(i);
+        }
+    }
+}
+
+int main()
+{
+    cin.tie(0);
+    cout.tie(0);
+    
+    //입력
+    cin>>n;
+    
+    //소수 배열 받기
+    prime_array();
+    
+    //투포인터
+    int left = 0;
+    int right = 0;
+    int total = prime[0];//현재 누적합
+    int cnt = 0;//경우의 수
+    while(left<=right && right<prime.size()){
+        if(total<=n){//아직 합에 도달 못함
+            //목표와 같다면
+            if(total==n){
+                cnt++;
+            }
+            right++;//추가
+            total += prime[right];
+        }else{//합을 넘음
+            total -= prime[left];//제거
+            left++;
+        }
+    }
+    
+    //경우의 수 출력
+    cout<<cnt;
+    return 0;
+}
