@@ -1,0 +1,85 @@
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int v,e,k;
+vector<pair<int,int>> map[20001];//그래프
+int dist[20001];//각 정점에서의 거리
+int inf = 1000000000;//초기화 값
+
+//다익스트라 알고리즘(bfs와 유사)
+void dijk(int start){
+    //거리 초기화
+    for(int i=1;i<=v;i++){
+        dist[i] = inf;
+    }
+    
+    //처음값 저장
+    dist[start] = 0;
+    priority_queue<pair<int,int>> pq;//우선순위 큐(정점, 거리)
+    pq.push({0,start});
+    
+    //bfs와 비슷
+    while(!pq.empty()){
+        //현재좌표 꺼내기
+        int x = pq.top().second;//정점
+        int x_dist = -pq.top().first;//거리(최솟값을 꺼내므로 -를 함)
+        pq.pop();
+        
+        //이전 거리보다 더 크다면
+        if(dist[x] < x_dist){//갱신할 필요도 없고 이웃을 살펴보지 않아도됨
+            continue;
+        }
+        
+        //이웃탐색
+        for(int i=0;i<map[x].size();i++){
+            int next = map[x][i].first;//다음 지점
+            int next_dist = map[x][i].second;//다음 지점까지의 거리보다
+            
+            //다음 지점에서 더 작은 거리가 나오면 업데이트
+            if(dist[next] > x_dist + next_dist){//지금까지의 거리 + 다음지점까지의 거리
+                dist[next] = x_dist + next_dist;
+                pq.push({-dist[next],next});//정점,거리(37번줄에서 음수로 넣었었음)
+            }
+        }
+    }
+    
+    //1~n번노드 까지의 최단거리 결과 출력
+    for(int i=1;i<=v;i++){
+        if(dist[i]>=inf){
+            cout<<"INF"<<"\n";
+        }else{
+            cout<<dist[i]<<"\n";
+        }
+    }
+}
+
+int main()
+{
+    cin.tie(0);
+    cout.tie(0);
+
+    //입력
+    cin>>v>>e;//정점 간선 개수
+    cin>>k;//시작 정점
+    for(int i=0;i<e;i++){
+        int a,b,c;
+        cin>>a>>b>>c;
+        map[a].push_back({b,c});//단방향 그래프(지점,거리)
+    }
+
+    dijk(k);//다익스트라
+    
+    return 0;
+}
