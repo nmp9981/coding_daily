@@ -1,0 +1,70 @@
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n;
+vector<int> prime;//소수 리스트
+int num[4000001];//0~4000000까지의 수
+
+//소수 구하기
+void prime_list(){
+    prime.push_back(2);//2는 소수
+    for(int i=3;i<2001;i+=2){
+        if(num[i]==0){
+            for(int j=i*i;j<4000001;j+=i){
+                num[j] = 1;//소수가 아님을 표시
+            }
+        }
+    }
+    
+    for(int i=3;i<4000001;i+=2){
+        if(num[i]==0){
+            prime.push_back(i);
+        }
+    }
+}
+
+int main()
+{
+    cin.tie(0);
+    cout.tie(0);
+
+    //입력
+    cin>>n;
+    //소수리스트
+    prime_list();
+    
+    //투포인터
+    int left = 0;
+    int right = 0;
+    int cnt = 0;
+    int total = prime[0];
+    
+    while(left<=right && right<prime.size()){
+        if(total<=n){
+            if(total == n){
+                cnt++;
+            }
+            right++;
+            total+=prime[right];
+        }else{
+            total-=prime[left];
+            left++;
+        }
+    }
+    
+    //결과
+    cout<<cnt;
+    return 0;
+}
