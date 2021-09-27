@@ -1,0 +1,78 @@
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n,m,s,e;
+vector<pair<int,int>> map[1001];//그래프
+int cost[1001];
+int inf = 200000000;
+
+//소수 구하기
+void dijk(int start, int end){
+    //거리 초기화
+    for(int i=1;i<=n;i++){
+        cost[i] = inf;
+    }
+    
+    //시작점
+    cost[start] = 0;
+    priority_queue<pair<int,int>> pq;
+    pq.push({0,start});//비용,정점
+    
+    while(!pq.empty()){
+        //현재 좌표
+        int current_cost = -pq.top().first;
+        int x = pq.top().second;
+        pq.pop();
+        
+        //더 큰비용이 오면 pass
+        if(cost[x]<current_cost){
+            continue;
+        }
+        
+        //이웃탐색
+        for(int i=0;i<map[x].size();i++){
+            int next = map[x][i].first;
+            int next_cost = map[x][i].second;
+            //더 적은 비용이 오면 갱신
+            if(cost[next]>current_cost+next_cost){
+                cost[next] = current_cost+next_cost;
+                pq.push({-cost[next],next});
+            }
+        }
+    }
+    
+    //결과
+    cout<<cost[end];
+}
+
+int main()
+{
+    cin.tie(0);
+    cout.tie(0);
+
+    //입력
+    cin>>n;
+    cin>>m;
+    
+    for(int i=0;i<m;i++){
+        int a,b,d;
+        cin>>a>>b>>d;
+        map[a].push_back({b,d});//단방향 그래프
+    }
+    cin>>s>>e;
+    
+    dijk(s,e);
+    return 0;
+}
