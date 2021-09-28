@@ -1,0 +1,93 @@
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n,m,goal;
+vector<pair<int,int>> map[1001];//그래프
+int dist[1001];
+int inf = 200000000;
+
+//다익스트라
+int dijk(int start, int end){
+    //거리 초기화
+    for(int i=1;i<=n;i++){
+        dist[i] = inf;
+    }
+    
+    //시작점
+    dist[start] = 0;
+    priority_queue<pair<int,int>> pq;
+    pq.push({0,start});//시간,정점
+
+    while(!pq.empty()){
+        //현재 좌표
+        int current_cost = -pq.top().first;
+        int x = pq.top().second;
+        pq.pop();
+
+        //더 큰비용이 오면 pass
+        if(dist[x]<current_cost){
+            continue;
+        }
+
+        //이웃탐색
+        for(int i=0;i<map[x].size();i++){
+            int next = map[x][i].first;
+            int next_cost = map[x][i].second;
+            //더 적은 비용이 오면 갱신
+            if(dist[next]>current_cost+next_cost){
+                dist[next] = current_cost+next_cost;
+                pq.push({-dist[next],next});
+            }
+        }
+    }
+    //결과
+    return dist[end];
+}
+
+int main()
+{
+    cin.tie(0);
+    cout.tie(0);
+
+    //입력
+    cin>>n>>m>>goal;
+
+    for(int i=0;i<m;i++){
+        int a,b,d;
+        cin>>a>>b>>d;
+        map[a].push_back({b,d});//단방향 그래프
+    }
+    
+    //각자 시작노드 -> 목표
+    vector<int> go;
+    for(int i=1;i<=n;i++){
+        go.push_back(dijk(i,goal));
+    }
+    //목표 -> 시작점
+    vector<int> backs;
+    for(int i=1;i<=n;i++){
+        backs.push_back(dijk(goal,i));
+    }
+    
+    //가장 최대시간
+    int maxi = 0;
+    for(int i=0;i<n;i++){
+        if(maxi<go[i]+backs[i]){
+            maxi = go[i]+backs[i];
+        }
+    }
+    cout<<maxi;
+    return 0;
+}
