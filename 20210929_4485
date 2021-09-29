@@ -1,0 +1,81 @@
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n;
+int map[125][125];
+int visit[125][125];
+int inf = 100000000;
+int dx[] = {-1,1,0,0};
+int dy[] = {0,0,-1,1};
+
+//입력
+void input(){
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cin>>map[i][j];
+            visit[i][j] = inf;//초기화
+        }
+    }    
+}
+
+int bfs(){
+    //첫항 넣기
+    visit[0][0] = map[0][0];
+    queue<pair<int,int>> q;
+    q.push({0,0});
+    
+    while(!q.empty()){
+        int x = q.front().first;
+        int y = q.front().second;
+        q.pop();
+        
+        //4방 탐색
+        for(int i=0;i<4;i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            //범위내에 있고
+            //더 작은 값이 나오면
+            if(nx>=0 && nx<n && ny>=0 && ny<n){
+                if(visit[nx][ny]>visit[x][y]+map[nx][ny]){
+                    visit[nx][ny] = visit[x][y]+map[nx][ny];
+                    q.push({nx,ny});
+                }    
+            }
+        }
+    }
+    return visit[n-1][n-1];
+}
+int main()
+{
+    cin.tie(0);
+    cout.tie(0);
+
+    //입력
+    int te = 0;
+    while(true){
+        te++;
+        cin>>n;
+        //종료
+        if(n==0){
+            break;
+        }
+        
+        input();//입력
+        int result = bfs();
+        //출력
+        cout<<"Problem "<<te<<": "<<result<<"\n";
+    }
+    return 0;
+}
