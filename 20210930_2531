@@ -1,0 +1,70 @@
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n,d,c,k;
+int dish[33333];//접시에 놓인것
+int eat[3001];//먹었는가?
+int cnt = 0;//현재까지 먹은 초밥의 종류개수
+
+//초밥을 먹음
+void sushi_eat(int x){
+    if(eat[x]==0){
+        cnt++;
+    }
+    eat[x]++;
+}
+
+//초밥을 뱉음
+void disgorge(int x){
+    eat[x]--;
+    if(eat[x]==0){
+        cnt--;
+    }
+}
+
+int main()
+{
+    cin.tie(0);
+    cout.tie(0);
+
+    //입력
+    cin>>n>>d>>k>>c;
+    for(int i=0;i<n;i++){
+        cin>>dish[i];
+    }
+    for(int i=0;i<k;i++){
+        dish[i+n] = dish[i];
+    }
+    
+    //쿠폰처리
+    sushi_eat(c);
+    
+    //첫부분
+    for(int i=0;i<k-1;i++){
+        sushi_eat(dish[i]);
+    }
+    
+    //윈도우 슬라이싱
+    int ans = 0;
+    for(int i=0;i<n;i++){
+        sushi_eat(dish[i+k-1]);
+        ans = max(ans,cnt);
+        disgorge(dish[i]);
+    }
+    
+    //결과
+    cout<<ans;
+    return 0;
+}
