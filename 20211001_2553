@@ -1,0 +1,41 @@
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n;
+long long fac;//6자리*5자리 = 11자리
+
+int main()
+{
+    cin.tie(0);
+    cout.tie(0);
+    
+    //입력
+    cin>>n;
+    fac = 1;//팩토리얼값
+    for(int i=1;i<=n;i++){
+        fac*=i;
+        //10의배수
+        while(fac%10==0){
+            fac/=10;
+        }
+        //다음계산을 위해 필요한 숫자
+        fac%=1000000;//19999*9 = 179991 => 고로6자리는 필요
+    }
+    
+    //출력
+    cout<<fac%10;
+    
+    return 0;
+}
