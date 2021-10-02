@@ -1,0 +1,61 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+int tree[1000001][2];//트리
+
+//후위순회
+void postorder(int x){
+    if(x==0){//없음
+        return;
+    }
+    postorder(tree[x][0]);
+    postorder(tree[x][1]);
+    cout<<x<<"\n";
+}
+
+//전위순회로부터 트리 제작
+void preorder(int root, int x){
+    if(x>root){//크면 오른쪽
+        if(tree[root][1]==0){//아직 안넣음
+            tree[root][1] = x;
+            return;
+        }else{
+            preorder(tree[root][1],x);
+        }
+    }else{//작으면 왼쪽
+        if(tree[root][0]==0){
+            tree[root][0] = x;
+            return;
+        }else{
+            preorder(tree[root][0],x);
+        }
+    }
+}
+
+int main()
+{
+    cin.tie(0);
+    cout.tie(0);
+
+    //입력
+    int root,n;
+    cin>>root;
+    memset(tree,0,sizeof(tree));//초기화
+    while(cin>>n){
+        preorder(root,n);//트리만들기
+    }
+    postorder(root);//후위순회
+    return 0;
+}
