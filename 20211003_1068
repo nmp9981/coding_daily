@@ -1,0 +1,77 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n,root,del;
+vector<int> tree[50];//트리
+int cnt = 0;//리프노드 개수
+
+void bfs(int root,int del){
+    //맨 처음 노드
+    queue<int> q;
+    q.push(root);
+    
+    while(!q.empty()){
+        int x = q.front();
+        q.pop();
+        
+        //자식노드탐색
+        for(int i=0;i<tree[x].size();i++){
+            int next = tree[x][i];//다음지점
+            
+            //제거 노드
+            if(next==del){
+                if(tree[x].size()==1){//부모노드가 리프노드가 됨
+                    cnt++;
+                }
+                continue;
+            }
+            
+            //밑에 아무것도 없으면 리프노드
+            if(tree[next].size()==0){
+                cnt++;
+            }else{//밑에 더 있으면 더 깊게
+                q.push(next);
+            }
+        }
+    }
+    
+    //리프노드 개수
+    cout<<cnt;
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    //입력
+    cin>>n;
+    for(int i=0;i<n;i++){
+        int a;
+        cin>>a;
+        if(a==-1){//루트노드
+            root = i;
+        }else{
+            tree[a].push_back(i);//i의 부모노드가 a
+        }
+    }
+    
+    cin>>del;//제거할 노드
+    if(root==del){
+        cout<<0;
+        return 0;
+    }else{
+        bfs(root,del);//루트노드 부터 
+    }
+    return 0;
+}
