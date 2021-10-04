@@ -1,0 +1,98 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n,d,c;
+vector<pair<int,int>> map[10001];
+int com[10001];//감염시간
+int inf = 200000000;//초기화 값
+
+//감염시간 초기화
+void com_init(){
+    for(int i=1;i<=n;i++){
+        com[i] = inf;
+    }
+}
+
+//지도 초기화
+void map_init(){
+    for(int i=1;i<=n;i++){
+        map[i].clear();
+    }
+}
+
+//다익스트라
+void dijk(int start){
+    com[start] = 0;
+    queue<pair<int,int>> q;
+    q.push({0,start});//감염시간, 감염노드
+    
+    while(!q.empty()){
+        int sec = -q.front().first;//감염시간
+        int node = q.front().second;//감염노드
+        q.pop();
+        
+        //더 큰 시간이 나오면
+        if(sec>com[node]){
+            continue;
+        }
+        
+        //이웃노드 탐색
+        for(int i=0;i<map[node].size();i++){
+            int next = map[node][i].first;//다음지점
+            int next_time = map[node][i].second;//감염시간
+            //더 적은 시간이 나오면
+            if(com[next]>sec+next_time){
+                com[next] = sec+next_time;
+                q.push({-com[next],next});
+            }
+        }
+    }
+    
+    //결과
+    int cnt = 0;
+    int maxi = 0;
+    for(int i=1;i<=n;i++){
+        if(com[i]<inf){
+            cnt++;
+            maxi = max(maxi,com[i]);
+        }
+    }
+    cout<<cnt<<" "<<maxi<<"\n";
+}
+//입력
+void input(){
+    cin>>n>>d>>c;
+    for(int i=0;i<d;i++){
+        int a,b,s;
+        cin>>a>>b>>s;
+        map[b].push_back({a,s});//b->a 단방향 그래프
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    //입력
+    int t;
+    cin>>t;
+    for(int te=0;te<t;te++){
+        input();//입력
+        com_init();//감염시간 초기화
+        dijk(c);//감염
+        map_init();//지도 초기화
+    }
+
+    return 0;
+}
