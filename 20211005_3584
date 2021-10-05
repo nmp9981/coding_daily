@@ -1,0 +1,111 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n,root;
+int r1,r2;
+vector<int> tree[10001];
+int visit[10001];//방문 여부
+int parent[10001];//부모노드
+int depth[10001];//각 노드의 깊이
+int chk[10001];//루트노드 판별
+
+//최소 공통 조상
+void LCA(int u,int v){
+    //v가 더 깊게
+    if(depth[v]<depth[u]){
+        swap(u,v);
+    }
+    
+    //u,v의 깊이가 같아질때까지
+    while(depth[u]!=depth[v]){
+        v = parent[v];
+    }
+    
+    //u,v가 같아질 때까지
+    while(u!=v){
+        u = parent[u];
+        v = parent[v];
+    }
+    //출력
+    cout<<u<<"\n";
+}
+
+//각 노드의 부모, 깊이 저장
+void bfs(int start){
+    visit[start] = 1;//방문 체크
+    queue<int> q;
+    q.push(start);//트리의 루트
+    
+    while(!q.empty()){
+        int x = q.front();//현재노드
+        q.pop();
+        
+        //다음 노드 탐색
+        for(int i=0;i<tree[x].size();i++){
+            int next = tree[x][i];//다음지점
+            if(visit[next]==0){//미방문이면
+                visit[next] = 1;//방문체크
+                parent[next] = x;//부모느드 체크
+                depth[next] = depth[x]+1;//깊이 증가
+                q.push(next);
+            }
+        }
+    }
+}
+
+//초기화
+void init(){
+    for(int i=1;i<=n;i++){
+        tree[i].clear();
+        parent[i] = i;
+        depth[i] = 0;
+        visit[i] = 0;
+        chk[i] = 0;
+    }
+}
+
+//입력
+void input(){
+    for(int i=0;i<n-1;i++){
+        int a,b;
+        cin>>a>>b;
+        tree[a].push_back(b);//a가 b의 부모
+        chk[b] = 1;//자식노드 체크
+    }
+    //루트노드 판별
+    for(int i=1;i<=n;i++){
+        if(chk[i]==0){
+            root = i;
+        }
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    //입력
+    int t;
+    cin>>t;
+    for(int te=0;te<t;te++){
+        cin>>n;
+        init();
+        input();
+        bfs(root);//1번을 루트 노드로 지정
+        cin>>r1>>r2;
+        LCA(r1,r2);//최소 공통 조상
+    }
+    
+    return 0;
+}
