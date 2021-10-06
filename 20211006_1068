@@ -1,0 +1,77 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n,root,del;
+int cnt = 0;//리트노드 개수
+vector<int> tree[50];
+
+//bfs탐색으로 트리 제작
+void bfs(int start,int del){
+    queue<int> q;
+    q.push(start);
+    
+    while(!q.empty()){
+        int x = q.front();
+        q.pop();
+        
+        //자식노드 탐색
+        for(int i=0;i<tree[x].size();i++){
+            int next = tree[x][i];//다음 지점
+            
+            if(next==del){//지울노드 도착
+                //자식노드가 지워짐으로서 부모노드가 리프가 되는 경우
+                if(tree[x].size()==1){
+                    cnt++;
+                }
+                continue;
+            }
+            if(tree[next].size()==0){//리프노드
+                cnt++;
+            }else{
+                q.push(next);//리프노드가 아닌경우 더 깊게
+            }
+        }
+    }
+    //출력
+    cout<<cnt;
+}
+//입력
+void input(){
+    cin>>n;
+    for(int i=0;i<n;i++){
+        int x;
+        cin>>x;
+        if(x==-1){
+            root = i;//루트 노드
+        }
+        tree[x].push_back(i);//i의 부모 x
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    cin>>del;//지울노드
+    
+    //결과
+    if(del==root){
+        cout<<0;
+    }else{
+        bfs(root,del);
+    }
+    
+    return 0;
+}
