@@ -1,0 +1,63 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n,m;
+vector<int> tree[32001];//각 노드의 부모노드
+int line[32001];//받는 간선 개수
+
+//위상정렬
+void bfs(){
+    //차수가 0인것을 모두 큐에 넣기
+    queue<int> q;
+    for(int i=1;i<=n;i++){
+        if(line[i]==0){
+            q.push(i);
+        }
+    }
+    
+    while(!q.empty()){
+        int x = q.front();//현재 좌표
+        q.pop();
+        cout<<x<<" ";//출력
+        
+        for(int i=0;i<tree[x].size();i++){
+            int next = tree[x][i];//다음 지점
+            line[next]-=1;//간선제거
+            //새로운 루트 노드
+            if(line[next]==0){
+                q.push(next);//큐에 넣기
+            }
+        }
+    }
+}
+//입력
+void input(){
+    cin>>n>>m;
+    for(int i=0;i<m;i++){
+        int a,b;
+        cin>>a>>b;
+        tree[a].push_back(b);//a->b
+        line[b]+=1;//간선 추가
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    input();//입력
+    bfs();
+
+    return 0;
+}
