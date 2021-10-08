@@ -1,0 +1,107 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n,root,r1,r2;
+vector<int> tree[10001];//지도
+int parent[10001];//부모노드
+int depth[10001];//각 노드의 깊이
+int root_node[10001];//루트노드 판별
+int visit[10001];//방문 여부
+
+//초기화
+void init(){
+    for(int i=1;i<=n;i++){
+        parent[i] = i;
+        depth[i] = 0;
+        visit[i] = 0;
+        root_node[i] = 0;
+        tree[i].clear();
+    }
+}
+
+//입력
+void input(){
+    for(int i=0;i<n-1;i++){
+        int a,b;
+        cin>>a>>b;
+        tree[a].push_back(b);//a가 b의 부모
+        root_node[b] = 1;//자식노드 체크
+    }
+    //루트노드 구하기
+    for(int i=1;i<=n;i++){
+        if(root_node[i]==0){
+            root = i;
+        }
+    }
+}
+
+//각 노드의 부모노드, 깊이 구하기
+void bfs(int start){
+    visit[start] = 1;//루트노드 방문체크
+    queue<int> q;
+    q.push(start);
+    
+    while(!q.empty()){
+        int x = q.front();//현재지점
+        q.pop();
+        
+        //이웃노드 탐색
+        for(int i=0;i<tree[x].size();i++){
+            int next = tree[x][i];//다음지점
+            if(visit[next]==0){//미방문
+                visit[next] = 1;//방문 체크
+                parent[next] = x;//next의 부모는 x
+                depth[next] = depth[x]+1;//깊이 증가
+                q.push(next);
+            }
+        }
+    }
+}
+
+//최소 공통 조상
+void LCA(int u,int v){
+    //v가 더 깊게
+    if(depth[u]>depth[v]){
+        swap(u,v);
+    }
+    
+    //깊이가 같게
+    while(depth[u]!=depth[v]){
+        v = parent[v];
+    }
+    
+    //노드가 같아질때까지
+    while(u!=v){
+        u = parent[u];
+        v = parent[v];
+    }
+    cout<<u<<"\n";
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    int t;
+    cin>>t;
+    for(int k=0;k<t;k++){
+        cin>>n;
+        init();//초기화
+        input();//입력
+        bfs(root);//각 노드의 부모노드, 깊이 저장
+        cin>>r1>>r2;
+        LCA(r1,r2);//최소 공통 조상
+    }
+    return 0;
+}
