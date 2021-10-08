@@ -1,0 +1,87 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n,m,root,city;
+int map[201][201];//지도
+int node[201];//진입차수
+int parent[201];//부모노드
+
+//초기화
+void init(){
+    for(int i=1;i<=n;i++){
+        parent[i] = i;
+    }
+}
+
+//루트노드 찾기
+int find(int x){
+    if(parent[x] == x){
+        return x;
+    }
+    parent[x] = find(parent[x]);
+    return parent[x];
+}
+
+//합치기
+void merge(int x,int y){
+    x = find(x);
+    y = find(y);
+    if(x==y){
+        return;
+    }else{
+        parent[y] = x;
+    }
+}
+
+//입력
+void input(){
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cin>>map[i][j];
+            //부모노드에 넣기
+            if(map[i][j]==1 && i<j){
+                merge(i,j);//그래프 합치기
+            }
+        }
+    }
+}
+
+//결과
+void result(){
+    cin>>root;
+    //루트노드가 다른게 하나라도 있으면 no
+    int ans = find(root);
+    for(int i=1;i<m;i++){
+        cin>>city;
+        if(ans != find(city)){
+            cout<<"NO";
+            return;
+        }
+    }
+    cout<<"YES";
+    return;
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    cin>>n;
+    cin>>m;
+    init();//초기화
+    input();//입력
+    result();//결과
+    
+    return 0;
+}
