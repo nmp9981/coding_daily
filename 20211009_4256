@@ -1,0 +1,72 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n;
+int preorder[1001];//전위순회
+int inorder[1001];//중위순회
+int idx[1001];//중위순회 기준 인덱스
+
+//초기화
+void init(){
+    for(int i=0;i<n;i++){
+        preorder[i] = 0;
+        inorder[i] = 0;
+        idx[i] = 0;
+    }
+}
+
+//입력
+void input(){
+    //전위순회
+    for(int i=0;i<n;i++){
+        cin>>preorder[i];
+    }
+    //중위순회
+    for(int i=0;i<n;i++){
+        cin>>inorder[i];
+    }
+    //중위순회 기준 인덱스
+    for(int i=0;i<n;i++){
+        idx[inorder[i]] = i;
+    }
+}
+
+//후위순회(중위 시작,끝, 전위 시작,끝)
+void postorder(int in_st,int in_end,int pre_st, int pre_end){
+    //재귀종료
+    if(in_st>in_end || pre_st>pre_end){
+        return;
+    }
+    int root = preorder[pre_st];//전위의 맨 처음이 루트
+    int size = idx[root] - in_st;
+    postorder(in_st,idx[root]-1,pre_st+1,pre_st+size);//왼쪽
+    postorder(idx[root]+1,in_end,pre_st+size+1,pre_end);//오른쪽
+    cout<<root<<" ";
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    int t;
+    cin>>t;
+    for(int k=0;k<t;k++){
+        cin>>n;
+        init();//초기화
+        input();//입력
+        postorder(0,n-1,0,n-1);//후위순회
+        cout<<"\n";
+    }
+    return 0;
+}
