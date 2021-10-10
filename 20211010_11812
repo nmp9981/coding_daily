@@ -1,0 +1,40 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+long long n,k,q,r1,r2;
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    cin>>n>>k>>q;//입력
+    for(int i=0;i<q;i++){
+        cin>>r1>>r2;
+        if(k==1){//예외처리
+            cout<<abs(r1-r2)<<"\n";
+            continue;
+        }
+        
+        int dist = 0;
+        while(r1!=r2){
+            if(r1>r2){//더 큰쪽이 1칸 위로 올라감
+                //한가운데 노드를 기준으로 재귀
+                r1 = (r1+k-2)/k;
+            }else{
+                r2 = (r2+k-2)/k;
+            }
+            dist++;
+        }
+        cout<<dist<<"\n";
+    }
+    return 0;
+}
