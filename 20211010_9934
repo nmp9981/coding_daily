@@ -1,0 +1,59 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int k,root;
+int build[1024];//건물
+vector<int> tree[11];//트리
+
+//입력
+void input(){
+    cin>>k;
+    int m = pow(2,k)-1;//건물의 총 개수
+    for(int i=1;i<=m;i++){
+        cin>>build[i];
+    }
+}
+
+//재귀로 트리제작(인덱스, 깊이)
+void dfs(int root,int depth){
+    tree[depth].push_back(build[root]);//트리에 루트 넣기
+    //재귀 종료
+    if(depth == k-1){
+        return;
+    }
+    int size = pow(2,k-depth-2);
+    dfs(root-size,depth+1);//왼쪽
+    dfs(root+size,depth+1);//오른쪽
+}
+
+//출력
+void result(){
+    for(int i=0;i<k;i++){
+        for(int j=0;j<tree[i].size();j++){
+            cout<<tree[i][j]<<" ";
+        }
+        cout<<"\n";
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    input();//입력
+    root = pow(2,k-1);//루트 노드 인덱스 구하기
+    dfs(root,0);//재귀로 트리 제작
+    result();//트리 출력
+    return 0;
+}
