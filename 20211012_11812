@@ -1,0 +1,45 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+long long n,k,q,a,b;
+
+//LCA
+void LCA(long long x,long long y){
+    int dist = 0;
+    while(x!=y){
+        if(x>y){//큰쪽이 한칸씩 거슬러 올라옴
+            x = (x+k-2)/k;//부모노드로 이동
+        }else{
+            y = (y+k-2)/k;
+        }
+        dist++;//한칸 이동
+    }
+    cout<<dist<<"\n";
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    cin>>n>>k>>q;
+    for(int i=0;i<q;i++){
+        cin>>a>>b;
+        if(k==1){//예외 케이스
+            cout<<abs(a-b)<<"\n";
+        }else{
+            LCA(a,b);
+        }
+    }
+    return 0;
+}
