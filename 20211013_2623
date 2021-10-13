@@ -1,0 +1,79 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n,m,num,a;
+vector<int> tree[1001];//트리 선언
+int node[1001];//진입노드
+vector<int> result;//결과를 담는 리스트
+
+void input(){
+    cin>>n>>m;
+    for(int i=1;i<=m;i++){
+        cin>>num;
+        vector<int> sing;
+        for(int j=0;j<num;j++){
+            cin>>a;
+            sing.push_back(a);//가수 입력
+        }
+        for(int k=0;k<sing.size()-1;k++){
+            tree[sing[k]].push_back(sing[k+1]);//트리생성
+            node[sing[k+1]]+=1;//간선추가
+        }
+    }
+}
+
+//위상정렬
+void bfs(){
+    //진입노드가 0인것은 모두 큐에 담기
+    queue<int> q;
+    for(int i=1;i<=n;i++){
+        if(node[i]==0){
+            q.push(i);
+        }
+    }
+    
+    while(!q.empty()){
+        //현재지점
+        int x = q.front();
+        q.pop();
+        result.push_back(x);//결과담기
+        
+        //이웃노드 탐색
+        for(int i=0;i<tree[x].size();i++){
+            int next = tree[x][i];//다음노드
+            node[next]-=1;//진입노드 제거
+            if(node[next]==0){//새로운 루트노드 생성
+                q.push(next);
+            }
+        }
+    }
+    
+    //사이클 판단
+    if(result.size()!=n){
+        cout<<0;
+    }else{
+        for(int i=0;i<result.size();i++){
+            cout<<result[i]<<"\n";
+        }
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    input();
+    bfs();
+    return 0;
+}
