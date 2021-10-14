@@ -1,0 +1,121 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n,m;
+vector<pair<int,int>> tree[40001];//트리 선언
+int depth[40001];//각 노드의 깊이 저장
+int parent[40001];//각 노드의 부모노드
+int dist[40001];//각 노드까지의 거리
+int visit[40001];//각 노드별 방문여부
+int dp[40001][18];//희소배열 
+
+//희소배열
+void sparse(){
+    for(int i=1;i<=n;i++){
+        dp[i][0] = parent[i];
+    }
+    for(int j=1;j<=17;j++){
+        for(int i=1;i<=n;i++){
+            dp[i][j] = dp[dp[i][j-1]][j-1];
+        }
+    }
+}
+
+//입력
+void input(){
+    cin>>n;
+    //초기화
+    for(int i=1;i<=n;i++){
+        parent[i] = i;
+        depth[i] = 0;
+        dist[i] = 0;
+        visit[i] = 0;
+    }
+    //트리 입력
+    for(int i=0;i<n-1;i++){
+        int a,b,d;
+        cin>>a>>b>>d;
+        tree[a].push_back({b,d});
+        tree[b].push_back({a,d});//양방향 그래프
+    }
+}
+
+//각 노드의 부모노드, 깊이,거리 구하기
+void bfs(){
+    queue<int> q;
+    q.push(1);
+    visit[1] = 1;//방문체크
+
+    while(!q.empty()){
+        //현재노드
+        int x = q.front();
+        q.pop();
+
+        //이웃탐색
+        for(int i=0;i<tree[x].size();i++){
+            int next = tree[x][i].first;//다음지점
+            int next_dist = tree[x][i].second;//다음 지점 비용
+            if(visit[next]==0){//미방문이면
+                visit[next] = 1;//방문체크
+                depth[next] = depth[x]+1;//깊이 갱신
+                dist[next] = dist[x] + next_dist;//거리갱신
+                parent[next] = x;//next의 부모는 x
+                q.push(next);
+            }
+        }
+    }
+}
+
+//LCA
+int LCA(int x,int y){
+    //x가 더 깊게
+    if(depth[x]<depth[y]){
+        swap(x,y);
+    }
+    //깊이가 서로 같을때까지
+    for(int i=17;i>=0;i--){
+        int diff = depth[x]-depth[y];
+        if(diff >= (1<<i)){//2^i만큼 거슬러 올라감
+            x = dp[x][i];
+        }
+    }
+    //두 노드가 같을때까지
+    if(x==y){
+        return x;
+    }
+    for(int i=17;i>=0;i--){
+        if(dp[x][i] != 0 && dp[x][i] != dp[y][i]){
+            x = dp[x][i];
+            y = dp[y][i];
+        }
+    }
+    return dp[x][0];
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();
+    bfs();
+    sparse();
+    cin>>m;
+    for(int i=0;i<m;i++){
+        int a,b;
+        cin>>a>>b;
+        int lca = LCA(a,b);//공통노드
+        cout<<dist[a]+dist[b]-dist[lca]-dist[lca]<<"\n";
+    }
+    return 0;
+}
