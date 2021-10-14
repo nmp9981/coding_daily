@@ -1,0 +1,92 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n,m;
+vector<int> tree[1001];//트리 선언
+int node[1001];//진입노드
+int build[1001];//건물 짓는 시간
+int times[1001];//각 노드별 총 시간
+
+//입력
+void input(){
+    cin>>n>>m;
+    //건물 짓기
+    for(int i=1;i<=n;i++){
+        cin>>build[i];
+    }
+    //트리 입력
+    for(int i=0;i<m;i++){
+        int a,b;
+        cin>>a>>b;
+        tree[a].push_back(b);//a->b
+        node[b]+=1;//진입노드
+    }
+}
+
+//위상정렬
+void bfs(){
+    //진입노드가 0인것을 모두 큐에 넣기
+    queue<int> q;
+    for(int i=1;i<=n;i++){
+        if(node[i]==0){
+            q.push(i);
+            times[i] = build[i];//dp초기화
+        }
+    }
+    
+    while(!q.empty()){
+        //현재노드
+        int x = q.front();
+        q.pop();
+        
+        //이웃탐색
+        for(int i=0;i<tree[x].size();i++){
+            int next = tree[x][i];//다음지점
+            //시간 갱신
+            times[next] = max(times[next],times[x]+build[next]);
+            node[next]-=1;//노드제거
+            if(node[next]==0){//신규노드 생성
+                q.push(next);
+            }
+        }
+    }
+    //출력
+    int w;
+    cin>>w;
+    cout<<times[w]<<"\n";
+}
+
+//초기화
+void init(){
+    for(int i=1;i<=n;i++){
+        tree[i].clear();
+        times[i] = 0;
+        build[i] = 0;
+        node[i] = 0;
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    int t;
+    cin>>t;
+    for(int i=0;i<t;i++){
+        input();
+        bfs();
+        init();
+    }
+    return 0;
+}
