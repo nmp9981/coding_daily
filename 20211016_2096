@@ -1,0 +1,61 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n;
+int min_dp[2][3];
+int max_dp[2][3];
+int s1,s2,s3;
+
+void input(){
+    cin>>n;
+    //초기값
+    cin>>s1>>s2>>s3;
+    min_dp[0][0] = s1;
+    max_dp[0][0] = s1;
+    min_dp[0][1] = s2;
+    max_dp[0][1] = s2;
+    min_dp[0][2] = s3;
+    max_dp[0][2] = s3;
+    for(int i=1;i<n;i++){
+        cin>>s1>>s2>>s3;
+        //점화식
+        min_dp[1][0] = s1+min(min_dp[0][0],min_dp[0][1]);
+        min_dp[1][1] = s2+min({min_dp[0][0],min_dp[0][1],min_dp[0][2]});
+        min_dp[1][2] = s3+min(min_dp[0][1],min_dp[0][2]);
+        max_dp[1][0] = s1+max(max_dp[0][0],max_dp[0][1]);
+        max_dp[1][1] = s2+max({max_dp[0][0],max_dp[0][1],max_dp[0][2]});
+        max_dp[1][2] = s3+max(max_dp[0][1],max_dp[0][2]);
+        
+        //윈도우 슬라이딩
+        min_dp[0][0] = min_dp[1][0];
+        min_dp[0][1] = min_dp[1][1];
+        min_dp[0][2] = min_dp[1][2];
+        max_dp[0][0] = max_dp[1][0];
+        max_dp[0][1] = max_dp[1][1];
+        max_dp[0][2] = max_dp[1][2];
+    }
+    
+    //결과 출력
+    int mini = min({min_dp[0][0],min_dp[0][1],min_dp[0][2]});
+    int maxi = max({max_dp[0][0],max_dp[0][1],max_dp[0][2]});
+    cout<<maxi<<" "<<mini;
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();
+    return 0;
+}
