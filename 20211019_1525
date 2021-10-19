@@ -1,0 +1,89 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n,l,x;
+string num;//퍼즐
+set<string> puzzle;//중복여부 확인
+int dx[] = {-1,1,0,0};//x축이동
+int dy[] = {0,0,-1,1};//y축이동
+
+//입력
+void input(){
+    for(int i=0;i<3;i++){
+        for(int j=0;j<3;j++){
+            char a;
+            cin>>a;
+            num += a;
+        }
+    }
+}
+
+//너비우선탐색
+void bfs(){
+    //초기값넣기
+    puzzle.insert(num);
+    queue<pair<string,int>> q;
+    q.push({num,0});
+    
+    while(!q.empty()){
+        string st = q.front().first;//현재상태
+        int cnt = q.front().second;//이동 횟수
+        q.pop();
+        
+        //0인 점을 찾아서 2차원 배열로 변환(좌표이동을 위해)
+        int x,y;
+        for(int i=0;i<9;i++){
+            if(st[i]=='0'){
+                x = i/3;
+                y = i%3;
+            }
+        }
+        int xy = 3*x+y;
+        
+        //정답코드이면 종료
+        if(st == "123456780"){
+            cout<<cnt;
+            return;
+        }
+        
+        //빈칸 이동
+        for(int i=0;i<4;i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            //범위내에 있고
+            if(nx>=0 && nx<3 && ny>=0 && ny<3){
+                int nxy = 3*nx+ny;//1차원 좌표로 변환
+                string p = st;
+                //교환
+                p[xy] = st[nxy];
+                p[nxy] = st[xy];
+                if(puzzle.count(p)==0){//미방문이면
+                    puzzle.insert(p);
+                    q.push({p,cnt+1});
+                }
+            }
+        }
+    }
+    cout<<-1;//정답이 없는 경우
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    input();
+    bfs();
+    return 0;
+}
