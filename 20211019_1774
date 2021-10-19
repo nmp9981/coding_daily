@@ -1,0 +1,94 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n,m;
+int parent[1001];//각 노드의 부모노드
+double map_x[1001];
+double map_y[1001];
+vector<pair<double,pair<int,int>>> ufo;
+
+//입력
+void input(){
+    cin>>n>>m;
+    //부모노드 초기화
+    for(int i=1;i<=n;i++){
+        parent[i] = i;
+    }
+    //입력
+    for(int i=1;i<=n;i++){
+        cin>>map_x[i]>>map_y[i];
+    }
+    //거리, 간선조합
+    for(int i=1;i<n;i++){
+        for(int j=i+1;j<=n;j++){
+            double dist_x = pow(map_x[j]-map_x[i],2);
+            double dist_y = pow(map_y[j]-map_y[i],2);
+            double dist = sqrt(dist_x+dist_y);
+            ufo.push_back({dist,{i,j}});
+        }
+    }
+    //이미 연결된 간선 => 가중치를 0으로 처리
+    for(int i=0;i<m;i++){
+        int a,b;
+        cin>>a>>b;
+        ufo.push_back({0,{a,b}});
+    }
+    //정렬
+    sort(ufo.begin(),ufo.end());
+}
+
+//각 노드의 루트노드 찾기
+int find(int x){
+    if(parent[x] == x){//루트노드라면 
+        return x;
+    }
+    parent[x] = find(parent[x]);
+    return parent[x];
+}
+
+//크루스칼 알고리즘
+void kruskal(){
+    double sum = 0;//거리의 총합
+    int node = 0;//간선의 개수
+    for(int i=0;i<ufo.size();i++){
+        double cost = ufo[i].first;
+        int x = ufo[i].second.first;
+        int y = ufo[i].second.second;
+        
+        //루트노드가 서로 다르다면 연결
+        int a = find(x);
+        int b = find(y);
+        if(a!=b){
+            parent[b] = a;
+            node++;
+            sum += cost;
+        }
+        
+        //노드의 개수가 n-1개면 종료
+        if(node == n-1){
+            break;
+        }
+    }
+    //출력
+    printf("%.2f",sum);
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();
+    kruskal();
+    return 0;
+}
