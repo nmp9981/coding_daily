@@ -1,0 +1,93 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n,m;
+int parent[200001];//각 노드별 부모노드
+vector<pair<int,pair<int,int>>> map;//지도
+int total = 0;//최대비용 
+
+//초기화
+void init(){
+    map.clear();
+    total = 0;
+}
+
+//입력
+void input(){
+    //부모노드 초기화
+    for(int i=0;i<=n;i++){
+        parent[i] = i;
+    }
+    //지도입력
+    for(int i=1;i<=m;i++){
+        int a,b,d;
+        cin>>a>>b>>d;
+        map.push_back({d,{a,b}});
+        total+=d;
+    }
+    //정렬
+    sort(map.begin(),map.end());
+}
+
+//각 노드의 루트노드
+int find(int x){
+    if(parent[x]==x){
+        return x;
+    }
+    parent[x] = find(parent[x]);
+    return parent[x];
+}
+
+//크루스칼 알고리즘
+void kruskal(){
+    int fee = 0;//노드의 수
+    int node = 0;//간선의 개수
+    for(int i=0;i<map.size();i++){
+        int cost = map[i].first;
+        int x = map[i].second.first;
+        int y = map[i].second.second;
+        
+        //루트노드가 다르면 합체
+        int a = find(x);
+        int b = find(y);
+        if(a!=b){
+            parent[b] = a;
+            node++;
+            fee += cost;
+        }
+        
+        //n-1개의 간선이 모이면 종료
+        if(node == n-1){
+            cout<<total-fee<<"\n";
+            return;
+        }
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    while(true){
+        cin>>n>>m;
+        if(n==0 && m==0){//종료
+            return 0;
+        }else{
+            input();
+            kruskal();
+            init();
+        }
+    }
+    return 0;
+}
