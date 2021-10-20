@@ -1,0 +1,94 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n;
+int parent[100001];//각 노드별 부모노드
+vector<pair<int,pair<int,int>>> diff;//거리, 간선
+vector<pair<int,int>> map_x;//x좌표, 노드
+vector<pair<int,int>> map_y;//y좌표, 노드
+vector<pair<int,int>> map_z;//z좌표, 노드
+
+//입력
+void input(){
+    cin>>n;
+    //부모노드 초기화
+    for(int i=1;i<=n;i++){
+        parent[i] = i;
+    }
+    //지도입력
+    for(int i=1;i<=n;i++){
+        int x,y,z;
+        cin>>x>>y>>z;
+        map_x.push_back({x,i});
+        map_y.push_back({y,i});
+        map_z.push_back({z,i});
+    }
+    //정렬
+    sort(map_x.begin(),map_x.end());
+    sort(map_y.begin(),map_y.end());
+    sort(map_z.begin(),map_z.end());
+}
+
+//각 노드의 루트노드
+int find(int x){
+    if(parent[x]==x){
+        return x;
+    }
+    parent[x] = find(parent[x]);
+    return parent[x];
+}
+
+//크루스칼 알고리즘
+void kruskal(){
+    //차이구하기
+    for(int i=0;i<n-1;i++){
+        diff.push_back({map_x[i+1].first-map_x[i].first,{map_x[i].second,map_x[i+1].second}});
+        diff.push_back({map_y[i+1].first-map_y[i].first,{map_y[i].second,map_y[i+1].second}});
+        diff.push_back({map_z[i+1].first-map_z[i].first,{map_z[i].second,map_z[i+1].second}});
+    }
+    sort(diff.begin(),diff.end());//정렬
+    
+    int fee = 0;//총비용
+    int node = 0;//간선의 개수
+    int siz = diff.size();
+    for(int i=0;i<siz;i++){
+        int cost = diff[i].first;
+        int x = diff[i].second.first;
+        int y = diff[i].second.second;
+        
+        //루트노드가 다르면 합체
+        int a = find(x);
+        int b = find(y);
+        if(a!=b){
+            parent[b] = a;
+            node++;
+            fee += cost;
+        }
+        
+        //n-1개의 간선이 모이면 종료
+        if(node == n-1){
+            cout<<fee<<"\n";
+            return;
+        }
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+      
+    input();
+    kruskal();
+    return 0;
+}
