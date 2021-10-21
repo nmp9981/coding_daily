@@ -1,0 +1,86 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n;
+long long parent[1001];//각 노드별 부모노드
+vector<pair<long long,pair<int,int>>> star;//행성(가중치, 간선)
+long long map[1001][1001];//지도
+
+//입력
+void input(){
+    cin>>n;
+    //부모노드 초기화
+    for(int i=1;i<=n;i++){
+        parent[i] = i;
+    }
+    //입력
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cin>>map[i][j];
+        }
+    }
+    //행성좌표에 넣기
+    for(int i=1;i<n;i++){
+        for(int j=i+1;j<=n;j++){
+            star.push_back({map[i][j],{i,j}});//가중치, 간선
+        }
+    }
+    //가중치 순 정렬
+    sort(star.begin(),star.end());
+}
+
+//루트노드 찾기
+int find(int x){
+    if(parent[x] == x){//루트노드 라면
+        return x;
+    }
+    parent[x] = find(parent[x]);
+    return parent[x];
+}
+
+//크루스칼 알고리즘
+void kruskal(){
+    int node = 0;//간선
+    long long total = 0;//총 비용
+    
+    for(int i=0;i<star.size();i++){
+        long long cost = star[i].first;
+        int x = star[i].second.first;
+        int y = star[i].second.second;
+        
+        //루트노드가 다르면 합체
+        int a = find(x);
+        int b = find(y);
+        if(a!=b){
+            parent[b] = a;
+            node++;
+            total+=cost;
+        }
+        
+        //n-1개의 간선이 생성되면 종료
+        if(node==n-1){
+            break;
+        }
+    }
+    cout<<total;
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    input();
+    kruskal();
+    return 0;
+}
