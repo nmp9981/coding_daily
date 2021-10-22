@@ -1,0 +1,90 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+
+string puzzle_init;//퍼즐의 초기값
+set<string> puzzle;//퍼즐의 중복여부
+int x,y,xy;
+int dx[] = {-1,1,0,0};
+int dy[] = {0,0,-1,1};
+
+//입력
+void input(){
+    //입력
+    for(int i=0;i<3;i++){
+        for(int j=0;j<3;j++){
+            char a;
+            cin>>a;
+            puzzle_init += a;//한글자씩 추가
+        }
+    }
+}
+
+//bfs로 퍼줄 풀이
+void bfs(){
+    queue<pair<string,int>> q;//퍼즐상태, 이동횟수
+    puzzle.insert(puzzle_init);
+    q.push({puzzle_init,0});
+    
+    while(!q.empty()){
+        string current = q.front().first;//퍼즐의 현재 상태
+        int cnt = q.front().second;//이동횟수
+        q.pop();
+        
+        //목표도달
+        if(current == "123456780"){
+            cout<<cnt;
+            return;
+        }
+        //2차원 좌표로 변환(0의 위치를 찾기)
+        for(int i=0;i<9;i++){
+            if(current[i]=='0'){
+                x = i/3;//행
+                y = i%3;//얄
+            }
+        }
+        xy = 3*x+y;//0의 위치를 1차원 좌표로
+        
+        //다음지점 탐색
+        for(int i=0;i<4;i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            //범위내에 들면
+            if(nx>=0 && nx<3 && ny>=0 && ny<3){
+                int nxy = 3*nx+ny;//다음 지점을 1차원좌표로
+                //교환
+                string next_puzzle = current;
+                next_puzzle[xy] = current[nxy];
+                next_puzzle[nxy] = current[xy];
+                //중복이 안된다면
+                if(puzzle.count(next_puzzle)==0){
+                    puzzle.insert(next_puzzle);
+                    q.push({next_puzzle,cnt+1});
+                }
+            }
+        }
+    }
+    //도달불가
+    cout<<-1;
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();
+    bfs();
+    return 0;
+}
