@@ -1,0 +1,55 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n;
+int novel[501];
+int sum[501];//부분합
+int dp[501][501];
+int inf = 1000000000;
+
+//입력
+void input(){
+    cin>>n;
+    for(int i=1;i<=n;i++){
+        cin>>novel[i];
+        sum[i] = sum[i-1]+novel[i];
+    }
+}
+
+//최소비용 도출
+void file_cost(){
+    for(int i=1;i<=n;i++){//구하는 범위의 크기
+        for(int j=1;j<=n-i;j++){//시작지점
+            dp[j][i+j] = inf;//초기화
+            //j~k , k+1~i+j
+            for(int k=j;k<i+j;k++){
+                dp[j][i+j] = min(dp[j][i+j],dp[j][k]+dp[k+1][i+j]+sum[i+j]-sum[j-1]);
+            }
+        }
+    }
+    //출력
+    cout<<dp[1][n]<<"\n";
+}
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    int test;
+    cin>>test;
+    for(int t=0;t<test;t++){
+        input();
+        file_cost();
+    }
+    return 0;
+}
