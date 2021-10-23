@@ -1,0 +1,85 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+using namespace chrono;
+int n;
+long long map[1001][1001];
+int parent[1001];
+vector<pair<long long,pair<int,int>>> planet;
+
+//입력
+void input(){
+    cin>>n;
+    //부모노드 초기화
+    for(int i=1;i<=n;i++){
+        parent[i] = i;
+    }
+    //지도 입력
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cin>>map[i][j];
+        }
+    }
+    //벡터에 넣기
+    for(int i=1;i<n;i++){
+        for(int j=i+1;j<=n;j++){
+            planet.push_back({map[i][j],{i,j}});//비용,간선
+        }
+    }
+    //정렬
+    sort(planet.begin(),planet.end());
+}
+
+//각 노드의 부모노드 찾기
+int find(int x){
+    if(parent[x]==x){//루트노드라면
+        return x;
+    }
+    parent[x] = find(parent[x]);
+    return parent[x];
+}
+
+//크루스칼 알고리즘
+void kruskal(){
+    long long total = 0;//총비용
+    int node = 0;//간선의 수
+    for(int i=0;i<planet.size();i++){
+        long long cost = planet[i].first;
+        int x = planet[i].second.first;
+        int y = planet[i].second.second;
+        
+        //루트노드가 다르면 합체
+        int a = find(x);
+        int b = find(y);
+        if(a!=b){
+            parent[b] = a;//간선합체
+            node++;//간선증가
+            total += cost;//비용증가
+        }
+        
+        //n-1개의 간선이 모이면 최소 신장 트리
+        if(node==n-1){
+            break;
+        }
+    }
+    cout<<total;
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    input();
+    kruskal();
+    return 0;
+}
