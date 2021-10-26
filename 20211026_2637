@@ -1,0 +1,78 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+
+int n,m;
+vector<pair<int,int>> tree[101];//트리
+int node[101];//진입노드
+vector<int> result;//기본부품을 담음
+int dp[101][101];//부품 i를 만드는데 필요한 j의 개수
+
+//입력
+void input(){
+    cin>>n;
+    cin>>m;
+    for(int i=0;i<m;i++){
+        int a,b,d;
+        cin>>a>>b>>d;
+        tree[b].push_back({a,d});//b->a
+        node[a]+=1;//진입노드 추가
+    }
+}
+
+//위상정렬
+void bfs(){
+    queue<int> q;
+    //진입노드가 0인것을 모두 큐에 넣기
+    for(int i=1;i<=n;i++){
+        if(node[i]==0){
+            q.push(i);
+            dp[i][i] = 1;//초기화(곱셈의 항등원)
+            result.push_back(i);//기본 부품
+        }
+    }
+    
+    while(!q.empty()){
+        int x = q.front();
+        q.pop();
+        
+        //다음지점탐색
+        for(int i=0;i<tree[x].size();i++){
+            int next = tree[x][i].first;
+            int next_cost = tree[x][i].second;
+            node[next]--;//간선 제거
+            
+            //next를 만들기 위한 x의 총 개수
+            for(int j=1;j<=n;j++){
+                dp[next][j] += dp[x][j]*next_cost;
+            }
+            
+            if(node[next]==0){//새로운 루트노드 탄생
+                q.push(next);
+            }
+        }
+    }
+    //결과
+    for(int i=0;i<result.size();i++){
+        cout<<result[i]<<" "<<dp[n][result[i]]<<"\n";
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    bfs();//위상정렬
+    return 0;
+}
