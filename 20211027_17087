@@ -1,0 +1,63 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+int n,s,g;
+vector<int> diff;//차이
+
+//유클리드 알고리즘
+int gcd(int x,int y){
+    //x가 더 크게
+    if(x<y){
+        swap(x,y);
+    }
+    while(y!=0){
+        int r = x%y;
+        x = y;
+        y = r;
+    }
+    return x;
+}
+
+void input(){
+    cin>>n>>s;
+    for(int i=0;i<n;i++){
+        int x;
+        cin>>x;
+        diff.push_back(abs(x-s));//차이값을 넣음
+    }
+}
+
+//동생찾기
+void seek(){
+    //예외처리
+    if(n==1){
+        cout<<diff[0];
+        return;
+    }
+    g = gcd(diff[0],diff[1]);//최대공약수
+    //여러수의 최대공약수 구하기
+    for(int i=2;i<n;i++){
+        g = gcd(g,diff[i]);
+    }
+    //출력
+    cout<<g;
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    seek();//동생찾기
+    return 0;
+}
