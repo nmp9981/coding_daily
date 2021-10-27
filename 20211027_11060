@@ -1,0 +1,55 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+int n,s,g;
+int maze[1001];//미로
+int dp[1001];//점프횟수
+const int inf = 1000000;//초기화값
+
+void input(){
+    cin>>n;
+    for(int i=1;i<=n;i++){
+        cin>>maze[i];
+        dp[i] = inf;//초기화
+    }
+}
+
+//점프하기
+void jump(){
+    //첫칸부터 시작
+    dp[1] = 0;
+    //점프하기
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=maze[i];j++){
+            //범위내에 들어가면
+            if(i+j<=n){
+                dp[i+j] = min(dp[i+j],dp[i]+1);
+            }
+        }
+    }
+    //결과
+    if(dp[n]==inf){
+        cout<<-1;
+    }else{
+        cout<<dp[n];
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    jump();//동생찾기
+    return 0;
+}
