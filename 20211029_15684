@@ -1,0 +1,88 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+int n,m,h;
+int map[31][11];
+bool down_flag;
+int ans = 10000000;//추가할 최솟값
+
+//입력
+void input(){
+    cin>>n>>m>>h;
+    for(int i=1;i<=m;i++){
+        int a,b;
+        cin>>a>>b;
+        map[a][b] = 1;//a행 ,b->b+1연결
+    }
+}
+
+//x번 사다리는 몇번에 도달하는가?
+int down(int x){
+    for(int j=1;j<=h;j++){
+        if(map[j][x]==1){
+            x = x+1;
+        }else if(map[j][x-1]==1){
+            x = x-1;
+        }
+    }
+    return x;
+}
+
+//모두 정답인가
+bool answer(){
+    for(int i=1;i<=n;i++){
+        if(down(i)!=i){
+            return false;
+        }
+    }
+    return true;
+}
+
+//내려가기
+void ladder(int cnt,int y){
+    //사다리가 3개 이상
+    if(cnt>3){
+        return;
+    }
+    
+    //모두 정답이면 종료
+    if(answer()==true){
+        ans = min(ans,cnt);
+        return;
+    }
+    
+    //사다리 추가
+    for(int i=y;i<=h;i++){//행,사다리는 밑으로만 간다.
+        for(int j=1;j<n;j++){//열
+            if(map[i][j-1]==0 && map[i][j]==0 && map[i][j+1]==0){
+                map[i][j] = 1;//사다리 추가
+                ladder(cnt+1,i);
+                map[i][j] = 0;//원래대로
+            }
+        }
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    ladder(0,1);//사다리타기
+    if(ans>3){
+        cout<<-1;
+    }else{
+        cout<<ans;
+    }
+    return 0;
+}
