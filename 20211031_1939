@@ -1,0 +1,79 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+int n,m,s,e;
+vector<pair<int,pair<int,int>>> map;//중량제한, 간선
+int parent[10001];//각 노드의 부모노드
+
+//입력
+void input(){
+    cin>>n>>m;
+    //부모노드 초기화
+    for(int i=1;i<=n;i++){
+        parent[i] = i;
+    }
+    //그래프 입력
+    for(int i=1;i<=m;i++){
+        int a,b,c;
+        cin>>a>>b>>c;
+        //양방향그래프
+        map.push_back({c,{a,b}});
+        map.push_back({c,{b,a}});
+    }
+    //정렬
+    sort(map.begin(),map.end());
+    //공장번호 입력
+    cin>>s>>e;
+}
+
+//각 노드의 루트노드
+int find(int x){
+    if(parent[x]==x){
+        return x;
+    }
+    parent[x] = find(parent[x]);
+    return parent[x];
+}
+
+//합체
+void merge(int x,int y){
+    int nx = find(x);
+    int ny = find(y);
+    if(nx!=ny){//루트노드가 서로 다를시 합체
+        parent[ny] = nx;
+    }
+}
+
+//크루스칼 알고리즘
+void kruskal(){
+    for(int i=map.size()-1;i>=0;i--){//중량제한이 큰것부터
+        int weight = map[i].first;
+        int x = map[i].second.first;
+        int y = map[i].second.second;
+        
+        //합체
+        merge(x,y);
+        //s,e가 연결이 될때까지
+        if(find(s)==find(e)){
+            cout<<weight;
+            return;
+        }
+    }
+}
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    input();//입력
+    kruskal();//크루스칼 알고리즘
+    return 0;
+}
