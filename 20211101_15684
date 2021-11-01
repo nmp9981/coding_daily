@@ -1,0 +1,86 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+int n,m,h;
+int map[31][11];//사다리
+int ans = 1000;//추가할 최솟값
+
+//입력
+void input(){
+    cin>>n>>m>>h;
+    for(int i=1;i<=m;i++){
+        int a,b;
+        cin>>a>>b;
+        map[a][b] = 1;//b,b+1
+    }
+}
+
+//각 사다리가 제 위치로 갔는가?
+int move(int x){
+    for(int i=1;i<=h;i++){
+        if(map[i][x]==1){
+            x++;
+        }else if(map[i][x-1]==1){
+            x--;
+        }
+    }
+    return x;
+}
+
+//사다리 타기
+void ladder(int cnt, int y){
+    //사다리타기 종료
+    if(cnt>3){
+        return;
+    }
+    
+    //모두 제위치로 갔는가?
+    bool flag = true;
+    for(int i=1;i<=n;i++){
+        if(move(i)!=i){
+            flag = false;
+            break;
+        }
+    }
+    
+    //완료
+    if(flag == true){
+        ans = min(ans,cnt);
+        return;
+    }
+    //사다리놓기
+    for(int i=y;i<=h;i++){//사다리는 아래로만 내려감
+        for(int j=1;j<n;j++){
+            //양쪽, 자신의 위치에 사다리가 없으면
+            if(map[i][j]==0 && map[i][j-1]==0 && map[i][j+1]==0){
+                map[i][j] = 1;//설치
+                ladder(cnt+1,i);
+                map[i][j] = 0;//원래대로
+            }
+        }
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    ladder(0,1);//사다리 타기
+    if(ans>3){
+        cout<<-1;
+    }else{
+        cout<<ans;
+    }
+    return 0;
+}
