@@ -1,0 +1,113 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+int n,l,r;
+int map[51][51];
+int visit[51][51];
+int dx[] = {-1,1,0,0};//축이동
+int dy[] = {0,0,-1,1};
+
+//입력
+void input(){
+    cin>>n>>l>>r;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            cin>>map[i][j];
+        }
+    }
+}
+
+//탐색
+bool bfs(int i,int j){
+    queue<pair<int,int>> q;
+    queue<pair<int,int>> uni;//연합
+    q.push({i,j});
+    uni.push({i,j});
+    visit[i][j] = 1;//방문체크
+    int cnt = 1;//연합개수
+    int total = map[i][j];//인구 총합
+    int flag = false;//인구이동이 일어났는가?
+    
+    while(!q.empty()){
+        int x = q.front().first;
+        int y = q.front().second;
+        q.pop();
+        
+        //다음지점탐색
+        for(int i=0;i<4;i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            //범위내에 있고 미방문
+            if(visit[nx][ny]==0 && nx>=1 && nx<=n && ny>=1 && ny<=n){
+                int diff = abs(map[nx][ny] - map[x][y]);
+                //차이가 범위내에 있으면 탐색
+                if(diff>=l && diff<=r){
+                    q.push({nx,ny});
+                    uni.push({nx,ny});//연합에 넣기
+                    visit[nx][ny] = 1;//방문체크
+                    cnt++;//연합개수 증가
+                    total += map[nx][ny];//인구증가
+                    flag = true;
+                }
+            }
+        }
+    }
+    
+    //맵 갱신
+    int new_pop = total/cnt;//새로운 인구수
+    while(!uni.empty()){
+        map[uni.front().first][uni.front().second] = new_pop;
+        uni.pop();
+    }
+    return flag;
+}
+
+//인구이동
+void population(){
+    int day = 0;//날짜
+    while(true){
+        bool day_flag = false;
+        bool move_flag = false;
+        
+        memset(visit,0,sizeof(visit));//0으로 초기화
+        //맵순회
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=n;j++){
+                if(visit[i][j]==0){
+                    move_flag = bfs(i,j);//탐색
+                    //이동이 일어났으면
+                    if(move_flag == true){
+                        day_flag = true;//하루 더
+                    }
+                }
+            }
+        }
+        
+        //하루 더 해야하는가?
+        if(day_flag == true){
+            day++;
+        }else{
+            cout<<day;
+            break;
+        }
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    population();//인구이동
+    return 0;
+}
