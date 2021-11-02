@@ -1,0 +1,69 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+int n;
+int a[11];//수열
+int op[4];//연산자 개수
+int maxi = -2000000000;
+int mini = 2000000000;
+
+//입력
+void input(){
+    cin>>n;
+    //수열입력
+    for(int i=0;i<n;i++){
+        cin>>a[i];
+    }
+    //연산자 입력
+    for(int i=0;i<4;i++){
+        cin>>op[i];
+    }
+}
+
+//재귀
+void dfs(int x,int result){
+    //마지막 자리까지 도달하면
+    if(x==n){
+        maxi = max(result,maxi);
+        mini = min(result,mini);
+        return;
+    }
+    
+    //계산
+    for(int i=0;i<4;i++){
+        if(op[i]>0){
+            op[i]--;
+            if(i==0){
+                dfs(x+1,result+a[x]);
+            }else if(i==1){
+                dfs(x+1,result-a[x]);
+            }else if(i==2){
+                dfs(x+1,result*a[x]);
+            }else if(i==3){
+                dfs(x+1,result/a[x]);
+            }
+            op[i]++;//원래대로   
+        }
+    }
+}
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    int result = a[0];//결과
+    dfs(1,result);//자리 번호
+    cout<<maxi<<"\n";
+    cout<<mini<<"\n";
+    return 0;
+}
