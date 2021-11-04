@@ -1,0 +1,78 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+int n,m,s,e;
+vector<pair<int,pair<int,int>>> tree;//트리
+int parent[10001];//각 노드의 부모노드
+int ans = 0;
+
+//입력
+void input(){
+    cin>>n>>m;
+    //각 노드의 부모노드 초기화
+    for(int i=1;i<=n;i++){
+        parent[i] = i;
+    }
+    //수열입력
+    for(int i=1;i<=m;i++){
+        int a,b,d;
+        cin>>a>>b>>d;
+        tree.push_back({d,{a,b}});//양방향그래프
+        tree.push_back({d,{b,a}});//무게제한,간선
+    }
+    sort(tree.begin(),tree.end());
+    cin>>s>>e;//구하는 간선 입력
+}
+
+//루트노드 찾기
+int find(int w){
+    if(parent[w]==w){
+        return w;
+    }
+    parent[w] = find(parent[w]);
+    return parent[w];
+}
+
+//합치기
+void merge(int x,int y){
+    int nx = find(x);
+    int ny = find(y);
+    if(nx!=ny){
+        parent[ny] = nx;
+    }
+}
+
+//크루스칼 알고리즘
+void kruskal(){
+    for(int i=tree.size()-1;i>=0;i--){
+        int cost = tree[i].first;//비용
+        int x = tree[i].second.first;//간선
+        int y = tree[i].second.second;
+        
+        merge(x,y);//합치기
+        if(find(s)==find(e)){//연결됨
+            ans = cost;
+            break;
+        }
+    }
+    cout<<ans;
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    kruskal();//크루스칼 알고리즘
+    return 0;
+}
