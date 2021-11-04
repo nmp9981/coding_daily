@@ -1,0 +1,67 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+int n,m;
+const int maxi = 501;
+int map[maxi][maxi];//지도
+int dp[maxi][maxi];//x,y에서의 경로의수
+int dx[] = {-1,1,0,0};//축 이동
+int dy[] = {0,0,-1,1};
+
+//입력
+void input(){
+    cin>>m>>n;
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+            cin>>map[i][j];
+        }
+    }
+    memset(dp,-1,sizeof(dp));//0과 겹치는것을 방지
+}
+
+//내려가기
+int dfs(int x,int y){
+    //도착
+    if(x==m-1 && y==n-1){
+        return 1;
+    }
+    
+    //이미 방문 했다면
+    if(dp[x][y]!=-1){
+        return dp[x][y];
+    }
+    dp[x][y] = 0;//아직 방문하지 않은 지점은 경로의수가 0
+    
+    //4방탐색
+    for(int i=0;i<4;i++){
+        int nx = x + dx[i];
+        int ny = y + dy[i];
+        //범위내에 들면
+        if(nx>=0 && nx<m && ny>=0 && ny<n){
+            //더 작은수가 나오면
+            if(map[nx][ny]<map[x][y]){
+                dp[x][y] += dfs(nx,ny);
+            }
+        }
+    }
+    return dp[x][y];
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    cout<<dfs(0,0);//내려가기
+    return 0; 
+}
