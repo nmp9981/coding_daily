@@ -1,0 +1,69 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+int n,m;
+int a[11];//수열
+int op[4];//연산자 
+int min_result = 1000000000;
+int max_result = -1000000000;
+
+//입력
+void input(){
+    cin>>n;
+    //수열 입력
+    for(int i=0;i<n;i++){
+        cin>>a[i];
+    }
+    //연산자 입력
+    for(int i=0;i<4;i++){
+        cin>>op[i];
+    }
+}
+
+//연산하기
+void dfs(int cnt,int result){
+    //맨 끝자리까지 도달
+    if(cnt==n){
+        min_result = min(min_result,result);
+        max_result = max(max_result,result);
+        return;
+    }
+    //연산
+    for(int i=0;i<4;i++){
+        if(op[i]>0){//해당연산자가 남아 있는가?
+            op[i]--;
+            if(i==0){
+                dfs(cnt+1,result+a[cnt]);
+            }else if(i==1){
+                dfs(cnt+1,result-a[cnt]);
+            }else if(i==2){
+                dfs(cnt+1,result*a[cnt]);
+            }else if(i==3){
+                dfs(cnt+1,result/a[cnt]);
+            }
+            op[i]++;//원래대로
+        }
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    dfs(1,a[0]);//연산하기
+    //결과 출력
+    cout<<max_result<<"\n";
+    cout<<min_result<<"\n";
+    return 0;
+}
