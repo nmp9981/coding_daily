@@ -1,0 +1,72 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+const int maxi = 501;
+int h,w;
+int map[maxi][maxi];//지도
+int wall[maxi];//벽
+
+//입력
+void input(){
+    cin>>h>>w;
+    for(int j=0;j<w;j++){
+        cin>>wall[j];
+        //벽세우기
+        for(int i=0;i<wall[j];i++){
+            map[i][j] = 1;
+        }
+    }
+    
+}
+
+//빗물
+void rain(){
+    int total = 0;//총량
+    //한행씩 처리
+    for(int i=0;i<h;i++){
+        int water = 0;//물의양
+        bool flag = false;//물을 채울 수 있는가?
+        for(int j=0;j<w;j++){
+            //맨끝
+            if(j==w-1){
+                if(map[i][j]==1){
+                    total+=water;
+                }
+                break;
+            }
+            //벽이면
+            if(map[i][j]==1){
+                flag = false;//기본적으로 물을 채울 수 없음
+                total+=water;
+                water = 0;//초기화
+                if(map[i][j+1]==0){//다음지점이 빈공간이면
+                    flag = true;//물을 채울 수 있음
+                }
+            }else{//빈공간이면
+                if(flag == true){
+                    water++;
+                }
+            }
+        }
+    }
+    cout<<total;//출력
+}
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    rain();//빗물
+    return 0;
+}
