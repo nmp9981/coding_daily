@@ -1,0 +1,70 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+int n,m;
+const int maxi = 1001;
+vector<int> tree[maxi];//트리
+int node[maxi];//진입노드
+int depth[maxi];//각 노드의 깊이
+
+//입력
+void input(){
+    cin>>n>>m;
+    for(int i=1;i<=m;i++){
+        int a,b;
+        cin>>a>>b;
+        tree[a].push_back(b);//a->b
+        node[b]++;//진입노드 증가
+    }
+}
+
+//위상정렬
+void bfs(){
+    //진입노드가 0인것은 모두 큐에 넣기
+    queue<int> q;
+    for(int i=1;i<=n;i++){
+        if(node[i]==0){
+            q.push(i);
+            depth[i] = 1;//1학기부터 시작
+        }
+    }
+    
+    while(!q.empty()){
+        //현재노드
+        int x = q.front();
+        q.pop();
+        
+        //다음노드
+        for(int i=0;i<tree[x].size();i++){
+            int next = tree[x][i];//다음지점
+            node[next]--;//노드제거
+            if(node[next]==0){//새로운 루트노드 탄생
+                q.push(next);
+                depth[next] = depth[x]+1;//다음학기
+            }
+        }
+    }
+    //출력
+    for(int i=1;i<=n;i++){
+        cout<<depth[i]<<" ";
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    bfs();//위상정렬
+    return 0;
+}
