@@ -1,0 +1,64 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+int h,w;
+vector<int> height;//높이
+int max_h = 0;//최대높이
+
+//입력
+void input(){
+    cin>>h>>w;
+    for(int i=0;i<w;i++){
+        int x;
+        cin>>x;//높이 입력
+        height.push_back(x);
+    }
+    //가장 높은 기둥의 위치 구하기
+    for(int i=1;i<w;i++){
+        if(height[max_h]<height[i]){
+            max_h = i;
+        }
+    }
+}
+
+//빗물 채우기
+void rain(){
+    int water = 0;
+    int left = 0;
+    int right = w-1;
+    //왼쪽부터 가장 큰것까지
+    for(int i=0;i<=max_h;i++){
+        if(height[i]<height[left]){
+            water += abs(height[i]-height[left]);
+        }else{
+            left=i;
+        }
+    }
+    //오른쪽부터 가장 큰것까지
+    for(int i=w-1;i>=max_h;i--){
+        if(height[i]<height[right]){
+            water += abs(height[i]-height[right]);
+        }else{
+            right=i;
+        }
+    }
+    cout<<water;
+}
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    rain();//빗물의 양
+    return 0;
+}
