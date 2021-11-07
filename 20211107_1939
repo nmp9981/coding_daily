@@ -1,0 +1,78 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+int n,m,s,e;
+const int maxi = 10001;
+vector<pair<int,pair<int,int>>> bridge;//가중치, 간선
+int parent[maxi];//각 노드의 루트노드
+
+//입력
+void input(){
+    cin>>n>>m;
+    //각 노드의 루트노드 초기화
+    for(int i=1;i<=n;i++){
+        parent[i] = i;
+    }
+    for(int i=0;i<m;i++){
+        int a,b,d;
+        cin>>a>>b>>d;
+        bridge.push_back({d,{a,b}});//양방향 그래프
+        bridge.push_back({d,{b,a}});
+    }
+    //정렬
+    sort(bridge.begin(),bridge.end());
+    //목표지점 입력
+    cin>>s>>e;
+}
+
+//각노드의 루트노드 구하기
+int find(int x){
+    if(parent[x]==x){
+        return x;
+    }
+    parent[x] = find(parent[x]);
+    return parent[x];
+}
+
+//합치기
+void merge(int a,int b){
+    int fa = find(a);
+    int fb = find(b);
+    if(fa!=fb){
+        parent[fb] = fa;//루트노드끼리 연결
+    }
+}
+
+//가중치가 큰것부터 탐색
+void kruskal(){
+    for(int i=bridge.size()-1;i>=0;i--){
+        int lim = bridge[i].first;
+        int x = bridge[i].second.first;
+        int y = bridge[i].second.second;
+        
+        merge(x,y);//합치기
+        //목표노드 도달
+        if(find(s)==find(e)){
+            cout<<lim;
+            break;
+        }
+    }
+}
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    kruskal();//크루스칼 알고리즘
+    return 0;
+}
