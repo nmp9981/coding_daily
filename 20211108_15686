@@ -1,0 +1,89 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+int n,m;
+const int maxi = 50;
+const int inf = 10000000;
+int map[maxi][maxi];//맵
+vector<pair<int,int>> chicken;//치킨집
+vector<pair<int,int>> select_chicken;//고른 치킨집
+vector<pair<int,int>> house;//집
+int dist[101];//각 집에서의 치킨거리
+int ans = inf;//정답
+
+//입력
+void input(){
+    cin>>n>>m;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            cin>>map[i][j];
+            if(map[i][j]==1){//집이면
+                house.push_back({i,j});
+            }else if(map[i][j]==2){//치킨집이면
+                chicken.push_back({i,j});
+            }
+        }
+    }
+}
+
+//도시의 치킨거리 구하기
+int chicken_dist(){
+    int city_dist = 0;//도시의 치킨거리
+    //각 집마다 거리리스트 초기화
+    for(int i=0;i<house.size();i++){
+        dist[i] = inf;
+    }
+    
+    //각 집에서부터
+    for(int i=0;i<house.size();i++){
+        int hx = house[i].first;
+        int hy = house[i].second;
+        //각 치킨집까지의 거리
+        for(int j=0;j<select_chicken.size();j++){
+            int cx = select_chicken[j].first;
+            int cy = select_chicken[j].second;
+            
+            //맨해튼 거리
+            dist[i] = min(dist[i],abs(hx-cx)+abs(hy-cy));
+        }
+        city_dist += dist[i];//각 집에서의 치킨거리
+    }
+    return city_dist;
+}
+
+//조합으로 치킨집 고르기
+void combination(int idx,int cnt){
+    if(cnt==m){
+        ans = min(ans,chicken_dist());//치킨거리 구하기
+        return;
+    }
+    
+    //조합구하기
+    for(int i=idx;i<chicken.size();i++){
+        int nx = chicken[i].first;
+        int ny = chicken[i].second;
+        select_chicken.push_back({nx,ny});//치킨집 선택
+        combination(i+1,cnt+1);//다음 지점부터
+        select_chicken.pop_back();//원래대로
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    combination(0,0);//조합으로 치킨집 고르기
+    cout<<ans;//정답
+    return 0;
+}
