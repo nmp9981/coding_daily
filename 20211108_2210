@@ -1,0 +1,61 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+const int maxi = 5;
+int map[maxi][maxi];//숫자판
+int dx[] = {-1,1,0,0};
+int dy[] = {0,0,-1,1};
+set<int> s;//결과값, 중복방지를 위해 집합구조 활용
+
+//입력
+void input(){
+    for(int i=0;i<5;i++){
+        for(int j=0;j<5;j++){
+            cin>>map[i][j];
+        }
+    }
+}
+
+//숫자판 점프
+void jump(int cnt,int x,int y,int n){
+    //6글자가 모두 차면
+    if(cnt==0){
+        s.insert(n);//결과값 넣기
+        return;
+    }
+    
+    //4방 탐색
+    for(int i=0;i<4;i++){
+        int nx = x + dx[i];
+        int ny = y + dy[i];
+        //범위내에 있고
+        if(nx>=0 && nx<maxi && ny>=0 && ny<maxi){
+            int next = n + map[nx][ny]*pow(10,cnt-2);
+            jump(cnt-1,nx,ny,next);
+        }
+    }
+}
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    for(int i=0;i<maxi;i++){
+        for(int j=0;j<maxi;j++){
+            jump(6,i,j,map[i][j]*pow(10,5));//자릿수,위치,숫자
+        }
+    }
+    cout<<s.size();//출력
+    return 0;
+}
