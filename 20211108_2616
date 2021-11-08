@@ -1,0 +1,48 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <chrono>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+int n,m;
+const int maxi = 50001;
+int guest[maxi];
+int dp[4][maxi];
+int sum[maxi];
+
+//입력
+void input(){
+    cin>>n;
+    //손님수 받기
+    for(int i=1;i<=n;i++){
+        cin>>guest[i];
+        sum[i] = sum[i-1]+guest[i];//부분합
+    }
+    //목표지점 입력
+    cin>>m;
+}
+
+//운송 수
+void kruskal(){
+    for(int i=1;i<=3;i++){
+        for(int j=m;j<=n;j++){
+            dp[i][j] = max(dp[i][j-1],dp[i-1][j-m]+sum[j]-sum[j-m]);
+        }
+    }
+    cout<<dp[3][n];
+}
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    kruskal();//크루스칼 알고리즘
+    return 0;
+}
