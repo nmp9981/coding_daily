@@ -1,0 +1,42 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<string> solution(vector<string> record) {
+    vector<string> answer;
+    vector<string> uid;//유저아이디
+    map<string, string> user_info;//key : 유저 아이디, value : 닉네임
+    stringstream ss;
+    string action;//행동
+    string id;//아이디
+    string nick;//닉네임
+    
+    //아이디 입력
+    for(int i=0;i<record.size();i++){
+        ss.str(record[i]);//공백을 기준으로 구분
+        ss>>action;
+        if(action == "Enter"){
+            ss>>id;
+            ss>>nick;
+            answer.push_back("님이 들어왔습니다.");
+            uid.push_back(id);
+            user_info[id] = nick;
+        }else if(action == "Leave"){
+            ss>>id;
+            answer.push_back("님이 나갔습니다.");
+            uid.push_back(id);
+        }else if(action == "Change"){
+            ss>>id;
+            ss>>nick;
+            user_info[id] = nick;
+        }
+        ss.clear();
+    }
+    
+    //카톡 진행
+    for(int i=0;i<answer.size();i++){
+        answer[i] = user_info[uid[i]]+answer[i];
+    }
+    return answer;
+}
