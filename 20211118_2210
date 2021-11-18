@@ -1,0 +1,59 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+int board[5][5];
+int dx[] = {-1,1,0,0};
+int dy[] = {0,0,-1,1};
+set<int> s;//중복된 결과가 나오지 않게
+
+//판 입력
+void input(){
+	for(int i=0;i<5;i++){
+		for(int j=0;j<5;j++){
+			cin>>board[i][j];
+		}
+	}
+}
+
+//수 고르기
+void jump(int x,int y, int cnt, int num){
+	if(cnt==6){
+		s.insert(num);
+		return;
+	}
+	
+	//다음지점
+	for(int i=0;i<4;i++){
+		int nx = x + dx[i];
+		int ny = y + dy[i];
+		//범위내에 있으면
+		if(nx>=0 && nx<5 && ny>=0 && ny<5){
+			int next = num + board[nx][ny]*pow(10,5-cnt);
+			jump(nx,ny,cnt+1,next);
+		}
+	}
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    input();//입력
+    for(int i=0;i<5;i++){
+    	for(int j=0;j<5;j++){
+    		jump(i,j,1,board[i][j]*100000);
+    	}
+    }
+    cout<<s.size();//결과 출력
+    return 0;
+}
