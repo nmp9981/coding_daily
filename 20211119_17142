@@ -1,0 +1,115 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+const int maxi = 50;
+const int inf = 10000000;
+int maps[maxi][maxi];//연구소
+int visit[maxi][maxi];//방문 시간
+int n,m;
+vector<pair<int,int>> virus;//전체 바이러스
+vector<pair<int,int>> active_virus;//활성화 바이러스
+int ans = inf;
+int dx[4] = {-1,1,0,0};//축 이동
+int dy[4] = {0,0,-1,1};
+
+//입력
+void input(){
+	cin>>n>>m;
+	for(int i=0;i<n;i++){
+		for(int j=0;j<n;j++){
+			cin>>maps[i][j];
+			if(maps[i][j] == 2){
+				virus.push_back({i,j});
+			}
+		}
+	}
+}
+
+//바이러스 확산
+int bfs(){
+	memset(visit,-1,sizeof(visit));
+	queue<pair<int,int>> q;
+	//활성화 바이러스를 모두 큐에 넣기
+	for(int i=0;i<active_virus.size();i++){
+		q.push({active_virus[i].first,active_virus[i].second});
+		visit[active_virus[i].first][active_virus[i].second] = 0;
+	}
+	
+	int times = 0;//시간 초기화
+	while(!q.empty()){
+		int x = q.front().first;
+		int y = q.front().second;
+		q.pop();
+		
+		//4방 탐색
+		for(int i=0;i<4;i++){
+			int nx = x + dx[i];
+			int ny = y + dy[i];
+			//범위내에 들고 
+			if(nx>=0 && nx<n && ny>=0 && ny<n){
+				//미방문이면
+				if(visit[nx][ny]==-1){
+					//벽이 아니면
+					if(maps[nx][ny]!=1){
+						q.push({nx,ny});
+						visit[nx][ny] = visit[x][y]+1;//시간증가
+						//빈공간이었으면
+						if(maps[nx][ny]==0){
+							times = visit[nx][ny];
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	//빈공간이 있는가?(벽이 아닐때)
+	for(int i=0;i<n;i++){
+		for(int j=0;j<n;j++){
+			if(visit[i][j]==-1 && maps[i][j]!=1){
+				return inf;
+			}
+		}
+	}
+	return times;
+}
+
+//바이러스선택
+void select_virus(int cnt, int idx){
+	if(cnt == m){//바이러스를 모두 선택
+		ans = min(ans,bfs());//바이러스 확산
+	}
+	
+	//바이러스 조합
+	for(int i=idx;i<virus.size();i++){
+		int vx = virus[i].first;
+		int vy = virus[i].second;
+		active_virus.push_back({vx,vy});
+		select_virus(cnt+1,i+1);
+		active_virus.pop_back();
+	}
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    input();//입력
+    select_virus(0,0);//바이러스 선택
+    //결과
+    if(ans>=inf){
+    	cout<<-1;
+    }else{
+    	cout<<ans;
+    }
+    return 0;
+}
