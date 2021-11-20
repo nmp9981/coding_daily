@@ -1,0 +1,68 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+const int maxi = 26;
+string s;
+int alpha[maxi];
+
+//입력
+void input(){
+	cin>>s;
+	//알파벳 횟수 세기
+	for(int i=0;i<s.size();i++){
+		alpha[s[i]-'A'] += 1;
+	}
+}
+
+void palin(){
+	//홀수인 알파벳의 개수구하기
+	int cnt = 0;
+	int center_idx = 0;
+	for(int i=0;i<maxi;i++){
+		if(alpha[i]%2==1){
+			center_idx = i;
+			cnt++;
+		}
+	}
+	
+	//홀수인 알파벳의 개수가 2를 넘으면 팰린드롬이 생성되지 않음
+	if(cnt>=2){
+		cout<<"I'm Sorry Hansoo";
+		return;
+	}else{
+		//앞 절반 출력
+		for(int i=0;i<maxi;i++){
+			for(int j=0;j<alpha[i]/2;j++){
+				cout<<char(i+65);
+			}
+		}
+		//중앙출력
+		if(cnt==1){
+			cout<<char(center_idx+65);
+		}
+		//뒤 절반 출력
+		for(int i=maxi-1;i>=0;i--){
+			for(int j=0;j<alpha[i]/2;j++){
+				cout<<char(i+65);
+			}
+		}
+	}
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    input();//입력
+    palin();
+    return 0;
+}
