@@ -1,0 +1,125 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+char maps[12][6];
+int visit[12][6];//방문여부
+int ans = 0;//정답
+int dx[4] = {-1,1,0,0};//축이동
+int dy[4] = {0,0,-1,1};
+
+//입력
+void input(){
+	for(int i=0;i<12;i++){
+		for(int j=0;j<6;j++){
+			cin>>maps[i][j];
+		}
+	}
+}
+
+//폭발이 일어나는가
+bool bfs(int i,int j){
+	memset(visit,0,sizeof(visit));//초기화
+	char color = maps[i][j];//색상
+	queue<pair<int,int>> q;
+	queue<pair<int,int>> boom;//터지는 지점
+	q.push({i,j});
+	boom.push({i,j});
+	visit[i][j] = 1;//방문체크
+	
+	while(!q.empty()){
+		int x = q.front().first;
+		int y = q.front().second;
+		q.pop();
+		
+		//다음지점 탐색
+		for(int i=0;i<4;i++){
+			int nx = x + dx[i];
+			int ny = y + dy[i];
+			//범위내에 있고 미방문
+			if(nx>=0 && nx<12 && ny>=0 && ny<6 && visit[nx][ny]==0){
+				//색상이 같다면
+				if(color==maps[nx][ny]){
+					visit[nx][ny] = 1;//방문체크
+					q.push({nx,ny});
+					boom.push({nx,ny});
+				}
+			}
+		}
+	}
+	//폭발이 일어나는가?
+	if(boom.size()>=4){
+		while(!boom.empty()){
+			int bx = boom.front().first;
+			int by = boom.front().second;
+			//폭발했으니 빈공간으로
+			maps[bx][by] = '.';
+			boom.pop();
+		}
+		return true;
+	}
+	return false;
+}
+
+//내리기
+void down(){
+	for(int i=11;i>=0;i--){
+		for(int j=0;j<6;j++){
+			//맵을 탐색하면서 빈공간 발견
+			if(maps[i][j]=='.'){
+				//내리기
+				for(int k=i-1;k>=0;k--){
+					//빈공간이 아니라면 바꾸기
+					if(maps[k][j]!='.'){
+						maps[i][j] = maps[k][j];
+						maps[k][j] = '.';
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
+//연산횟수
+void play(){
+	while(true){
+		bool boom_flag = false;//폭발이 일어나는가?
+		//맵탐색
+		for(int i=11;i>=0;i--){
+			for(int j=0;j<6;j++){
+				//빈공간이 아닐 경우
+				if(maps[i][j] != '.'){
+					if(bfs(i,j)==true){//연쇄폭발이 일어나면
+						boom_flag = true;
+					}
+				}
+			}
+		}
+		//결과
+		if(boom_flag == true){
+			down();//내리기
+			ans++;
+		}else{
+			cout<<ans;
+			break;
+		}
+	}
+}
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+   	input();//입력
+    play();//게임진행
+    
+    return 0;
+}
