@@ -1,0 +1,68 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+
+vector<long long> dist;
+long long x[4];
+long long y[4];
+
+//입력
+void input(){
+	for(int i=0;i<4;i++){
+		cin>>x[i]>>y[i];
+	}
+}
+bool square(){
+	dist.clear();//초기화
+	//모든 거리 조합구하기
+	for(int i=0;i<3;i++){
+		for(int j=i+1;j<4;j++){
+			long long d_x = pow(x[i]-x[j],2);
+			long long d_y = pow(y[i]-y[j],2);
+			long long d = d_x + d_y;
+			dist.push_back(d);
+		}
+	}
+	//정렬
+	sort(dist.begin(),dist.end());
+	
+	//검사
+	//대각선의 길이가 같은가?
+	if(dist[4]!=dist[5]){
+		return false;
+	}
+	//네변의 길이가 같은가?
+	for(int i=1;i<4;i++){
+		if(dist[0] != dist[i]){
+			return false;
+		}
+	}
+	return true;
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    int test;
+    cin>>test;
+    for(int t=0;t<test;t++){
+   		input();//입력
+    	if(square()==true){
+    		cout<<1<<"\n";
+    	}else{
+    		cout<<0<<"\n";
+    	}
+    }
+    
+    return 0;
+}
