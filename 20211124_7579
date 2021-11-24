@@ -1,0 +1,65 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+
+int n,m;
+const int maxi = 101;
+const int inf = 1000000000;
+int dp[maxi][10001];//i번까지 j비용내의 공간 최댓값
+int cost[maxi];
+int memory[maxi];
+
+//입력
+void input(){
+	cin>>n>>m;
+	//메모리 입력
+	for(int i=1;i<=n;i++){
+		cin>>memory[i];
+	}
+	//가격 입력
+	for(int i=1;i<=n;i++){
+		cin>>cost[i];
+	}
+}
+
+//비활성화 최소비용
+void app(){
+	//점화식
+	dp[1][cost[1]] = memory[1];
+	for(int i=1;i<=n;i++){
+		for(int j=0;j<=10000;j++){
+			//돈이 충분하면
+			if(j>=cost[i]){
+				dp[i][j] = max(dp[i-1][j],dp[i-1][j-cost[i]]+memory[i]);
+			}else{
+				dp[i][j] = dp[i-1][j];
+			}
+		}
+	}
+	
+	//최소비용 구하기
+	for(int j=0;j<=10000;j++){
+		if(dp[n][j]>=m){
+			cout<<j;
+			break;
+		}
+	}
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    input();//입력
+    app();
+    return 0;
+}
