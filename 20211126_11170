@@ -1,0 +1,45 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+
+int n,m;
+
+//입력
+void input(){
+	cin>>n>>m;
+}
+
+//0의 개수 세기
+int count_zero(int n,int m){
+    int cnt = 0;
+    for(int i=n;i<=m;i++){
+        string s = to_string(i);
+        for(int j=0;j<s.size();j++){
+            if(s[j]=='0'){//0의 개수 세기
+                cnt++;
+            }
+        }
+    }
+    return cnt;
+}
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    int test;
+    cin>>test;
+    for(int t=0;t<test;t++){
+        input();//입력
+        cout<<count_zero(n,m)<<"\n";//0의 개수 세기
+    }
+    return 0;
+}
