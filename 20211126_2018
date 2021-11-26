@@ -1,0 +1,38 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+
+int n;
+
+//경우의 수 구하기
+int add(int n){
+    int cnt = 0;
+    for(int i=1;i<=4500;i++){
+        int up = 2*n-i*(i-1);//분자
+        int down = 2*i;//분모
+        if(up%down==0 && up>0){//자연수가 나와야한다.
+            cnt++;
+        }
+        if(up<0){
+            break;
+        }
+    }
+    return cnt;
+}
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    cin>>n;
+    cout<<add(n);
+    return 0;
+}
