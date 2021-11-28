@@ -1,0 +1,63 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+
+using namespace std;//이름공간 선언
+
+int n,m;
+const int maxi = 10001;
+int dp[20][maxi];//i번까지 동전을 j원내로 지불하는 경우의 수
+int coin[20];
+
+//입력
+void input(){
+	cin>>n;
+	for(int i=0;i<n;i++){
+	    cin>>coin[i];
+	}
+	cin>>m;
+}
+
+//동전 세는 방법 수
+int coin_case(){
+    memset(dp,0,sizeof(dp));//초기화
+    //첫줄
+    for(int j=0;j<=m;j++){
+        if(j%coin[0]==0){
+            dp[0][j] = 1;//1가지 방법
+        }
+    }
+    
+    //점화식
+    for(int i=1;i<n;i++){
+        for(int j=0;j<=m;j++){
+            //coin[i]를 안쓰는 경우 + 1개이상 쓰는 경우
+            if(j>=coin[i]){//돈이 충분한 경우
+                dp[i][j] = dp[i-1][j]+dp[i][j-coin[i]];
+            }else{//돈이 모자른 경우
+                dp[i][j] = dp[i-1][j];
+            }
+        }
+    }
+    return dp[n-1][m];
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    int test;
+    cin>>test;
+    for(int t=0;t<test;t++){
+        input();//입력
+        cout<<coin_case()<<"\n";//동전의 개수를 세는 경우의 수
+    }
+    return 0;
+}
