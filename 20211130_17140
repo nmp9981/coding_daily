@@ -1,0 +1,134 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+
+int r,c,k,col_num,row_num;
+const int maxi = 101;
+int A[maxi][maxi];//배열
+
+//입력
+void input(){
+	cin>>r>>c>>k;
+	//초기배열 입력
+	for(int i=1;i<=3;i++){
+	    for(int j=1;j<=3;j++){
+	        cin>>A[i][j];
+	    }
+	}
+	col_num = 3;
+	row_num = 3;
+}
+
+//R연산
+void R(){
+    //모든 행에 대해서
+    for(int i=1;i<=row_num;i++){
+        int num[maxi];
+        memset(num,0,sizeof(num));//초기화
+        //각 수가 몇번 나왔는가?
+        for(int j=1;j<=col_num;j++){
+            if(A[i][j]>0){
+                num[A[i][j]]++;
+            }
+        }
+        vector<pair<int,int>> v;//횟수, 숫자
+        for(int k=1;k<maxi;k++){
+            if(num[k]>0){
+                v.push_back({num[k],k});
+            }
+        }
+        //정렬
+        sort(v.begin(),v.end());
+        
+        //재배치
+        int v_size = v.size();
+        col_num = max(col_num,v_size+v_size);//갱신
+        for(int k=0;k<v_size;k++){
+            A[i][2*k+2] = v[k].first;//횟수
+            A[i][2*k+1] = v[k].second;//숫자
+        }
+        
+        //뒷부분은 0으로
+        for(int j=2*v_size+1;j<=col_num;j++){
+            A[i][j] = 0;
+        }
+        //범위초과시 
+        if(col_num>=100){
+            col_num = 100;
+        }
+    }
+}
+
+//C연산
+void C(){
+    //모든 열에 대해서
+    for(int j=1;j<=col_num;j++){
+        int num[maxi];
+        memset(num,0,sizeof(num));//초기화
+        //각 수가 몇번 나왔는가?
+        for(int i=1;i<=row_num;i++){
+            if(A[i][j]>0){
+                num[A[i][j]]++;
+            }
+        }
+        vector<pair<int,int>> v;//횟수, 숫자
+        for(int k=1;k<maxi;k++){
+            if(num[k]>0){
+                v.push_back({num[k],k});
+            }
+        }
+        //정렬
+        sort(v.begin(),v.end());
+        
+        //재배치
+        int v_size = v.size();
+        row_num = max(row_num,v_size+v_size);//갱신
+        for(int k=0;k<v_size;k++){
+            A[2*k+2][j] = v[k].first;//횟수
+            A[2*k+1][j] = v[k].second;//숫자
+        }
+        
+        //뒷부분은 0으로
+        for(int i=2*v_size+1;i<=row_num;i++){
+            A[i][j] = 0;
+        }
+        //범위초과시 
+        if(row_num>=100){
+            row_num = 100;
+        }
+    }
+}
+
+int main(){
+    cin.tie(0);
+    cout.tie(0);
+    
+    input();//입력
+    //진행
+    for(int t=0;t<=100;t++){
+        //목표도달
+        if(A[r][c] == k){
+            cout<<t;
+            return 0;
+        }
+        
+        //Rc연산
+        if(row_num >= col_num){
+            R();
+        }else{
+            C();
+        }
+    }
+    cout<<-1;//100초가 지나도 도달 못하면
+    return 0;
+}
