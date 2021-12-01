@@ -1,0 +1,73 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+
+int n,m;
+const int maxi = 2001;
+int A[maxi];//동전
+int dp[maxi][maxi];//i~j까지가 팰린드롬인가?
+
+//입력
+void input(){
+	cin>>n;
+	memset(dp,0,sizeof(dp));//초기화
+	for(int i=1;i<=n;i++){
+	    cin>>A[i];
+	    dp[i][i] = 1;//숫자 1개는 팰린드롬
+	}
+}
+
+//팰린드롬 판단
+void palindrome(){
+    //숫자 2개
+    for(int i=1;i<n;i++){
+        if(A[i]==A[i+1]){
+            dp[i][i+1] = 1;
+        }
+    }
+    
+    //점화식
+    for(int s=2;s<n;s++){//탐색 범위
+        for(int i=1;i<=n-s;i++){//시작지점
+            int j = i+s;//종료지점
+            //사이가 팰린드롬이고 양끝이 같다면
+            if(dp[i+1][j-1]==1 && A[i]==A[j]){
+                dp[i][j] = 1;//팰린드롬
+            }else{
+                dp[i][j] = 0;
+            }
+        }
+    }
+}
+
+//질문
+void questions(){
+    cin.tie(0);
+    cout.tie(0);
+    cin>>m;
+    for(int i=0;i<m;i++){
+        int s,e;
+        cin>>s>>e;
+        cout<<dp[s][e]<<"\n";
+    }
+}
+
+int main(){
+    //빠른 입출력
+    ios::sync_with_stdio(false);
+    
+    input();//입력
+    palindrome();//팰린드롬 여부 배열 만들기
+    questions();//질문
+    return 0;
+}
