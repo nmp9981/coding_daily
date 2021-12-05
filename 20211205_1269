@@ -1,0 +1,49 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+
+int a,b;
+set<int> s;
+
+//입력
+void input(){
+	cin>>a>>b;
+	//a집합 입력
+	for(int i=0;i<a;i++){
+	    int x;
+	    cin>>x;
+	    s.insert(x);
+	}
+	//b집합 입력
+	for(int j=0;j<b;j++){
+	    int y;
+	    cin>>y;
+	    s.insert(y);
+	}
+}
+
+//대칭차집합 개수 세기
+void count_set(){
+    int com = a+b-s.size();
+    cout<<a-com+b-com;
+}
+
+
+int main(){
+    //빠른 입출력
+    ios::sync_with_stdio(false);
+
+    input();//입력
+    count_set();//집합의 개수
+    return 0;
+}
