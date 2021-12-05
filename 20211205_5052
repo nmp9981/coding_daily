@@ -1,0 +1,70 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+
+//구조체 정의
+struct trie{
+    trie* children[10];
+    bool isEndOfPhone;
+};
+
+//삽입조건
+bool insert(trie* root,string& phone){
+    trie* parent = root;
+    
+    for(int i=0;i<phone.length();++i){
+        trie** child=&parent->children[phone[i]-'0'];
+        if(parent->isEndOfPhone){
+            return false;
+        }
+        if(!*child){
+            *child=new trie{{0},false};
+        }
+        parent=*child;
+    }
+    for(int i=0;i<10;++i){
+        if(parent->children[i]){
+            return false;
+        }
+    }
+    return parent->isEndOfPhone=true;
+}
+
+bool solve(){
+    trie* root=new trie{{0},false};
+    int n;cin>>n;
+    string phone;
+    for(int i=0;i<n;++i){
+        cin>>phone;
+        if(!insert(root,phone)){
+            while(++i<n){
+                cin>>phone;
+            }
+            return false;
+        }
+    }
+    return true;
+}
+
+int main(){
+    //빠른 입출력
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    
+    int t;cin>>t;
+    while(t--){
+        cout<<(solve()?"YES":"NO")<<"\n";
+    }
+    return 0;
+}
