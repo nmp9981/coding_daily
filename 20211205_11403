@@ -1,0 +1,70 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+
+int n;
+const int maxi = 101;
+int matrix[maxi][maxi];//인접행렬
+int answer[maxi][maxi];//인접행렬
+int visit[maxi];//방문기록
+
+//입력
+void input(){
+	cin>>n;
+	for(int i=1;i<=n;i++){
+	    for(int j=1;j<=n;j++){
+	        cin>>matrix[i][j];//인접행렬
+	    }
+	}
+}
+
+//대칭차집합 개수 세기
+void dfs(int node){
+    for(int j=1;j<=n;j++){
+        //경로가 있고 미방문
+        if(matrix[node][j]==1 && visit[j]==0){
+            visit[j]=1;//방문체크
+            dfs(j);//더 깊게 탐색
+        }
+    }
+}
+
+//출력
+void output(){
+	for(int i=1;i<=n;i++){
+	    for(int j=1;j<=n;j++){
+	        cout<<answer[i][j]<<" ";
+	    }
+	    cout<<"\n";
+	}
+}
+
+int main(){
+    //빠른 입출력
+    ios::sync_with_stdio(false);
+
+    input();//입력
+    //각 노드별 깊이우선 탐색
+    for(int i=1;i<=n;i++){
+        memset(visit,0,sizeof(visit));//방문기록 초기화
+        dfs(i);
+        //정답배열에 기록
+        for(int k=1;k<=n;k++){
+            if(visit[k]==1){
+                answer[i][k]=1;
+            }
+        }
+    }
+    output();//출력
+    return 0;
+}
