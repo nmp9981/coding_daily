@@ -1,0 +1,73 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+
+int n;
+const int maxi = 1010000;
+bool chk[maxi];//소수여부 체크
+vector<int> prime;//소수목록
+
+//에라토스테네스 체
+void eratos(){
+    memset(chk,true,sizeof(chk));//초기화
+    //소수구하기
+    int root_maxi = ceil(pow(maxi,0.5))+1;
+    for(int i=3;i<root_maxi;i+=2){
+        if(chk[i]==true){//소수라면
+            for(int j=i*i;j<maxi;j+=i){
+                chk[j]=false;//소수가 아님
+            }
+        }
+    }
+    
+    //소수리스트
+    prime.push_back(2);//2도 소수
+    for(int i=3;i<maxi;i+=2){
+        if(chk[i]==true){
+            prime.push_back(i);
+        }
+    }
+}
+
+//팰린드롬 검사
+void palondrame(){
+    for(int i=0;i<prime.size();i++){
+        string s = to_string(prime[i]);
+        bool flag = true;
+        
+        int l = s.size()/2;
+        for(int j=0;j<l;j++){
+            if(s[j]!=s[s.size()-j-1]){//팰린드롬이 아님
+                flag=false;
+                break;
+            }
+        }
+        
+        //판정
+        if(flag==true && prime[i]>=n){
+            cout<<prime[i];
+            return;
+        }
+    }
+}
+int main(){
+    //빠른 입출력
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    cin>>n;
+    eratos();//에라토스테네스의 체
+    palondrame();//팰린드롬 판정
+    return 0;
+}
