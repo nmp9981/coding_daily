@@ -1,0 +1,61 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+
+//구조체 정의
+struct student{
+    string name;
+    int day,month,year;
+};
+
+int n;
+vector<student> p;//반 학생 벡터
+
+//오름차순 정렬
+bool cmp(student A, student B){
+    if(A.year==B.year){
+        if(A.month==B.month){
+            return A.day<B.day;
+        }
+        return A.month<B.month;
+    }
+    return A.year<B.year;
+}
+
+//결과
+void result(){
+    cout<<p[n-1].name<<"\n";//연소자
+    cout<<p[0].name<<"\n";//연장자
+}
+//입력
+void input(){
+    cin>>n;
+    for(int i=0;i<n;i++){
+        string n;
+        int d,m,y;
+        cin>>n>>d>>m>>y;
+        p.push_back({n,d,m,y});
+    }
+    sort(p.begin(),p.end(),cmp);//오름차순 정렬
+}
+
+int main(){
+    //빠른 입출력
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    result();//결과
+    return 0;
+}
