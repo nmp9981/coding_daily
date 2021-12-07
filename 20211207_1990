@@ -1,0 +1,78 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+
+int a,b;
+const int maxi = 9999999;
+vector<int> prime;//소수 목록
+bool chk[maxi];
+
+//입력
+void input(){
+    cin>>a>>b;
+}
+
+//소수 목록
+void prime_list(){
+    //소수체크
+    memset(chk,true,sizeof(chk));//초기화
+    int root_maxi = ceil(pow(maxi,0.5))+1;
+    for(int i=3;i<root_maxi;i+=2){
+        if(chk[i]==true){//소수이면
+            for(int j=i*i;j<maxi;j+=i){
+                chk[j]=false;//소수가 아님
+            }
+        }
+    }
+    
+    //소수 담기
+    for(int i=3;i<maxi;i+=2){
+        if(chk[i]==true){
+            prime.push_back(i);
+        }
+    }
+}
+
+//팰린드롬
+void palindrome(){
+    for(int i=0;i<prime.size();i++){
+        string s = to_string(prime[i]);
+        bool flag = true;//팰린드롬인가?
+        
+        int s_size = s.size()/2;
+        for(int j=0;j<s_size;j++){
+            if(s[j]!=s[s.size()-j-1]){
+                flag = false;//팰린드롬이 아님
+                break;
+            }
+        }
+        
+        //결과
+        if(flag==true && prime[i]>=a && prime[i]<=b){
+            cout<<prime[i]<<"\n";
+        }
+    }
+}
+
+int main(){
+    //빠른 입출력
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    prime_list();//소수 리스트
+    palindrome();//팰린드롬 판단
+    cout<<-1<<"\n";
+    return 0;
+}
