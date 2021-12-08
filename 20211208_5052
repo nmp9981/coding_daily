@@ -1,0 +1,68 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+
+int n;
+vector<string> tele;//번호목록
+
+//입력
+void input(){
+    cin>>n;
+    tele.clear();//초기화
+    for(int i=0;i<n;i++){
+        string s;
+        cin>>s;
+        tele.push_back(s);
+    }
+    sort(tele.begin(),tele.end());//오름차순 정렬
+}
+
+//일관성이 있는가?
+void chk(){
+    bool flag = true;//일관성이 있는가?
+    for(int i=0;i<tele.size()-1;i++){
+        string cur = tele[i];
+        string next_cur = tele[i+1];
+        
+        //이전 문자열이 더 길면 스킵
+        if(cur.size()>next_cur.size()){
+            continue;
+        }
+        //이전 문자열이 포함되는가?
+        if(cur==next_cur.substr(0,cur.size())){
+            flag = false;//일관성이 없음
+            break;
+        }
+    }
+    //결과
+    if(flag==false){
+        cout<<"NO"<<"\n";
+    }else{
+        cout<<"YES"<<"\n";
+    }
+}
+
+int main(){
+    //빠른 입출력
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    
+    int test;
+    cin>>test;
+    for(int t=0;t<test;t++){
+        input();//입력
+        chk();//일관성이 있는가?
+    }
+    return 0;
+}
