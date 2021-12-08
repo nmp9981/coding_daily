@@ -1,0 +1,70 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+
+vector<int> A;//DDR
+const int maxi = 100001;
+int dp[5][5][maxi];//왼발, 오른발, 인덱스
+
+//입력
+void input(){
+    while(true){
+        int x;
+        cin>>x;
+        if(x==0){//입력 종료
+            break;
+        }
+        A.push_back(x);
+    }
+}
+
+//점수
+int energe(int now,int next){//현재, 나중
+    if(now==next){
+        return 1;
+    }else if(now==0){
+        return 2;
+    }else if(abs(now-next)==2){
+        return 4;
+    }
+    return 3;//나머지 경우
+}
+
+//게임진행
+int play(int x,int y,int idx){
+    //종료조건
+    if(idx==A.size()){
+        return 0;
+    }
+    //점화식
+    if(dp[x][y][idx]!=-1){//이미 한거면
+        return dp[x][y][idx];
+    }
+    
+    int left = play(A[idx],y,idx+1) + energe(x,A[idx]);
+    int right = play(x,A[idx],idx+1) + energe(y,A[idx]);
+    dp[x][y][idx] = min(left,right);//왼발 오른발 중 더 작은것
+    return dp[x][y][idx];
+}
+
+int main(){
+    //빠른 입출력
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    memset(dp,-1,sizeof(dp));//초기화
+    cout<<play(0,0,0);//왼발, 오른발 , 인덱스
+    return 0;
+}
