@@ -1,0 +1,114 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+
+int n;
+string board[5];//전광판
+vector<int> num[9];//각 자릿수에 올 수 있는 숫자
+//각 숫자 전광판
+string number[10][5] = {
+    {"###","#.#","#.#","#.#","###"},
+    {"..#","..#","..#","..#","..#"},
+    {"###","..#","###","#..","###"},
+    {"###","..#","###","..#","###"},
+    {"#.#","#.#","###","..#","..#"},
+    {"###","#..","###","..#","###"},
+    {"###","#..","###","#.#","###"},
+    {"###","..#","..#","..#","..#"},
+    {"###","#.#","###","#.#","###"},
+    {"###","#.#","###","..#","###"}
+};
+
+//입력
+void input(){
+    cin>>n;
+    for(int i=0;i<5;i++){
+        cin>>board[i];
+    }
+}
+
+//올 수 없는 숫자 가리기
+bool tower(){
+    bool flag = true;//평균을 구할 수 있는가?
+    //모든 자릿수 탐색
+    for(int k=0;k<n;k++){
+        //각 자릿수 정보를 배열에 담기
+        string semi_board[5][3];
+        for(int i=0;i<5;i++){
+            for(int j=0;j<3;j++){
+                semi_board[i][j] = board[i][4*k+j];
+            }
+        }
+        
+        //나올 수 없는 숫자 가려내기
+        bool chk[10];
+        memset(chk,true,sizeof(chk));//초기화
+        //배열탐색
+        for(int i=0;i<5;i++){
+            for(int j=0;j<3;j++){
+                //#으로 나올 수 없는 숫자들을 가려냄
+                if(semi_board[i][j]=="#"){
+                    //각 숫자에 대해 탐색
+                    for(int m=0;m<=9;m++){
+                        if(number[m][i][j]=='.'){
+                            chk[m] = false;//나올 수 없는 숫자
+                        }
+                    }
+                }
+            }
+        }
+        //나올 수 있는 숫자들을 넣기
+        int cnt = 0;
+        for(int m=0;m<=9;m++){
+            if(chk[m]==true){
+                num[k].push_back(m);
+                cnt++;
+            }
+        }
+        //가능한 숫자의 개수가 없다면 
+        if(cnt==0){
+            flag = false;
+        }
+    }
+    return flag;
+}
+
+//평균 구하기
+double average_tower(){
+    double total = 0.0;
+    for(int i=0;i<n;i++){
+        //각 자릿수마다 합구하기
+        int sum = 0;
+        for(int j=0;j<num[i].size();j++){
+            sum+=num[i][j];
+        }
+        total += (double)sum/(double)num[i].size()*pow(10,n-i-1);
+    }
+    return total;
+}
+
+int main(){
+    //빠른 입출력
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    //올 수 없는 숫자 가리기
+    if(tower()==false){
+        cout<<-1;
+    }else{
+        cout<<average_tower();//평균 구하기
+    }
+    return 0;
+}
