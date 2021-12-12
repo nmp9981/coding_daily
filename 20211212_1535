@@ -1,0 +1,59 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+
+int n;
+const int maxi = 21;
+int L[maxi];//잃는 체력
+int J[maxi];//얻는 기쁨
+int dp[maxi][101];//n번째까지 인사했고 체력 j일때의 기쁨 
+
+//입력
+void input(){
+    cin>>n;
+    //잃는 체력
+    for(int i=1;i<=n;i++){
+        cin>>L[i];
+    }
+    //얻는 기쁨
+    for(int i=1;i<=n;i++){
+        cin>>J[i];
+    }
+}
+
+//최대 기쁨 구하기
+void solve(){
+    for(int i=1;i<=n;i++){
+        for(int j=0;j<=100;j++){
+            //체력이 충분하다면
+            if(j>L[i]){//인사 여부
+                dp[i][j] = max(dp[i-1][j],dp[i-1][j-L[i]]+J[i]);
+            }else{//체력이 부족하면 인사를 할 수 없음
+                dp[i][j] = dp[i-1][j];
+            }
+        }
+    }
+    cout<<dp[n][100];//출력
+}
+
+int main(){
+    //빠른 입출력
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    memset(dp,0,sizeof(dp));//초기화
+    solve();//풀이
+    return 0;
+}
