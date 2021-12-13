@@ -1,0 +1,112 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+
+int n;//자릿수
+bool flag = true;//나올 수 있는 숫자가 있는가?
+string board[5];//전체 판
+vector<int> num[9];//각 자릿수에 해당되는 숫자
+string digit[10][5] = {
+    {"###","#.#","#.#","#.#","###"},
+    {"..#","..#","..#","..#","..#"},
+    {"###","..#","###","#..","###"},
+    {"###","..#","###","..#","###"},
+    {"#.#","#.#","###","..#","..#"},
+    {"###","#..","###","..#","###"},
+    {"###","#..","###","#.#","###"},
+    {"###","..#","..#","..#","..#"},
+    {"###","#.#","###","#.#","###"},
+    {"###","#.#","###","..#","###"}
+};
+//입력
+void input(){
+    cin>>n;
+    for(int i=0;i<5;i++){
+        cin>>board[i];
+    }
+}
+
+//나올 수 있는 층 번호 구하기
+void tower(){
+    //각 자릿수
+    for(int k=0;k<n;k++){
+        //1자리용 배열
+        string sub_board[5][3];
+        for(int i=0;i<5;i++){
+            for(int j=0;j<3;j++){
+                sub_board[i][j] = board[i][4*k+j];
+            }
+        }
+        
+        //배열탐색
+        bool chk[10];
+        memset(chk,true,sizeof(chk));//초기화
+        for(int i=0;i<5;i++){
+            for(int j=0;j<3;j++){
+                //#을 기준으로 나올 수 없는 숫자 가려내기
+                if(sub_board[i][j] == "#"){
+                    //0~9까지 가려내기
+                    for(int m=0;m<=9;m++){
+                        //.이면 나올 수 없는 숫자
+                        if(digit[m][i][j]=='.'){
+                            chk[m] = false;
+                        }
+                    }
+                }
+            }
+        }
+        
+        //나올 수 있는 숫자만 넣기
+        int cnt = 0;
+        for(int m=0;m<=9;m++){
+            if(chk[m]==true){
+                cnt++;
+                num[k].push_back(m);
+            }
+        }
+        
+        //나올 수 있는 숫자가 없다면
+        if(cnt==0){
+            flag = false;
+        }
+    }
+}
+
+//평균 구하기
+double avg(){
+    double total = 0.0;
+    for(int i=0;i<n;i++){
+        int sum = 0;
+        for(int j=0;j<num[i].size();j++){
+            sum+=num[i][j];
+        }
+        total += (double)sum/(double)num[i].size()*pow(10,n-i-1);
+    }
+    return total;
+}
+
+int main(){
+    //빠른 입출력
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    tower();//나올수 있는 층번호 구하기
+    if(flag==true){
+        cout<<avg();//평균 구하기
+    }else{
+        cout<<-1;
+    }
+    return 0;
+}
