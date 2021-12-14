@@ -1,0 +1,43 @@
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <deque>
+#include <utility>
+#include <set>
+
+using namespace std;//이름공간 선언
+
+int n;
+vector<int> v;
+
+//입력
+void input(){
+    cin>>n;
+    for(int i=0;i<n;i++){
+        int x;
+        cin>>x;
+        v.push_back(x);
+    }
+}
+
+//중앙값 구하기
+void medi(){
+    sort(v.begin(),v.end());
+    cout<<v[(n-1)/2];
+}
+
+int main(){
+    //빠른 입출력
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    input();//입력
+    medi();//중앙값 구하기
+    return 0;
+}
