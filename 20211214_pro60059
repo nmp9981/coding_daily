@@ -1,0 +1,214 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cstring>
+
+using namespace std;
+const int maxi = 20;
+const int maxi_lock = 58;
+
+int n,m;
+//4방향의 키
+int key1[maxi][maxi];//0도
+int key2[maxi][maxi];//90도
+int key3[maxi][maxi];//180도
+int key4[maxi][maxi];//270도
+//자물쇠
+int lock_board[maxi_lock+3][maxi_lock+3];
+int home_cnt;//전체 홈의 개수
+
+//열쇠 회전
+void rotation_key(vector<vector<int>> key){
+    m = key.size();
+    //0도 회전
+    for(int i=0;i<m;i++){
+        for(int j=0;j<m;j++){
+            key1[i][j] = key[i][j];
+        }
+    }
+    //90도 회전
+    for(int i=0;i<m;i++){
+        for(int j=0;j<m;j++){
+            key2[i][j] = key[j][m-1-i];
+        }
+    }
+    //180도 회전
+    for(int i=0;i<m;i++){
+        for(int j=0;j<m;j++){
+            key3[i][j] = key[m-i-1][m-1-j];
+        }
+    }
+    //270도 회전
+    for(int i=0;i<m;i++){
+        for(int j=0;j<m;j++){
+            key4[i][j] = key2[m-i-1][m-1-j];
+        }
+    }
+}
+
+//자물쇠 세팅
+void set_lock_board(vector<vector<int>> lock){
+    n = lock.size();
+    memset(lock_board,-1,sizeof(lock_board));//초기화
+    int start = (maxi_lock-n)/2;//시작지점
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            lock_board[i+start][j+start] = lock[i][j];
+            //자물쇠의 홈의 개수 세기
+            if(lock[i][j]==0){
+                home_cnt++;
+            }
+        }
+    }
+}
+
+//자물쇠 열기
+bool unlock(){
+    int l = maxi_lock-m+1;//시작할 최대 지점
+    //1번 열쇠
+    for(int start_x=0;start_x<l;start_x++){//시작지점 잡기
+        for(int start_y=0;start_y<l;start_y++){
+            int cnt = 0;//홈의 개수
+            //종료지점
+            int end_x = start_x + m;
+            int end_y = start_y + m;
+            //열쇠의 돌기와 자물쇠의 홈이 맞는지 탐색
+            for(int i=start_x;i<end_x;i++){
+                for(int j=start_y;j<end_y;j++){
+                    if(key1[i-start_x][j-start_y]==1 && lock_board[i][j]==0){
+                        //돌기끼리 만나는 지점이 있는지 검사
+                        bool bump = false;//돌기끼리 만나는가?
+                        for(int a=start_x;a<end_x;a++){
+                            for(int b=start_y;b<end_y;b++){
+                                if(key1[a-start_x][b-start_y]==1 && lock_board[a][b]==1){
+                                    bump = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if(bump==false){//돌기끼리 만나는게 없음
+                            cnt++;
+                        }
+                    }
+                }
+            }
+            //자물쇠가 열림
+            if(home_cnt==cnt){
+                return true;
+            }
+        }
+    }
+    //2번 열쇠
+    for(int start_x=0;start_x<l;start_x++){//시작지점 잡기
+        for(int start_y=0;start_y<l;start_y++){
+            int cnt = 0;
+            //종료지점
+            int end_x = start_x + m;
+            int end_y = start_y + m;
+            //열쇠의 돌기와 자물쇠의 홈이 맞는지 탐색
+            for(int i=start_x;i<end_x;i++){
+                for(int j=start_y;j<end_y;j++){
+                    if(key2[i-start_x][j-start_y]==1 && lock_board[i][j]==0){
+                        //돌기끼리 만나는 지점이 있는지 검사
+                        bool bump = false;//돌기끼리 만나는가?
+                        for(int a=start_x;a<end_x;a++){
+                            for(int b=start_y;b<end_y;b++){
+                                if(key2[a-start_x][b-start_y]==1 && lock_board[a][b]==1){
+                                    bump = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if(bump==false){//돌기끼리 만나는게 없음
+                            cnt++;
+                        }
+                    }
+                }
+            }
+            //자물쇠가 열림
+            if(home_cnt==cnt){
+                return true;
+            }
+        }
+    }
+    //3번 열쇠
+    for(int start_x=0;start_x<l;start_x++){//시작지점 잡기
+        for(int start_y=0;start_y<l;start_y++){
+            int cnt = 0;
+            //종료지점
+            int end_x = start_x + m;
+            int end_y = start_y + m;
+            //열쇠의 돌기와 자물쇠의 홈이 맞는지 탐색
+            for(int i=start_x;i<end_x;i++){
+                for(int j=start_y;j<end_y;j++){
+                    if(key3[i-start_x][j-start_y]==1 && lock_board[i][j]==0){
+                        //돌기끼리 만나는 지점이 있는지 검사
+                        bool bump = false;//돌기끼리 만나는가?
+                        for(int a=start_x;a<end_x;a++){
+                            for(int b=start_y;b<end_y;b++){
+                                if(key3[a-start_x][b-start_y]==1 && lock_board[a][b]==1){
+                                    bump = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if(bump==false){//돌기끼리 만나는게 없음
+                            cnt++;
+                        }
+                    }
+                }
+            }
+            //자물쇠가 열림
+            if(home_cnt==cnt){
+                return true;
+            }
+        }
+    }
+    //4번 열쇠
+    for(int start_x=0;start_x<l;start_x++){//시작지점 잡기
+        for(int start_y=0;start_y<l;start_y++){
+            int cnt = 0;
+            //종료지점
+            int end_x = start_x + m;
+            int end_y = start_y + m;
+            //열쇠의 돌기와 자물쇠의 홈이 맞는지 탐색
+            for(int i=start_x;i<end_x;i++){
+                for(int j=start_y;j<end_y;j++){
+                    if(key4[i-start_x][j-start_y]==1 && lock_board[i][j]==0){
+                        //돌기끼리 만나는 지점이 있는지 검사
+                        bool bump = false;//돌기끼리 만나는가?
+                        for(int a=start_x;a<end_x;a++){
+                            for(int b=start_y;b<end_y;b++){
+                                if(key4[a-start_x][b-start_y]==1 && lock_board[a][b]==1){
+                                    bump = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if(bump==false){//돌기끼리 만나는게 없음
+                            cnt++;
+                        }
+                    }
+                }
+            }
+            //자물쇠가 열림
+            if(home_cnt==cnt){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool solution(vector<vector<int>> key, vector<vector<int>> lock) {
+    bool answer = true;
+    rotation_key(key);//열쇠 회전
+    set_lock_board(lock);//자물쇠 세팅
+    //자물쇠 열기
+    if(unlock()==true){
+        answer = true;
+    }else{
+        answer = false;
+    }
+    return answer;
+}
