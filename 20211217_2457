@@ -1,0 +1,72 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cstring>
+#include <cmath>
+using namespace std;
+
+//꽃의 정보
+struct flower{
+    int st,end;
+};
+
+int n;
+int month[12] = {0,31,59,90,120,151,181,212,243,273,304,334};
+vector<flower> garden;//꽃을 담는 벡터
+
+//시작날짜를 기준으로 정렬
+bool cmp(const flower& A, const flower& B){
+    if(A.st==B.st){
+        return A.end>B.end;
+    }
+    return A.st<B.st;
+}
+//입력
+void input(){
+    cin>>n;
+    for(int i=0;i<n;i++){
+        int a,b,c,d,s,e;
+        cin>>a>>b>>c>>d;
+        s = month[a-1]+b;
+        e = month[c-1]+d;
+        garden.push_back({s,e});
+    }
+    //시작날짜를 기준으로 정렬
+    sort(garden.begin(),garden.end(),cmp);
+}
+
+//꽃 선택
+int select_flower(){
+    int left = 60,right = 0,cnt = 0;
+    for(int i=0;i<n;i++){
+        //사이에 있을 경우
+        if(left>=garden[i].st){
+            if(right<garden[i].end){//더 긴게 올 경우
+                right = garden[i].end;
+            }
+            //범위를 넘을 경우 종료
+            if(right>=335){
+                break;
+            }
+        }else{
+            if(garden[i].st>right){
+                cnt = 0;
+                break;
+            }
+            left = right;
+            right = garden[i].end;
+            cnt++;
+        }
+    }
+    //다 못채운 경우
+    if(right<335){
+        return 0;
+    }
+    return cnt+1;
+}
+int main(){
+    input();//입력
+    cout<<select_flower();//꽃을 선택
+    return 0;
+}
