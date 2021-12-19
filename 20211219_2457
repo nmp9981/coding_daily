@@ -1,0 +1,71 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cstring>
+#include <cmath>
+using namespace std;
+
+//꽃 정보
+struct flower{
+    int st,end;
+};
+
+int n;
+int ans = 0;
+int month[13] = {0,0,31,59,90,120,151,181,212,243,273,304,334};
+vector<flower> garden;//꽃을 담는 벡터
+
+//정렬조건
+bool cmp(const flower& A,const flower& B){
+    if(A.st==B.st){
+        return A.end>B.end;
+    }
+    return A.st<B.st;
+}
+
+//입력
+void input(){
+    cin>>n;
+    for(int i=1;i<=n;i++){
+        int a,b,c,d,s,e;
+        cin>>a>>b>>c>>d;
+        s = month[a]+b;
+        e = month[c]+d;
+        garden.push_back({s,e});
+    }
+    sort(garden.begin(),garden.end(),cmp);
+}
+
+//꽃을 고르기
+int set_flower(){
+    int before = 60, after = 0;
+    for(int i=0;i<n;i++){
+        if(garden[i].st<=before){
+            if(after<garden[i].end){
+                after = garden[i].end;
+            }
+            if(after>334){//범위를 넘어가면 종료
+                break;
+            }
+        }else{
+            if(after<garden[i].st){//사이에 빈공간이 있음
+                return 0;
+            }
+            ans++;
+            before = after;
+            after = garden[i].end;
+        }
+    }
+    //다 못채움
+    if(after<335){
+        return 0;
+    }
+    return ans+1;
+}
+
+int main(){
+    input();//입력
+    cout<<set_flower();//정사각형의 넓이
+    return 0;
+}
