@@ -1,0 +1,107 @@
+#include <string>
+#include <vector>
+#include <cstring>
+
+using namespace std;
+const int maxi = 102;
+//둘다 같은 위치에 있지 않기위해 기둥과 보 분리
+int pillar[maxi][maxi];//기둥
+int beam[maxi][maxi];//보
+
+//설치 조건
+bool is_build(int x,int y,int z){
+    if(z==0){//기둥
+        //바닥위에 있거나 다른기둥 위
+        if(y==0 || (y>0 && pillar[x][y-1]==1)){
+            return true;
+        //보의 한쪽 끝 위
+        }else if(beam[x][y]==1 || (x>0 && beam[x-1][y]==1)){
+            return true;
+        }
+    }else{//보
+    //양쪽 끝 부분이 다른 보와 동시 연결
+        if((x>0 && beam[x-1][y]==1) && beam[x+1][y]==1){
+            return true;
+        //한쪽 끝 부분이 기둥 위에 있음
+        }else if((y>0 && pillar[x][y-1]==1) || (y>0 && pillar[x+1][y-1]==1)){
+            return true;
+        }
+    }
+    return false;
+}
+
+//삭제 조건
+bool is_del(int x, int y){
+    //주변순회
+    int search_x = max(0,x-1);
+    for(int i=search_x;i<=x+1;i++){
+        for(int j=y;j<=y+1;j++){
+            //기둥삭제
+            if(pillar[i][j]==1 && is_build(i,j,0)==false){
+                return false;
+            }
+            //보삭제
+            if(beam[i][j]==1 && is_build(i,j,1)==false){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+//기둥과 보 설치
+void frame(vector<vector<int>> build_frame,int n){
+    int build_size = build_frame.size();
+    //초기화
+    memset(pillar,0,sizeof(pillar));
+    memset(beam,0,sizeof(beam));
+    for(int i=0;i<build_size;i++){
+        int x = build_frame[i][0];
+        int y = build_frame[i][1];
+        int struc = build_frame[i][2];
+        int ox = build_frame[i][3];
+        //기둥
+        if(struc==0){
+            //설치가 가능한가?
+            if(ox==1 && is_build(x,y,struc)==true){
+                pillar[x][y] = 1;
+            }else{
+                pillar[x][y] = 0;
+                //삭제 가능한가?
+                if(is_del(x,y)==false){
+                    pillar[x][y] = 1;//삭제못하면 그대로
+                }
+            }
+        }else{//보
+            //설치가 가능한가?
+            if(ox==1 && is_build(x,y,struc)==true){
+                beam[x][y] = 1;
+            }else{
+                beam[x][y] = 0;
+                //삭제 가능한가?
+                if(is_del(x,y)==false){
+                    beam[x][y] = 1;//삭제못하면 그대로
+                }
+            }
+        }
+    }
+}
+
+//전체 요약
+vector<vector<int>> solution(int n, vector<vector<int>> build_frame) {
+    vector<vector<int>> answer;
+    //기둥과 보 설치
+    frame(build_frame,n);
+    //설치한것 가져오기
+    for(int i=0;i<=n;i++){
+        for(int j=0;j<=n;j++){
+            if(pillar[i][j]==1){
+                answer.push_back({i,j,0});
+            }
+            if(beam[i][j]==1){
+                answer.push_back({i,j,1});
+            }
+        }
+    }
+    return answer;
+}
