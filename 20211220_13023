@@ -1,0 +1,58 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cstring>
+#include <cmath>
+using namespace std;
+
+int n,m;
+const int maxi = 2001;
+vector<int> f[maxi];
+int visit[maxi];//방문여부
+bool flag = false;//깊이 4인 노드가 존재하는가?
+
+//입력
+void input(){
+    cin>>n>>m;
+    for(int i=0;i<m;i++){
+        int a,b;
+        cin>>a>>b;
+        f[a].push_back(b);
+        f[b].push_back(a);
+    }
+}
+
+//깊이가 4인 노드가 존재하는가?
+void dfs(int node,int depth){
+    visit[node] = 1;//방문체크
+    //목표깊이 도달
+    if(depth==4){
+        flag = true;
+        return;
+    }
+    //다음지점
+    for(int j=0;j<f[node].size();j++){
+        int next = f[node][j];
+        //미방문이면 재귀
+        if(visit[next]==0){
+            dfs(next,depth+1);//다음지점, 깊이 추가
+        }
+    }
+    visit[node] = 0;//이전 지점으로
+}
+
+int main(){
+    input();//입력
+    for(int i=0;i<n;i++){
+        memset(visit,0,sizeof(visit));//초기화
+        dfs(i,0);//노드, 깊이
+    }
+    //존재하는가?
+    if(flag==true){
+        cout<<1;
+    }else{
+        cout<<0;
+    }
+    return 0;
+}
