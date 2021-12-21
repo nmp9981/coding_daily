@@ -1,0 +1,108 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cstring>
+#include <cmath>
+#include <queue>
+using namespace std;
+
+int n,m;
+int ans = 0;
+const int maxi = 1001;
+string maze[maxi];
+queue<pair<int,int>> fire;//불
+queue<pair<int,int>> jihun;//지훈
+int visit[maxi][maxi];//지훈 방문여부
+//축이동
+int dx[4] = {-1,1,0,0};
+int dy[4] = {0,0,-1,1};
+
+//입력
+void input(){
+    cin>>n>>m;
+    for(int i=0;i<n;i++){
+        cin>>maze[i];
+    }
+}
+
+//탈출이 가능한가?
+bool escape(){
+    memset(visit,0,sizeof(visit));//초기화
+    //초기지점 탐색
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(maze[i][j]=='F'){
+                fire.push({i,j});
+            }
+            if(maze[i][j]=='J'){
+                jihun.push({i,j});
+                visit[i][j] = 1;//방문체크
+            }
+        }
+    }
+    
+    //더 이상 이동이 불가능해질때까지
+    while(!jihun.empty()){
+        //불길
+        int fs = fire.size();
+        for(int i=0;i<fs;i++){
+            int fx = fire.front().first;
+            int fy = fire.front().second;
+            fire.pop();
+            
+            //다음지점
+            for(int j=0;j<4;j++){
+                int nx = fx + dx[j];
+                int ny = fy + dy[j];
+                //범위내에 들고 미방문
+                if(nx>=0 && nx<n && ny>=0 && ny<m){
+                    if(maze[nx][ny]=='.' || maze[nx][ny]=='J'){
+                        maze[nx][ny] = 'F';
+                        fire.push({nx,ny});
+                    }
+                }
+            }
+        }
+        
+        //지훈
+        int js = jihun.size();
+        for(int i=0;i<js;i++){
+            int jx = jihun.front().first;
+            int jy = jihun.front().second;
+            jihun.pop();
+            
+            //탈출
+            if(jx==0 || jx==n-1 || jy==0 || jy==m-1){
+                ans+=1;//다음지점에서 탈출
+                return true;
+            }
+            
+            //다음지점
+            for(int j=0;j<4;j++){
+                int nx = jx + dx[j];
+                int ny = jy + dy[j];
+                //범위내에 들고 미방문
+                if(nx>=0 && nx<n && ny>=0 && ny<m && visit[nx][ny]==0){
+                    if(maze[nx][ny]=='.'){
+                        visit[nx][ny] = 1;//방문체크
+                        jihun.push({nx,ny});
+                    }
+                }
+            }
+        }
+        ans++;
+    }
+    return false;//탈출을 못함
+}
+
+int main(){
+    input();//입력
+    //탈출
+    if(escape()==true){
+        cout<<ans;
+    }else{
+        cout<<"IMPOSSIBLE";
+    }
+    return 0;
+}
