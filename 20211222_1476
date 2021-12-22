@@ -1,0 +1,46 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cstring>
+#include <cmath>
+#include <queue>
+using namespace std;
+
+int E,S,M,y;
+
+//입력
+void input(){
+    cin>>E>>S>>M;
+}
+
+//날짜
+int solve(){
+    int e=1;int s=1;int m=1;y=1;
+    while(true){
+        //조건만족
+        if(E==e && S==s && M==m){
+            return y;
+        }
+        e++;
+        s++;
+        m++;
+        //범위를 넘는가?
+        if(e>15){
+            e=1;
+        }
+        if(s>28){
+            s=1;
+        }
+        if(m>19){
+            m=1;
+        }
+        y++;
+    }
+}
+
+int main(){
+    input();//입력
+    cout<<solve();//날짜
+    return 0;
+}
