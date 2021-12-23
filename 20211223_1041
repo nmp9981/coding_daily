@@ -1,0 +1,84 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cstring>
+#include <cmath>
+#include <queue>
+using namespace std;
+
+long long n;
+long long ans = 0;
+long long p[6];
+int three_side[8][3] = {//가능한 꼭짓점 조합
+    {0,1,2},
+    {1,5,2},
+    {5,4,2},
+    {4,0,2},
+    {0,1,3},
+    {1,5,3},
+    {5,4,3},
+    {4,0,3}
+};
+
+//입력
+void input(){
+    cin>>n;
+    for(int i=0;i<6;i++){
+        cin>>p[i];//주사위 값
+    }
+}
+
+//주사위가 1개인 경우
+long long dice_one(){
+    long long maxi = p[0];
+    long long sum = 0;
+    for(int i=0;i<6;i++){
+        maxi = max(maxi,p[i]);//가장 큰것 제외
+        sum+=p[i];
+    }
+    return sum-maxi;
+}
+
+//풀이
+long long dice(){
+    //주사위가 1개면
+    if(n==1){
+        ans = dice_one();//가장 작은것
+    }else{
+        //1개 면이 보임
+        long long one = p[0];
+        for(int i=0;i<6;i++){
+            one = min(one,p[i]);
+        }
+        //2개 면이 보임
+        long long two = p[0]+p[1];
+        for(int i=0;i<6;i++){
+            for(int j=0;j<6;j++){
+                if(i+j==5 || i==j){
+                    continue;
+                }else{
+                    two = min(two,p[i]+p[j]);
+                }
+            }
+        }
+        //3개 면이 보임
+        long long three = p[0]+p[1]+p[2];
+        for(int i=0;i<8;i++){
+            three = min(three,p[three_side[i][0]]+p[three_side[i][1]]+p[three_side[i][2]]);
+        }
+        
+        //주사위 총합의 최소
+        long long side1 = ((n-2)*(n-2)+4*(n-1)*(n-2))*one;
+        long long side2 = (8*n-12)*two;
+        long long side3 = 4*three;
+        ans = side1+side2+side3;
+    }
+    return ans;
+}
+
+int main(){
+    input();//입력
+    cout<<dice();//주사위의 최솟값
+    return 0;
+}
