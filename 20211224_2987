@@ -1,0 +1,69 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cstring>
+#include <cmath>
+#include <queue>
+using namespace std;
+
+//구조체 선언
+struct point{
+    int x,y;
+};
+
+point a,b,c,pa,pb,pc,p;//세 점
+int n;
+int cnt = 0;
+
+//입력
+void input(){
+    //삼각형의 좌표 입력
+    cin>>a.x>>a.y;
+    cin>>b.x>>b.y;
+    cin>>c.x>>c.y;
+}
+
+//삼각형의 넓이 구하기
+double area(){
+    int s = abs(a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y));
+    double ss = (double)s/2.0;
+    return ss;
+}
+
+//외적
+int cross(point x0,point x1){
+    return x0.x*x1.y-x0.y*x1.x;
+}
+
+//점이 삼각형 내부에 있는가?
+bool is_in(point p){
+    pa.x = a.x-p.x;
+    pa.y = a.y-p.y;
+    pb.x = b.x-p.x;
+    pb.y = b.y-p.y;
+    pc.x = c.x-p.x;
+    pc.y = c.y-p.y;
+    if(cross(pa,pc)>=0 && cross(pc,pb)>=0 && cross(pb,pa)>=0){
+        return true;
+    }else if(cross(pa,pc)<=0 && cross(pc,pb)<=0 && cross(pb,pa)<=0){
+        return true;
+    }
+    return false;
+}
+
+int main(){
+    input();//입력
+    //각 좌표마다 검사
+    cin>>n;
+    for(int i=0;i<n;i++){
+        cin>>p.x>>p.y;
+        if(is_in(p)==true){//점이 삼각형 내부에 있는가?
+            cnt++;
+        }
+    }
+    printf("%.1f",area());
+    cout<<"\n";
+    cout<<cnt<<"\n";
+    return 0;
+}
