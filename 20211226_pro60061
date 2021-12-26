@@ -1,0 +1,108 @@
+#include <string>
+#include <vector>
+#include <cstring>
+
+using namespace std;
+const int maxi = 102;
+int pillar[maxi][maxi];//기둥
+int beam[maxi][maxi];//보
+
+//설치가 가능한가?
+bool is_install(int x,int y,int inst){
+    //기둥
+    if(inst == 0){
+        //바닥에 있거나 다른기둥 위
+        if(y==0 || (y>0 && pillar[x][y-1]==1)){
+            return true;
+        //보의 한쪽 끝부분
+        }else if(beam[x][y]==1 || (x>0 && beam[x-1][y]==1)){
+            return true;
+        }
+    //보
+    }else if(inst == 1){
+        //다른보와 동시 연결
+        if((x>0 && beam[x-1][y] == 1) && beam[x+1][y]==1){
+            return true;
+        //한쪽 끝 부분이 기둥위에 있음
+        }else if((y>0 && pillar[x][y-1]==1) || (y>0 && pillar[x+1][y-1]==1)){
+            return true;
+        }
+    }
+    return false;//설치 불가능
+}
+
+//삭제가 가능한가?
+bool is_del(int x,int y){
+    int search_x = max(0,x-1);
+    //주변탐색
+    for(int i=search_x;i<=x+1;i++){
+        for(int j=y;j<=y+1;j++){
+            //해당위치에 기둥이 있어야함
+            if(pillar[i][j]==1 && is_install(i,j,0)==false){
+                return false;
+            }
+            //해당위치에 보가 있어야함
+            if(beam[i][j]==1 && is_install(i,j,1)==false){
+                return false;
+            }
+        }
+    }
+    return true;//삭제가능
+}
+
+//기둥과 보 설치
+void install_frame(vector<vector<int>> build_frame,int n){
+    //초기화
+    memset(pillar,0,sizeof(pillar));
+    memset(beam,0,sizeof(beam));
+    int build_size = build_frame.size();
+    for(int i=0;i<build_size;i++){
+        int x = build_frame[i][0];
+        int y = build_frame[i][1];
+        int inst = build_frame[i][2];
+        int ox = build_frame[i][3];
+        //기둥
+        if(inst==0){
+            //설치가 가능한가?
+            if(ox==1 && is_install(x,y,inst)==true){
+                pillar[x][y] = 1;
+            }else{
+                pillar[x][y] = 0;
+                //삭제가 불가능하면 그대로
+                if(is_del(x,y)==false){
+                    pillar[x][y] = 1;
+                }
+            }
+        }else{//보
+            //설치가 가능한가?
+            if(ox==1 && is_install(x,y,inst)==true){
+                beam[x][y] = 1;
+            }else{
+                beam[x][y] = 0;
+                //삭제가 불가능하면 그대로
+                if(is_del(x,y)==false){
+                    beam[x][y] = 1;
+                }
+            }
+        }
+    }
+}
+
+//메인 함수
+vector<vector<int>> solution(int n, vector<vector<int>> build_frame) {
+    vector<vector<int>> answer;
+    install_frame(build_frame,n);//기둥과 보 설치
+    //순서대로 넣기
+    for(int i=0;i<=n;i++){
+        for(int j=0;j<=n;j++){
+            //기둥
+            if(pillar[i][j] == 1){
+                answer.push_back({i,j,0});
+            }
+            if(beam[i][j] == 1){//보
+                answer.push_back({i,j,1});
+            }
+        }
+    }
+    return answer;
+}
