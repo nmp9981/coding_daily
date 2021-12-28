@@ -1,0 +1,102 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cstring>
+using namespace std;
+
+string s;
+int a,b;
+//입력
+void input(){
+    cin>>s;
+}
+
+//1차식 적분
+void inte_one(int idx){
+    string sa = s.substr(0,idx);
+    if(sa.size()==0){
+        a = 0;
+    }else{
+        a = stoi(sa);
+    }
+    string sb = s.substr(idx+1,s.size());
+    if(sb.size()==0){
+        b = 0;
+    }else{
+        b = stoi(sb);
+    }
+    
+    if(a==2){
+        if(b>1){
+            cout<<"xx+"<<b<<"x+W";
+        }else if(b==1){
+            cout<<"xx+x+W";
+        }else if(b==0){
+            cout<<"xx+W";
+        }else if(b==-1){
+            cout<<"xx-x+W";
+        }else if(b<-1){
+            cout<<"xx"<<b<<"x+W";
+        }
+    }else if(a==-2){
+        if(b>1){
+            cout<<"-xx+"<<b<<"x+W";
+        }else if(b==1){
+            cout<<"-xx+x+W";
+        }else if(b==0){
+            cout<<"-xx+W";
+        }else if(b==-1){
+            cout<<"-xx-x+W";
+        }else if(b<-1){
+            cout<<"-xx"<<b<<"x+W";
+        }
+    }else{
+        if(b>1){
+            cout<<a/2<<"xx+"<<b<<"x+W";
+        }else if(b==1){
+            cout<<a/2<<"xx+x+W";
+        }else if(b==0){
+            cout<<a/2<<"xx+W";
+        }else if(b==-1){
+            cout<<a/2<<"xx-x+W";
+        }else if(b<-1){
+            cout<<a/2<<"xx"<<b<<"x+W";
+        }
+    }
+}
+
+//적분
+void integral(){
+    int idx = 0;
+    int order = 0;
+    //차수 구하기
+    for(int i=0;i<s.size();i++){
+        if(s[i]=='x'){
+            order = 1;
+            idx = i;
+        }
+    }
+    
+    //일차식인가?
+    if(order==1){
+        inte_one(idx);
+    }else{//상수항
+        b = stoi(s);
+        if(abs(b)>1){
+            cout<<b<<"x+W";
+        }else if(b==1){
+            cout<<"x+W";
+        }else if(b==-1){
+            cout<<"-x+W";
+        }else if(b==0){
+            cout<<"W";
+        }
+    }
+}
+
+int main(){
+    input();//입력
+    integral();//적분
+    return 0;
+}
