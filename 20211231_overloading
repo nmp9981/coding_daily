@@ -1,0 +1,45 @@
+#include <iostream> 
+#include <cmath>
+using namespace std;
+
+int lv,max_attack,min_attack,damage;
+
+//입력
+void input(){
+    cin>>lv>>max_attack;
+    min_attack = max_attack*9/10;
+}
+
+//스킬1
+int skill(int x){
+    damage = x*4;
+    return damage;
+}
+
+//스킬2
+int skill(int x,int y){
+    damage = y*3+x*2/5;
+    return damage;
+}
+//스킬3
+int skill(int x,int y,int z){
+    damage = y*5+x/2+z*2;
+    return damage;
+}
+
+//스킬4
+long long skill(int x){
+    damage = pow(x,5);
+    return damage;
+}
+
+int main(){
+    //입력
+    input();
+    cin>>max_attack;
+    cout<<skill(lv);
+    skill(lv,max_attack);
+    skill(lv,max_attack,min_attack);
+    skill(lv);
+    return 0;
+}
